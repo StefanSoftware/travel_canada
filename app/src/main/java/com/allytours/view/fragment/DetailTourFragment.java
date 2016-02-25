@@ -56,9 +56,9 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         btnBuy.setOnClickListener(this);
 
         llButtonContainer = (LinearLayout)view.findViewById(R.id.ll_detail_tour_button_container);
-        if (!(Utils.getFromPreference(getContext(), Constant.USER_TYPE).equals(Constant.USER_TYPE_CUSTOMER))) {
-            llButtonContainer.setVisibility(View.GONE);
-        }
+//        if (!(Utils.getFromPreference(getContext(), Constant.USER_TYPE).equals(Constant.USER_TYPE_CUSTOMER))) {
+//            llButtonContainer.setVisibility(View.GONE);
+//        }
         HorizontalListView horizontalListView = (HorizontalListView)view.findViewById(R.id.horizontalListView);
         ImageAdapter imageAdapter = new ImageAdapter(mContext, PurchaseActivity.tourModel.getArrImage());
         horizontalListView.setAdapter(imageAdapter);

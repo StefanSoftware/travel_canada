@@ -360,8 +360,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                                 Utils.setOnPreference(mContext, Constant.PASSWORD, userModel.getPassword());
                                 Utils.setOnPreference(mContext, Constant.FULLNAME, userModel.getFullname());
 
-                                mContext.startActivity(new Intent(mContext, HomeActivity.class));
-                                ((HomeActivity) mContext).finish();
+                                if (HomeActivity.fromWhere == 0) {
+                                    mContext.startActivity(new Intent(mContext, HomeActivity.class));
+                                    ((HomeActivity) mContext).finish();
+                                } else if (HomeActivity.fromWhere == 1) {
+                                    ((HomeActivity) mContext).finishForPurchase(-1);
+                                }
 
                             } else {
                                 String reason = response.getString("reason");

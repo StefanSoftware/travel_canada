@@ -48,6 +48,8 @@ public class HomeActivity extends AppCompatActivity {
     private NavigationMenuFragment navigationMenuFragment;
     private MapFragment mainFragment;
     private Context mContext;
+
+    public  static int fromWhere;//0: default, 1: from purchaseActivity to log in for payment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void initVariable() {
         mContext = this;
+        fromWhere = getIntent().getIntExtra("login_for_payment", 0);
     }
     private void initUI() {
 
@@ -82,15 +85,26 @@ public class HomeActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.main_menu_container, navigationMenuFragment)
                 .commit();
+
         mainFragment = new MapFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, mainFragment, "")
-                .commit();
+        if (fromWhere == 0) {
+            toolbar.setVisibility(View.VISIBLE);
+            navigationTo(0);
+        } else {
+            toolbar.setVisibility(View.INVISIBLE);
+            navigationTo(7);
+        }
+
     }
 
     public android.app.FragmentManager getFragmentManager() {
         return getFragmentManager();
     }
+    public void finishForPurchase(int result) {
+        setResult(result);
+        finish();
+    }
+
     public void goToSignup() {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, new SignUpFragment(), "")

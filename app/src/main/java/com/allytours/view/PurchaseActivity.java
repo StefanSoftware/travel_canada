@@ -1,6 +1,7 @@
 package com.allytours.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.allytours.R;
+import com.allytours.controller.Utilities.Utils;
+import com.allytours.model.Constant;
 import com.allytours.model.TourModel;
 import com.allytours.view.fragment.customer.CheckOutFragment;
 import com.allytours.view.fragment.customer.ConfirmationFragment;
@@ -19,11 +22,12 @@ import com.allytours.view.fragment.customer.SelectOptionFragment;
 
 public class PurchaseActivity extends AppCompatActivity implements View.OnClickListener{
 
+
     public static FragmentManager fragmentManager;
 
     public static TextView tvTitle, tvPrice;
     private ImageButton btnBack;
-    private Context mContext;
+    private static Context mContext;
 
     public static TourModel tourModel;
 
@@ -87,6 +91,11 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                 tvTitle.setText("Check Out");
                 break;
             case 3:
+                if (!Utils.getFromPreference(mContext, Constant.USER_TYPE).equals(Constant.USER_TYPE_CUSTOMER)) {
+                    Intent intent = new Intent(mContext, HomeActivity.class);
+                    intent.putExtra("login_for_payment", "1") ;
+                    ((PurchaseActivity)mContext).startActivityForResult(intent, 100);
+                }
                 fragments[3] = new ConfirmationFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, fragments[3])
@@ -99,6 +108,18 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 100:
+                if (resultCode == RESULT_OK) {
+
+                }
+                break;
         }
     }
 
