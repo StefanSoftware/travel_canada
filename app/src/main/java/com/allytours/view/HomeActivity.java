@@ -88,10 +88,10 @@ public class HomeActivity extends AppCompatActivity {
 
         mainFragment = new MapFragment();
         if (fromWhere == 0) {
-            toolbar.setVisibility(View.VISIBLE);
+//            toolbar.setVisibility(View.VISIBLE);
             navigationTo(0);
         } else {
-            toolbar.setVisibility(View.INVISIBLE);
+//            toolbar.setVisibility(View.INVISIBLE);
             navigationTo(7);
         }
 
