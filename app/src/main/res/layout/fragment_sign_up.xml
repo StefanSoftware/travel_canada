@@ -1,0 +1,310 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.allytours.view.fragment.SignUpFragment">
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_signup_done">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/pad_5dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_10dp"
+                >
+                <Button
+                    android:id="@+id/ib_signup_back"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/ic_arrow_back_black_24dp"
+                    />
+                <ImageView
+                    android:id="@+id/iv_signup_userphoto"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/register_person"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <RadioButton
+                    android:id="@+id/rb_signup_customer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Customer"
+                    android:layout_marginRight="@dimen/pad_20dp"
+                    />
+                <RadioButton
+                    android:id="@+id/rb_signup_operator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Operator"
+                    android:layout_marginRight="@dimen/pad_20dp"
+                    android:checked="true"/>
+            </RadioGroup>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/pad_5dp"
+                android:layout_marginTop="@dimen/pad_10dp"
+                android:background="@drawable/round_corner_gray"
+                >
+                <EditText
+                    android:id="@+id/et_signup_fullname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:hint="Full Name"
+                    android:maxLength="30"
+                    android:text="test customer1"
+                    />
+                <EditText
+                    android:id="@+id/et_signup_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="35"
+                    android:text="test@customer.com"
+                    />
+                <EditText
+                    android:id="@+id/et_signup_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:maxLength="30"
+                    android:text="1234567"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phone +"
+                        android:textColor="@color/black"/>
+                    <EditText
+                        android:id="@+id/et_signup_country_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLength="4"
+                        android:inputType="phone"
+                        android:singleLine="true"
+                        android:text="1"/>
+                    <EditText
+                        android:id="@+id/et_signup_phonenumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="phone"
+                        android:maxLength="20"
+                        android:text="1223423"
+                        />
+
+                </LinearLayout>
+                <!--birthday and gender-->
+                <LinearLayout
+                    android:id="@+id/ll_signup_container1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:weightSum="2"
+                    android:gravity="center_vertical"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        >
+                        <EditText
+                            android:id="@+id/et_signup_birthday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Birthday"
+                            android:textColor="@color/black"
+                            android:singleLine="true"
+                            android:editable="false"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/pad_5dp"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/pad_5dp">
+                        <RadioGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <RadioButton
+                                android:id="@+id/rb_signup_male"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Male"
+                                android:checked="true"
+                                />
+                            <RadioButton
+                                android:id="@+id/rb_signup_female"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Female"
+                                />
+                        </RadioGroup>
+                    </LinearLayout>
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/et_signup_city_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="City/Country"
+                    android:maxLength="50"
+                    />
+                <EditText
+                    android:id="@+id/et_signup_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Address"
+                    android:maxLength="100"/>
+                <!--<Button-->
+                    <!--android:id="@+id/btn_checkout_pay"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@color/transparent"-->
+                    <!--android:text="Pay"-->
+                    <!--android:inputType="phone"-->
+                    <!--android:textColor="@color/blue"/>-->
+            </LinearLayout>
+
+
+
+
+            <!--add license photo-->
+            <LinearLayout
+                android:id="@+id/ll_signup_container2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:background="@drawable/round_corner_gray"
+                    >
+
+                    <ImageView
+                        android:id="@+id/iv_signup_license"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/tv_signup_license"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload License Picture"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/blue"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+
+            <!--card info-->
+            <LinearLayout
+                android:id="@+id/ll_signup_card_info_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/pad_5dp"
+                android:layout_marginTop="@dimen/pad_10dp"
+                android:background="@drawable/round_corner_gray"
+                android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/ll_signup_card_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <EditText
+                        android:id="@+id/et_signup_cardnumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="Card Number"
+                        android:maxLength="20"
+                        android:editable="false"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:weightSum="2">
+
+                        <EditText
+                            android:id="@+id/et_signup_cvv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="4"
+                            android:singleLine="true"
+                            android:hint="CVV"
+                            android:editable="false"
+                            android:layout_weight="1"/>
+                        <EditText
+                            android:id="@+id/et_signup_expire_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:maxLength="10"
+                            android:hint="Expire Date"
+                            android:editable="false"
+                            android:layout_weight="1"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_signup_card_scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:text="Card Scan"
+                    android:inputType="phone"
+                    android:textColor="@color/blue"
+                    android:onClick="onScanPress"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_signup_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:textColor="@color/blue"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

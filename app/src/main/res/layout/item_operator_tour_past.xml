@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/pad_5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="5">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tour name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/txt_14sp"/>
+                    <ImageView
+                        android:layout_marginLeft="@dimen/pad_15dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/canada"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100 Adults"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_14sp"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:layout_marginLeft="@dimen/pad_10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100 Children"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_14sp"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:layout_marginLeft="@dimen/pad_10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEC 10, 2016, 5 PM"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_14sp"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:layout_marginLeft="@dimen/pad_10dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/pad_10dp"
+                    android:layout_marginLeft="@dimen/pad_10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pick Up : "
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/txt_14sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pick Up"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/txt_13sp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="@dimen/pad_10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$ 25000"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_13sp"
+                    android:layout_marginTop="@dimen/pad_5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CAD"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_13sp"
+                    android:layout_marginTop="@dimen/pad_5dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/pad_5dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/smile5"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dec 20, 2016"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_16sp"
+                    android:layout_marginTop="@dimen/pad_5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/pad_10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Review"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_14sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This tour was very good"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_13sp"
+                android:padding="@dimen/pad_5dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

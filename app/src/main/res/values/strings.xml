@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">AllyTours</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="Loading">Loading</string>
+    <string name="title_activity_exception_view">ExceptionViewActivity</string>
+
+    <string name="map_api_key">AIzaSyAg9TKKZa9dV6r4qHLwl1qSfLGe6RyYzMc</string>
+
+    <string name="facebook_app_id">552345238273778</string>
+    <string name="key_hash">3zMxj/ECDwxahhd5TeTlieYYvKk=</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_detail_tour">DetailTourActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_add_new_tour">AddNewTourActivity</string>
+</resources>

@@ -1,0 +1,44 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.allytours.view.fragment.ToursFragment">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/tour_tabbar"
+            layout="@layout/custom_tabbar_tour"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/pad_5dp">
+            <ImageView
+                android:layout_width="@dimen/pad_20dp"
+                android:layout_height="@dimen/pad_20dp"
+                android:background="@drawable/ic_chevron_left_black_24dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Toronto"
+                android:textColor="@color/black"
+                android:layout_marginLeft="@dimen/pad_20dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/lv_tour_list"
+                android:layout_gravity="center_horizontal|bottom"
+                android:smoothScrollbar="true">
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

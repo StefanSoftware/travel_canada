@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/pad_5dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/ll_item_my_tours_right"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/tv_item_tour_listing_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tour name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_14sp"
+                    android:drawablePadding="@dimen/pad_5dp"/>
+
+                <TextView
+                    android:id="@+id/tv_item_tour_listing_last_message_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:background="@drawable/badge_red"
+                    android:layout_marginLeft="@dimen/pad_10dp"
+                    android:text="65654"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/txt_10sp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_item_my_tours_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="@dimen/pad_10dp"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:id="@+id/tv_item_tour_listing_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$ 25000"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_13sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_item_tour_listing_currency_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CAD"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_13sp"
+                    android:layout_marginLeft="@dimen/pad_5dp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/pad_5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chat"
+                android:textColor="@color/strong_blue"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_item_tour_listing_last_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/tv_item_tour_listing_last_message_time"
+                    android:text="What is included?"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="@dimen/pad_10dp"/>
+                <TextView
+                    android:id="@+id/tv_item_tour_listing_last_message_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Aug 14, 2015"
+                    android:layout_toLeftOf="@+id/iv_item_my_tours_chat_navigation"
+                    android:layout_marginRight="@dimen/pad_10dp"/>
+                <ImageView
+                    android:id="@+id/iv_item_my_tours_chat_navigation"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_chevron_right_black_24dp"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:background="@drawable/round_corner_gray"
+            android:gravity="center">
+            <Button
+                android:id="@+id/btn_item_tour_listing_active"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Active"
+                android:background="@color/transparent"
+                android:textColor="@color/blue"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/ll_markerview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/marker_background_grey"
+        >
+        <ImageView
+            android:id="@+id/iv_markerview_flag"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/canada"
+            android:padding="2dp"/>
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/pad_5dp">
+
+            <TextView
+                android:id="@+id/tv_markerview_tour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tours"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_14sp"
+                android:layout_above="@+id/tv_ntl_half1"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"
+                />
+            <TextView
+                android:id="@+id/tv_ntl_half1"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/black"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/pad_5dp"
+                android:layout_marginBottom="@dimen/pad_5dp"/>
+            <TextView
+                android:id="@+id/tv_markerview_tour_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="55"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_14sp"
+                android:layout_below="@+id/tv_ntl_half1"
+                android:layout_centerHorizontal="true"
+                />
+
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:layout_margin="@dimen/pad_5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/pad_5dp"
+            android:layout_gravity="center">
+            <TextView
+                android:id="@+id/tv_markerview_tour_titles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Toronto, Niagara Falls"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_14sp"
+                />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_ntl_half2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.5dp"-->
+                <!--android:background="@color/black"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_marginTop="@dimen/pad_5dp"-->
+                <!--android:layout_marginBottom="@dimen/pad_5dp"/>-->
+            <!--<TextView-->
+                <!--android:id="@+id/tv_markerview_tour_operators"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="200 Tour, Operator, 400 Reviews"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="@dimen/txt_14sp"-->
+                <!--android:layout_below="@+id/tv_ntl_half2"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--/>-->
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
