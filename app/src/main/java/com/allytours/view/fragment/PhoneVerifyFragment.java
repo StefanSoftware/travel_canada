@@ -60,7 +60,7 @@ public class PhoneVerifyFragment extends Fragment {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etVerifyCode.getText().toString().trim().length() > 0 && Utils.getFromPreference(getContext(), Constant.PHONE_NUMBER).length() > 0) {
+                if (etVerifyCode.getText().toString().trim().length() > 0 ) {
                     verify();
                 }
             }
@@ -73,54 +73,13 @@ public class PhoneVerifyFragment extends Fragment {
     ///verify
     private void verify() {
         String verifyCode = etVerifyCode.getText().toString().trim();
-        String phonenumber = Utils.getFromPreference(getContext(), Constant.PHONE_NUMBER);
-
-        if (verifyCode.length() == 0 || phonenumber.length() == 0) {
+        if (verifyCode.equals(Utils.getFromPreference(getContext(), Constant.VERIFY_CODE))) {
+            Utils.setOnPreference(getContext(), Constant.VERIFY_CODE, "");
+            ((HomeActivity) getContext()).goToSingupStep2();
         } else {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("phonenumber", phonenumber);
-//            params.put("verify_code", verifyCode);
-
-            CustomRequest signinRequest = new CustomRequest(Request.Method.POST, API.PHONE_VERIFY, params,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                String success = response.getString("success");
-                                if (success.equals("true")) {
-
-                                    JSONObject jsonObject = response.getJSONObject("data");
-
-                                    String verifyCode = jsonObject.getString("verify_code");
-
-                                    if (verifyCode.equals(etVerifyCode.getText().toString().trim())) {
-                                        getContext().startActivity(new Intent(getContext(), HomeActivity.class));
-                                        ((HomeActivity) getContext()).goToSingupStep2();
-                                    } else {
-                                        Utils.showOKDialog(getContext(), "Verify code incorrect");
-                                    }
-
-                                } else {
-                                    String reason = response.getString("reason");
-                                    if (reason.equals("401")) {
-                                        Utils.showOKDialog(getContext(), "Unregistered phone number");
-                                    }
-                                }
-                            }catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    });
-            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-            requestQueue.add(signinRequest);
+            Utils.showOKDialog(getContext(), "Verification code is incorrect");
         }
+
 
     }
 

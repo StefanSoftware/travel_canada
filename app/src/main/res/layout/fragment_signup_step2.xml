@@ -3,8 +3,108 @@
     android:layout_height="match_parent"
     tools:context="com.allytours.view.fragment.SignupStep2Fragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="@dimen/pad_5dp">
+        <LinearLayout
+            android:id="@+id/ll_signup_card_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/pad_5dp"
+            android:layout_marginTop="@dimen/pad_10dp"
+            android:background="@drawable/round_corner_gray"
+            >
+            <LinearLayout
+                android:id="@+id/ll_signup_card_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/et_signup_account_holder_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:hint="Account Holder Name"
+                    android:maxLength="20"
+                    android:editable="false"
+                    android:text="Jane Austen"
+                    />
+                </android.support.design.widget.TextInputLayout>
 
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/et_signup_route_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:hint="Routing Number"
+                    android:maxLength="50"
+                    android:inputType="number"
+                    android:editable="false"
+                    android:text="110000000"
+                    />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/et_signup_account_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:hint="Account Number"
+                    android:maxLength="50"
+                    android:inputType="number"
+                    android:editable="false"
+                    android:text="000123456789"
+                    />
+                </android.support.design.widget.TextInputLayout>
+                <Spinner
+                    android:id="@+id/sp_signup_account_holder_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:visibility="gone"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:weightSum="2">
+
+                    <Spinner
+                        android:id="@+id/sp_signup_country"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        />
+                    <Spinner
+                        android:id="@+id/sp_signup_currency"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_signup_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="Submit"
+                android:inputType="phone"
+                android:textColor="@color/blue"
+                android:onClick="onScanPress"/>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

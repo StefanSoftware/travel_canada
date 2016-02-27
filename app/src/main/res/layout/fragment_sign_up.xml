@@ -61,6 +61,10 @@
                 android:layout_marginTop="@dimen/pad_10dp"
                 android:background="@drawable/round_corner_gray"
                 >
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/et_signup_fullname"
                     android:layout_width="match_parent"
@@ -68,8 +72,12 @@
                     android:singleLine="true"
                     android:hint="Full Name"
                     android:maxLength="30"
-                    android:text="test customer1"
+
                     />
+            </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/et_signup_email"
                     android:layout_width="match_parent"
@@ -78,8 +86,12 @@
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:maxLength="35"
-                    android:text="test@customer.com"
+
                     />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/et_signup_password"
                     android:layout_width="match_parent"
@@ -88,8 +100,10 @@
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:maxLength="30"
-                    android:text="1234567"
+
                     />
+                </android.support.design.widget.TextInputLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,7 +129,7 @@
                         android:singleLine="true"
                         android:inputType="phone"
                         android:maxLength="20"
-                        android:text="1223423"
+
                         />
 
                 </LinearLayout>

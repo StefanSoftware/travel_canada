@@ -197,7 +197,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (v == btnToSignup) {
-            if (Utils.getFromPreference(mContext, Constant.PHONE_NUMBER).length() > 0) {
+            if (Utils.getFromPreference(mContext, Constant.VERIFY_CODE).length() > 0) {
                 ((HomeActivity)mContext).goToPhoneVerify();
             } else {
                 ((HomeActivity)mContext).goToSignup();
@@ -247,9 +247,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                         String country_city = jsonObject.getString("country_city");
                                         String address = jsonObject.getString("address");
                                         String gender = jsonObject.getString("gender");
-                                        String cardnumber = jsonObject.getString("cardnumber");
-                                        String cvv = jsonObject.getString("cvv");
-                                        String expireday = jsonObject.getString("expireday");
+
                                         String licensePhoto = jsonObject.getString("licensePhoto");
 
 
@@ -257,9 +255,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                         Utils.setOnPreference(mContext, Constant.COUNTRY_CITY, country_city);
                                         Utils.setOnPreference(mContext, Constant.ADDRESS, address);
                                         Utils.setOnPreference(mContext, Constant.GENDER, gender);
-                                        Utils.setOnPreference(mContext, Constant.CARD_NUMBER, cardnumber);
-                                        Utils.setOnPreference(mContext, Constant.CVV, cvv);
-                                        Utils.setOnPreference(mContext, Constant.EXPIRE_DAY, expireday);
+
                                         Utils.setOnPreference(mContext, Constant.LICENSE_PHOTO, licensePhoto);
                                     }
 
@@ -330,24 +326,30 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                     Utils.setOnPreference(mContext, Constant.ID, id);
                                     Utils.setOnPreference(mContext, Constant.USER_PHOTO, userphoto);
 
+
+
                                     if (userType.equals(Constant.USER_TYPE_OPERATOR)) {
                                         String country_city = jsonObject.getString("country_city");
                                         String address = jsonObject.getString("address");
                                         String gender = jsonObject.getString("gender");
-                                        String cardnumber = jsonObject.getString("cardnumber");
-                                        String cvv = jsonObject.getString("cvv");
-                                        String expireday = jsonObject.getString("expireday");
-                                        String licensePhoto = jsonObject.getString("licensePhoto");
+
+//                                        String licensePhoto = jsonObject.getString("licensePhoto");
 
 
                                         Utils.setOnPreference(mContext, Constant.PHONE_NUMBER, phonenumber);
                                         Utils.setOnPreference(mContext, Constant.COUNTRY_CITY, country_city);
                                         Utils.setOnPreference(mContext, Constant.ADDRESS, address);
                                         Utils.setOnPreference(mContext, Constant.GENDER, gender);
-                                        Utils.setOnPreference(mContext, Constant.CARD_NUMBER, cardnumber);
-                                        Utils.setOnPreference(mContext, Constant.CVV, cvv);
-                                        Utils.setOnPreference(mContext, Constant.EXPIRE_DAY, expireday);
-                                        Utils.setOnPreference(mContext, Constant.LICENSE_PHOTO, licensePhoto);
+
+//                                        Utils.setOnPreference(mContext, Constant.LICENSE_PHOTO, licensePhoto);
+                                    } else if (userType.equals(Constant.USER_TYPE_CUSTOMER)) {
+//                                        String cardnumber = jsonObject.getString("cardnumber");
+//                                        String cvv = jsonObject.getString("cvv");
+//                                        String expireday = jsonObject.getString("expireday");
+//
+//                                        Utils.setOnPreference(mContext, Constant.CARD_NUMBER, cardnumber);
+//                                        Utils.setOnPreference(mContext, Constant.CVV, cvv);
+//                                        Utils.setOnPreference(mContext, Constant.EXPIRE_DAY, expireday);
                                     }
 
 

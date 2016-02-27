@@ -15,4 +15,20 @@
     <string name="title_activity_detail_tour">DetailTourActivity</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_add_new_tour">AddNewTourActivity</string>
+
+
+    <string-array name="country">
+        <item>US</item>
+        <item>CA</item>
+
+    </string-array>
+    <string-array name="currency">
+        <item>usd</item>
+        <item>cad</item>
+
+    </string-array>
+    <string-array name="account_holder_type">
+        <item>individual</item>
+        <item>business</item>
+    </string-array>
 </resources>

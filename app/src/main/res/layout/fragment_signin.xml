@@ -23,7 +23,7 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:maxLength="40"
-                android:text="jasonisme@gmail.com"/>
+                />
             <EditText
                 android:id="@+id/et_signin_password"
                 android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:maxLength="25"
-                android:text="jasonisme"/>
+                />
             <Button
                 android:id="@+id/btn_signin"
                 android:layout_width="match_parent"

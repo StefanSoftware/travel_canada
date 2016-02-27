@@ -45,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     public static DrawerLayout mDrawerLayout;
     public static FragmentManager fragmentManager;
     private Toolbar toolbar;
+    private MenuItem searchItem;
     private NavigationMenuFragment navigationMenuFragment;
     private MapFragment mainFragment;
     private Context mContext;
@@ -88,11 +89,15 @@ public class HomeActivity extends AppCompatActivity {
 
         mainFragment = new MapFragment();
         if (fromWhere == 0) {
-//            toolbar.setVisibility(View.VISIBLE);
-            navigationTo(0);
+            toolbar.setVisibility(View.VISIBLE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, mainFragment)
+                    .commit();
         } else {
-//            toolbar.setVisibility(View.INVISIBLE);
-            navigationTo(7);
+            toolbar.setVisibility(View.INVISIBLE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, new SignInFragment())
+                    .commit();
         }
 
     }
@@ -129,6 +134,7 @@ public class HomeActivity extends AppCompatActivity {
     public void navigationTo(int num) {
         switch (num) {
             case 0:
+                mainFragment = new MapFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, "")
                         .commit();
@@ -248,7 +254,7 @@ public class HomeActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-    MenuItem searchItem;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

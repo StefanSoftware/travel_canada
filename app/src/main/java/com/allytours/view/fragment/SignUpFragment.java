@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.allytours.R;
 import com.allytours.controller.API;
 import com.allytours.controller.Utilities.MediaUtility;
+import com.allytours.controller.Utilities.UIUtility;
 import com.allytours.controller.Utilities.Utils;
 import com.allytours.view.camera.AlbumStorageDirFactory;
 import com.allytours.view.camera.BaseAlbumDirFactory;
@@ -109,6 +110,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
+    ///init variables
     private void initVariable() {
         mContext = getContext();
 
@@ -121,6 +123,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
             mAlbumStorageDirFactory = new BaseAlbumDirFactory();
         }
     }
+    ////init UI
     private void initUI(View view) {
         ibBack = (Button)view.findViewById(R.id.ib_signup_back);
         ibBack.setOnClickListener(this);
@@ -168,6 +171,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        if (!(v instanceof EditText)) {
+            UIUtility.hideSoftKeyboard(getActivity());
+        }
         if (v == ibBack) {
             ((HomeActivity)mContext).backToSingin();
         }
@@ -205,10 +211,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
             showChooseDialog(mContext, "Choose picture from", ACTION_TAKE_LICENSE_PHOTO);
         }
         if (v == etBirthday) {
+            UIUtility.hideSoftKeyboard(getActivity());
             DialogFragment newFragment = new SelectDateFragment(etBirthday);
             newFragment.show(getFragmentManager(), "Birthday");
         }
     }
+    ///photo choose dialog
     public void showChooseDialog(Context context, String message, final int type){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(Constant.INDECATOR);
@@ -241,6 +249,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         AlertDialog alert = builder.create();
         alert.show();
     }
+    ///check values to sign up
     private boolean checkValue() {
         userModel = new UserModel();
         userModel.setUserPhotoURL(userPhotoPath);
@@ -258,7 +267,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         userModel.setFullname(etFullname.getText().toString());
         userModel.setEmail(etEmail.getText().toString());
         userModel.setPassword(etPassword.getText().toString());
-        userModel.setPhoneNumber(etCountryCode.getText().toString() + etPhoneNumber.getText().toString());
+        userModel.setPhoneNumber("+" + etCountryCode.getText().toString() + etPhoneNumber.getText().toString());
         userModel.setUsertype("C");
         ////in case of operator
         if (rbOperator.isChecked()) {
@@ -276,17 +285,21 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 userModel.setGender("M");
             }
             userModel.setUsertype("O");
-        } else if (rbCustomer.isChecked()) {
+        } else if (rbCustomer.isChecked()) {///in case of customer
             if (TextUtils.isEmpty(etCardNumber.getText().toString()) || TextUtils.isEmpty(etCVV.getText().toString()) || TextUtils.isEmpty(etExprieDate.getText().toString())) {
                 Utils.showOKDialog(mContext, "Please input card information");
+                return false;
             } else {
                 userModel.setCardNumber(etCardNumber.getText().toString());
                 userModel.setCvv(etCVV.getText().toString());
-                userModel.setExpireday(etExprieDate.getText().toString());
+                String strExpireDate = etExprieDate.getText().toString().trim();
+                userModel.setExpireday_month(strExpireDate.substring(0, strExpireDate.lastIndexOf("/")));
+                userModel.setExpireday_year(strExpireDate.substring(strExpireDate.lastIndexOf("/") + 1));
             }
         }
         return true;
     }
+    ///operator sign up step 1
     private void operatorSignupStep1(){
         CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(API.SIGNUP_STEP1,
                 new Response.Listener<JSONObject>() {
@@ -295,16 +308,27 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                         try {
                             String success = response.getString("success");
                             if (success.equals("true")) {
+                                Utils.setOnPreference(mContext, Constant.USER_PHOTO, response.getJSONObject("data").getString("photo"));
+                                Utils.setOnPreference(mContext, Constant.ID, response.getJSONObject("data").getString("id"));
+                                Utils.setOnPreference(mContext, Constant.VERIFY_CODE, response.getJSONObject("data").getString("code"));
+
                                 Utils.setOnPreference(mContext, Constant.PHONE_NUMBER, userModel.getPhoneNumber());
-                                mContext.startActivity(new Intent(mContext, PhoneVerifyFragment.class));
+                                Utils.setOnPreference(mContext, Constant.EMAIL, userModel.getEmail());
+                                Utils.setOnPreference(mContext, Constant.PASSWORD, userModel.getPassword());
+                                Utils.setOnPreference(mContext, Constant.FULLNAME, userModel.getFullname());
+
+                                Utils.setOnPreference(mContext, Constant.COUNTRY_CITY, userModel.getCity_country());
+                                Utils.setOnPreference(mContext, Constant.ADDRESS, userModel.getAddress());
+                                Utils.setOnPreference(mContext, Constant.GENDER, userModel.getGender());
+                                Utils.setOnPreference(mContext, Constant.BIRTHDAY, userModel.getBirthday());
+
+                                ((HomeActivity) mContext).goToPhoneVerify();
                             } else {
                                 String reason = response.getString("reason");
-                                if (reason.equals("401")) {
+                                if (reason.equals("402")) {
                                     Utils.showOKDialog(mContext, "Email is already registered");
-                                }else if (reason.equals("402")) {
-                                    Utils.showOKDialog(mContext, "Photo size is too big");
-                                } else if (reason.equals("403")) {
-                                    Utils.showOKDialog(mContext, "");
+                                }else if (reason.equals("401")) {
+                                    Utils.showOKDialog(mContext, "Invalid phone number");
                                 }
                             }
                         }catch (Exception e) {
@@ -326,7 +350,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 .addStringPart("country_city", userModel.getCity_country())
                 .addStringPart("address", userModel.getAddress())
                 .addStringPart("birthday", userModel.getBirthday())
-                .addFilePart("licensePhoto", licensePhotoPath);
+                .addStringPart("gender", userModel.getGender())
+                .addFilePart("licensephoto", licensePhotoPath);
         if (userPhotoPath.length() > 0) {
             customMultipartRequest
                     .addFilePart("userphoto", userPhotoPath);
@@ -340,7 +365,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
 
     }
-    ///Sign up
+    ///customer Sign up
     private void customerSignup() {
 
         CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(API.CUSTOMER_SIGNUP,
@@ -360,6 +385,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                                 Utils.setOnPreference(mContext, Constant.PASSWORD, userModel.getPassword());
                                 Utils.setOnPreference(mContext, Constant.FULLNAME, userModel.getFullname());
 
+                                Utils.setOnPreference(mContext, Constant.CARD_NUMBER, userModel.getCardNumber());
+                                Utils.setOnPreference(mContext, Constant.CVV, userModel.getCvv());
+                                Utils.setOnPreference(mContext, Constant.EXPIRE_MONTH, userModel.getExpireday_month());
+                                Utils.setOnPreference(mContext, Constant.EXPIRE_YEAR, userModel.getExpireday_year());
+
                                 if (HomeActivity.fromWhere == 0) {
                                     mContext.startActivity(new Intent(mContext, HomeActivity.class));
                                     ((HomeActivity) mContext).finish();
@@ -375,6 +405,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                                     Utils.showOKDialog(mContext, "Failed validation check");
                                 }else if (reason.equals("403")) {
                                     Utils.showOKDialog(mContext, "Email or phone number registered already");
+                                }else if (reason.equals("404")) {
+                                    Utils.showOKDialog(mContext, "Invalid card");
                                 }
                             }
                         }catch (Exception e) {
@@ -392,9 +424,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 .addStringPart("fullname", userModel.getFullname())
                 .addStringPart("email", userModel.getEmail())
                 .addStringPart("password", userModel.getPassword())
-//                .addStringPart("card_number", userModel.getCardNumber())
-//                .addStringPart("cvv", userModel.getCvv())
-//                .addStringPart("expire_date", userModel.getExpireday())
+                .addStringPart("card_number", userModel.getCardNumber())
+                .addStringPart("cvv", userModel.getCvv())
+                .addStringPart("expire_date_year", userModel.getExpireday_year())
+                .addStringPart("expire_date_month", userModel.getExpireday_month())
                 .addStringPart("phonenumber", userModel.getPhoneNumber());
         if (userPhotoPath.length() > 0) {
             customMultipartRequest
@@ -538,6 +571,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                     // Never log a raw card number. Avoid displaying it, but if necessary use getFormattedCardNumber()
                     resultStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
                     etCardNumber.setText(scanResult.getRedactedCardNumber());
+                    ///test card
+                    etCardNumber.setText("4242424242424242");
+
                     // Do something with the raw number, e.g.:
                     // myService.setCardNumber( scanResult.cardNumber );
 
@@ -550,6 +586,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                         // Never log or display a CVV
                         resultStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
                         etCVV.setText(scanResult.cvv);
+                        ///test card
+                        etCVV.setText("314");
                     }
 
                     if (scanResult.postalCode != null) {

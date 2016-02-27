@@ -6,8 +6,6 @@ package com.allytours.model;
 public class Constant {
 
     //////////string parameters
-//    public static String SEVER_URL = "http://safar.safarapp.com/index.php/api";
-//    public static String PHOTO_URL = "http://safar.safarapp.com";
 
     public static String INDECATOR = "AllyTours";
     public static String DEVICE_TYPE = "android";
@@ -30,11 +28,19 @@ public class Constant {
     public static String ADDRESS = "address";
     public static String CARD_NUMBER = "cardnumber";
     public static String CVV = "cvv";
-    public static String EXPIRE_DAY = "expireday";
+    public static String EXPIRE_MONTH = "expire_month";
+    public static String EXPIRE_YEAR = "expire_year";
     public static String LICENSE_PHOTO = "licensePhoto";
+    public static String VERIFY_CODE = "verify_code";
+    public static String BANK_COUNTRY = "BANK_COUNTRY";
+    public static String BANK_CURRENCY = "BANK_CURRENCY";
+    public static String BANK_ROUTING_NUMBER = "BANK_ROUTING_NUMBER";
+    public static String BANK_ACCOUNT_NUMBER = "BANK_ACCOUNT_NUMBER";
+    public static String BANK_ACCOUNT_HOLDER_NAME = "BANK_ACCOUNT_HOLDER_NAME";
+    public static String BANK_ACCOUNT_HOLDER_TYPE = "BANK_ACCOUNT_HOLDER_TYPE";
 
     ///for facebook login
-    public static String FB_EMAIL = "fb)email";
+    public static String FB_EMAIL = "fb_email";
     public static String FB_ID = "fb_id";
     public static String FB_ACCESS_TOKEN = "fb_access_token";
     public static String FB_NAME = "fb_name";

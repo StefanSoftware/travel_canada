@@ -8,9 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.allytours.R;
 import com.allytours.view.PurchaseActivity;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +24,9 @@ public class CheckOutFragment extends Fragment implements View.OnClickListener{
 
     private Button btnPay;
     private Context mContext;
+    private TextView tvTourName, tvAdultsCount, tvChildrenCount, tvDate, tvPickUp, tvTotalPrice, tvCurrency;
+    private ImageView ivFlag;
+
     public CheckOutFragment() {
         // Required empty public constructor
     }
@@ -43,6 +50,16 @@ public class CheckOutFragment extends Fragment implements View.OnClickListener{
     private void initUI(View view) {
         btnPay = (Button)view.findViewById(R.id.btn_checkout_pay);
         btnPay.setOnClickListener(this);
+        tvTourName = (TextView)view.findViewById(R.id.tv_checkout_tourname);
+        tvAdultsCount = (TextView)view.findViewById(R.id.tv_checkout_tourname);
+        tvChildrenCount = (TextView)view.findViewById(R.id.tv_checkout_tourname);
+        tvDate = (TextView)view.findViewById(R.id.tv_checkout_tourname);
+        tvPickUp = (TextView)view.findViewById(R.id.tv_checkout_tourname);
+        tvTotalPrice = (TextView)view.findViewById(R.id.tv_checkout_tourname);
+        tvCurrency = (TextView)view.findViewById(R.id.tv_checkout_tourname);
+
+        ivFlag = (ImageView)view.findViewById(R.id.iv_checkout_flag);
+
     }
 
     @Override
