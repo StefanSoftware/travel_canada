@@ -1,17 +1,226 @@
 package com.allytours.model;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2/9/2016.
  */
-public class TourModel implements Serializable{
+public class TourModel  implements Serializable{
     ArrayList<Integer> arrImage = new ArrayList<>();
-    String title, price, currency_unit, review_count, rate, duration, start_time,
-            end_time, days;
+    String title;
+    String price;
+
+    String currency_unit;
+    String review_count;
+    String rate;
+    String duration;
+    String start_time;
+    String end_time;
+    String days;
+    String adultCount ;
+    String childCount;
+    String totalPrice;
     ArrayList<String> arrCountry;
-    String lastMessage, lastMessageCount;
+    String  lastMessageCount;
+    String lastMessage;
+    LocationModel locationModel;
+    String lastMessageTime;
+    boolean is_romantic ;
+    boolean is_sightseeing;
+    boolean is_adventure;
+    boolean is_private;
+
+    String adultPrice, childPrice;
+    String locationIds, roundTripLocatioIds;
+    String pictureCount, picture1, picture2, picture3, picture4, picture5;
+    String active;
+    String tourType;
+    String languages;
+    String attractions, inclusions, specifiedCityIds;
+    String frequency, startDate, startDay, startTime;
+    String durationDay, durationTime;
+
+    public String getAdultPrice() {
+        return adultPrice;
+    }
+
+    public void setAdultPrice(String adultPrice) {
+        this.adultPrice = adultPrice;
+    }
+
+    public String getChildPrice() {
+        return childPrice;
+    }
+
+    public void setChildPrice(String childPrice) {
+        this.childPrice = childPrice;
+    }
+
+    public String getLocationIds() {
+        return locationIds;
+    }
+
+    public void setLocationIds(String locationIds) {
+        this.locationIds = locationIds;
+    }
+
+    public String getRoundTripLocatioIds() {
+        return roundTripLocatioIds;
+    }
+
+    public void setRoundTripLocatioIds(String roundTripLocatioIds) {
+        this.roundTripLocatioIds = roundTripLocatioIds;
+    }
+
+    public String getPictureCount() {
+        return pictureCount;
+    }
+
+    public void setPictureCount(String pictureCount) {
+        this.pictureCount = pictureCount;
+    }
+
+    public String getPicture1() {
+        return picture1;
+    }
+
+    public void setPicture1(String picture1) {
+        this.picture1 = picture1;
+    }
+
+    public String getPicture2() {
+        return picture2;
+    }
+
+    public void setPicture2(String picture2) {
+        this.picture2 = picture2;
+    }
+
+    public String getPicture3() {
+        return picture3;
+    }
+
+    public void setPicture3(String picture3) {
+        this.picture3 = picture3;
+    }
+
+    public String getPicture4() {
+        return picture4;
+    }
+
+    public void setPicture4(String picture4) {
+        this.picture4 = picture4;
+    }
+
+    public String getPicture5() {
+        return picture5;
+    }
+
+    public void setPicture5(String picture5) {
+        this.picture5 = picture5;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getTourType() {
+        return tourType;
+    }
+
+    public void setTourType(String tourType) {
+        this.tourType = tourType;
+    }
+
+    public String getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(String languages) {
+        this.languages = languages;
+    }
+
+    public String getAttractions() {
+        return attractions;
+    }
+
+    public void setAttractions(String attractions) {
+        this.attractions = attractions;
+    }
+
+    public String getInclusions() {
+        return inclusions;
+    }
+
+    public void setInclusions(String inclusions) {
+        this.inclusions = inclusions;
+    }
+
+    public String getSpecifiedCityIds() {
+        return specifiedCityIds;
+    }
+
+    public void setSpecifiedCityIds(String specifiedCityIds) {
+        this.specifiedCityIds = specifiedCityIds;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getStartDay() {
+        return startDay;
+    }
+
+    public void setStartDay(String startDay) {
+        this.startDay = startDay;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getDurationDay() {
+        return durationDay;
+    }
+
+    public void setDurationDay(String durationDay) {
+        this.durationDay = durationDay;
+    }
+
+    public String getDurationTime() {
+        return durationTime;
+    }
+
+    public void setDurationTime(String durationTime) {
+        this.durationTime = durationTime;
+    }
+
+    public TourModel() {
+
+    }
 
     public String getLastMessageCount() {
         return lastMessageCount;
@@ -21,7 +230,14 @@ public class TourModel implements Serializable{
         this.lastMessageCount = lastMessageCount;
     }
 
-    String adultCount, childCount, totalPrice;
+
+    public LocationModel getLocationModel() {
+        return locationModel;
+    }
+
+    public void setLocationModel(LocationModel locationModel) {
+        this.locationModel = locationModel;
+    }
 
     public String getAdultCount() {
         return adultCount;
@@ -63,7 +279,7 @@ public class TourModel implements Serializable{
         this.lastMessage = lastMessage;
     }
 
-    String lastMessageTime;
+
 
     public String getTitle() {
         return title;
@@ -177,7 +393,7 @@ public class TourModel implements Serializable{
         this.is_private = is_private;
     }
 
-    boolean is_romantic, is_sightseeing, is_adventure, is_private;
+
 
     public ArrayList<Integer> getArrImage() {
         return arrImage;

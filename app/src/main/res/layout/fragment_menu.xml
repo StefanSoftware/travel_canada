@@ -3,11 +3,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/grey">
+    android:background="@color/main_background">
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="100dp"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="@dimen/pad_30dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Allytours"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_24sp"
+                android:textStyle="bold"/>
+            <ImageView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:src="@drawable/logo_72"
+                android:layout_marginLeft="@dimen/pad_30dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/pad_20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-----  "
+                android:textColor="@color/black"
+               />
+            <TextView
+                android:id="@+id/tv_menu_signin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign in/Register"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_18sp"
+                android:padding="@dimen/pad_5dp"/>
+            <TextView
+                android:id="@+id/tv_menu_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dishant Patel"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_18sp"
+                android:padding="@dimen/pad_5dp"
+                android:visibility="gone"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  -----"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/white"/>
     <ListView
         android:id="@+id/lv_menu"
         android:layout_width="match_parent"

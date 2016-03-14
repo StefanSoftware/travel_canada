@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,18 +17,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.allytours.R;
-import com.allytours.controller.ExceptionHandler;
+import com.allytours.controller.Utilities.ExceptionHandler;
+import com.allytours.controller.Helpers.InitHelper;
 import com.allytours.controller.Utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.view.fragment.AboutFragment;
 import com.allytours.view.fragment.ChangePasswordFragment;
 import com.allytours.view.fragment.ContactUsFragment;
 import com.allytours.view.fragment.MapFragment;
-import com.allytours.view.fragment.PhoneVerifyFragment;
 import com.allytours.view.fragment.ProfileFragment;
+import com.allytours.view.fragment.PromotionFragment;
 import com.allytours.view.fragment.SignInFragment;
 import com.allytours.view.fragment.SignUpFragment;
 import com.allytours.view.fragment.SignupStep2Fragment;
@@ -45,10 +45,12 @@ public class HomeActivity extends AppCompatActivity {
     public static DrawerLayout mDrawerLayout;
     public static FragmentManager fragmentManager;
     private Toolbar toolbar;
-    private MenuItem searchItem;
+    private TextView tvTitle;
+    private MenuItem searchItem, newTourItem;
     private NavigationMenuFragment navigationMenuFragment;
     private MapFragment mainFragment;
     private Context mContext;
+
 
     public  static int fromWhere;//0: default, 1: from purchaseActivity to log in for payment
     @Override
@@ -77,6 +79,8 @@ public class HomeActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(Gravity.LEFT);
             }
         });
+        tvTitle = (TextView)toolbar.findViewById(R.id.tv_home_title);
+        setTitle("Allytours");
 
 
         //////////////navigation view
@@ -102,6 +106,12 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public void setTitle(String strTitle) {
+        tvTitle.setText(strTitle);
+//        toolbar.setTitle(strTitle);
+//        TextView tvTitle = (TextView)toolbar.findViewById(R.id.tv_home_title);
+//        tvTitle.setText(strTitle);
+    }
     public android.app.FragmentManager getFragmentManager() {
         return getFragmentManager();
     }
@@ -121,11 +131,7 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, new SignInFragment(), "")
                 .commit();
     }
-    public void goToPhoneVerify() {
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, new PhoneVerifyFragment(), "")
-                .commit();
-    }
+
     public void goToSingupStep2() {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, new SignupStep2Fragment(), "")
@@ -133,75 +139,74 @@ public class HomeActivity extends AppCompatActivity {
     }
     public void navigationTo(int num) {
         switch (num) {
+
             case 0:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, new CustomerToursFragment(), "")
+                        .commit();
+                searchItem.setVisible(true);
+                newTourItem.setVisible(false);
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, new OperatorToursFragment(), "")
+                        .commit();
+                searchItem.setVisible(false);
+                newTourItem.setVisible(false);
+                break;
+
+            case 2:
                 mainFragment = new MapFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, "")
                         .commit();
                 searchItem.setVisible(true);
-                break;
-            case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new ToursFragment(), "")
-                        .commit();
-                searchItem.setVisible(false);
-                break;
-            case 2:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new CustomerToursFragment(), "")
-                        .commit();
-                searchItem.setVisible(false);
+                newTourItem.setVisible(false);
                 break;
             case 3:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new ChangePasswordFragment(), "")
+                        .replace(R.id.fragment_container, new TourListingFragment(), "")
                         .commit();
                 searchItem.setVisible(false);
+                newTourItem.setVisible(true);
                 break;
             case 4:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new PaymentDetailFragment(), "")
+                        .replace(R.id.fragment_container, new PromotionFragment(), "")
                         .commit();
                 searchItem.setVisible(false);
+                newTourItem.setVisible(false);
                 break;
             case 5:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ContactUsFragment(), "")
                         .commit();
                 searchItem.setVisible(false);
+                newTourItem.setVisible(false);
                 break;
             case 6:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new AboutFragment(), "")
                         .commit();
                 searchItem.setVisible(false);
+                newTourItem.setVisible(false);
                 break;
             case 7:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new SignInFragment(), "")
-                        .commit();
-                searchItem.setVisible(false);
-                break;
-            case 8:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new TourListingFragment(), "")
-                        .commit();
-                searchItem.setVisible(false);
-                break;
-            case 9:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new OperatorToursFragment(), "")
-                        .commit();
-                searchItem.setVisible(false);
+                signout();
                 break;
             case 10:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ProfileFragment(), "")
                         .commit();
                 searchItem.setVisible(false);
+                newTourItem.setVisible(false);
                 break;
             case 11:
-                signout();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, new SignInFragment(), "")
+                        .commit();
+                searchItem.setVisible(false);
+                newTourItem.setVisible(false);
                 break;
         }
         mDrawerLayout.closeDrawers();
@@ -214,18 +219,12 @@ public class HomeActivity extends AppCompatActivity {
         builder.setPositiveButton("Sign Out",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Utils.setOnPreference(HomeActivity.this, Constant.USER_TYPE, "");
-                        Utils.setOnPreference(HomeActivity.this, Constant.FIRST_NAME, "");
-                        Utils.setOnPreference(HomeActivity.this, Constant.LAST_NAME, "");
-                        Utils.setOnPreference(HomeActivity.this, Constant.EMAIL, "");
-                        Utils.setOnPreference(HomeActivity.this, Constant.PHONE_NUMBER, "");
-                        Utils.setOnPreference(HomeActivity.this, Constant.USER_PHOTO, "");
-                        Utils.setOnPreference(HomeActivity.this, Constant.BIRTHDAY, "");
-                        Utils.setOnPreference(HomeActivity.this, Constant.GENDER, "");
 
-//                        Utils.setOnPreference(HomeActivity.this, Constant.FB_ACCESS_TOKEN, "");
+                        InitHelper.initPreference(mContext);
+
+                        Utils.setOnPreference(HomeActivity.this, Constant.FB_ACCESS_TOKEN, "");
 //                        Utils.setOnPreference(HomeActivity.this, Constant.FB_PHOTO, "");
-//                        Utils.setOnPreference(HomeActivity.this, Constant.FB_EMAIL, "");
+                        Utils.setOnPreference(HomeActivity.this, Constant.FB_EMAIL, "");
 //                        Utils.setOnPreference(HomeActivity.this, Constant.FB_NAME, "");
 //                        Utils.setOnPreference(HomeActivity.this, Constant.FB_ID, "");
 
@@ -266,6 +265,7 @@ public class HomeActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
         searchItem = menu.findItem(R.id.action_search);
+        newTourItem = menu.findItem(R.id.add_new_tour);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -287,6 +287,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         searchItem.setVisible(true);
+        newTourItem.setVisible(false);
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -301,6 +302,8 @@ public class HomeActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
             return true;
+        } else if (id == R.id.add_new_tour) {
+            startActivity(new Intent(this, AddNewTourActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

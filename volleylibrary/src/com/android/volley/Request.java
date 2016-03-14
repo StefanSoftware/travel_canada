@@ -96,7 +96,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     private long mRequestBirthTime = 0;
 
     /** Threshold at which we should log the request (even when debug logging is not enabled). */
-    private static final long SLOW_REQUEST_THRESHOLD_MS = 3000;
+    private static final long SLOW_REQUEST_THRESHOLD_MS = 6000;
 
     /** The retry policy for this request. */
     private RetryPolicy mRetryPolicy;

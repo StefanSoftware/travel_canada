@@ -113,20 +113,7 @@ public class TourListingFragment extends Fragment implements View.OnClickListene
             selectTabbar(1);
         }
     }
-    //////for test
-    private void  makeList() {
 
-        ArrayList<TourModel> arrayList = new ArrayList<>();
-        for (int i = 0; i < 10; i ++) {
-            TourModel tourModel = new TourModel();
-            tourModel.setTitle("Tour " + String.valueOf(i));
-            tourModel.setTotalPrice(String.valueOf(152 * i));
-            tourModel.setLastMessageCount(String.valueOf(i));
-            arrayList.add(tourModel);
-        }
-        TourListingAdapter tourAdapter = new TourListingAdapter(mContext, arrayList);
-        lvHome.setAdapter(tourAdapter);
-    }
 
     private class TourListingAdapter extends BaseAdapter {
 
@@ -170,9 +157,9 @@ public class TourListingFragment extends Fragment implements View.OnClickListene
 
             Button btnActive = (Button)view.findViewById(R.id.btn_item_tour_listing_active);
             if (isActive) {
-                btnActive.setText("Active");
-            } else {
                 btnActive.setText("Inactive");
+            } else {
+                btnActive.setText("Active");
             }
             tvTitle.setText(tourModel.getTitle());
             tvTotalPrice.setText(tourModel.getTotalPrice());
@@ -185,5 +172,23 @@ public class TourListingFragment extends Fragment implements View.OnClickListene
             return view;
         }
 
+    }
+
+
+
+
+    //////for test
+    private void  makeList() {
+
+        ArrayList<TourModel> arrayList = new ArrayList<>();
+        for (int i = 0; i < 10; i ++) {
+            TourModel tourModel = new TourModel();
+            tourModel.setTitle("Tour " + String.valueOf(i));
+            tourModel.setTotalPrice(String.valueOf(152 * i));
+            tourModel.setLastMessageCount(String.valueOf(i));
+            arrayList.add(tourModel);
+        }
+        TourListingAdapter tourAdapter = new TourListingAdapter(mContext, arrayList);
+        lvHome.setAdapter(tourAdapter);
     }
 }

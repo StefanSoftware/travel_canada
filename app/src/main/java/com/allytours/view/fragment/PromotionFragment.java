@@ -1,4 +1,4 @@
-package com.allytours.view.fragment.operator;
+package com.allytours.view.fragment;
 
 
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import com.allytours.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewTourLocationFragment extends Fragment {
+public class PromotionFragment extends Fragment {
 
 
-    public NewTourLocationFragment() {
+    public PromotionFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class NewTourLocationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_tour_location, container, false);
+        return inflater.inflate(R.layout.fragment_promotion, container, false);
     }
 
 

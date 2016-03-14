@@ -1,4 +1,4 @@
-package com.allytours.controller;
+package com.allytours.controller.Utilities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

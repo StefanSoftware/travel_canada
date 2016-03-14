@@ -1,10 +1,8 @@
-package com.allytours.controller;
+package com.allytours.controller.Utilities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
-
-import com.allytours.controller.ExceptionViewActivity;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

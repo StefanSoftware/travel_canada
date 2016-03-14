@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:hint="Email"
+                android:hint="*Email"
                 android:inputType="textEmailAddress"
                 android:maxLength="40"
                 />
@@ -29,10 +29,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:hint="Password"
+                android:hint="*Password"
                 android:inputType="textPassword"
                 android:maxLength="25"
                 />
+            <TextView
+                android:id="@+id/tv_signin_forgot_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/pad_10dp"
+                android:textColor="@color/blue"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dark"
+                android:layout_marginRight="@dimen/pad_5dp"
+                android:layout_marginLeft="@dimen/pad_5dp"/>
             <Button
                 android:id="@+id/btn_signin"
                 android:layout_width="match_parent"

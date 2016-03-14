@@ -3,6 +3,7 @@ package com.allytours.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -76,8 +77,48 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
     }
     private void initUI(View view) {
         etHolderName = (EditText)view.findViewById(R.id.et_signup_account_holder_name);
+        final Drawable originalDrawable = etHolderName.getBackground();
+        etHolderName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etHolderName.getText().toString().trim().length() == 0) {
+                        etHolderName.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etHolderName.setBackground(originalDrawable);
+
+                }
+            }
+        });
         etAccountNumber = (EditText)view.findViewById(R.id.et_signup_account_number);
+        etAccountNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etAccountNumber.getText().toString().trim().length() == 0) {
+                        etAccountNumber.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etAccountNumber.setBackground(originalDrawable);
+
+                }
+            }
+        });
         etRouteNumber = (EditText)view.findViewById(R.id.et_signup_route_number);
+        etRouteNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etRouteNumber.getText().toString().trim().length() == 0) {
+                        etRouteNumber.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etRouteNumber.setBackground(originalDrawable);
+
+                }
+            }
+        });
 
         btnSubmit = (Button)view.findViewById(R.id.btn_signup_submit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +129,7 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
                 }
             }
         });
+        ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_2);
     }
     ///check bank account info to submit
     private boolean checkValue() {
@@ -114,8 +156,7 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
     }
     ///submit bank account info
     private void submit() {
-
-
+        Utils.showProgress(mContext);
         Map<String, String> params = new HashMap<String, String>();
         params.put("email", userModel.getEmail());
         params.put("country", userModel.getBank_country());
@@ -129,6 +170,7 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Utils.hideProgress();
                         try {
                             String success = response.getString("success");
                             if (success.equals("true")) {
@@ -167,6 +209,7 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Utils.hideProgress();
                         Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 });

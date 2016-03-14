@@ -27,6 +27,25 @@ public class UserModel {
     String licensePhotoURL;
     String cardNumber;
     String cvv;
+    String ssn_sin;
+
+    public String getOffset() {
+        return offset;
+    }
+
+    public void setOffset(String offset) {
+        this.offset = offset;
+    }
+
+    String offset;
+
+    public String getSsn_sin() {
+        return ssn_sin;
+    }
+
+    public void setSsn_sin(String ssn_sin) {
+        this.ssn_sin = ssn_sin;
+    }
 
     public String getExpireday_month() {
         return expireday_month;

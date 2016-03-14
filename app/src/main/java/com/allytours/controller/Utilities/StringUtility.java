@@ -28,6 +28,7 @@ public class StringUtility {
         }
         return phrase;
     }
+
     public static String getEmoji(String str) {
         String strKey = "\\ud83d";
         while(str.contains(strKey)) {

@@ -5,30 +5,37 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
+import com.allytours.controller.Utilities.TimeUtility;
+import com.allytours.controller.Utils.GPSTracker;
+import com.orm.SugarContext;
+
 
 //import com.googlservices.pushnotifications.PlayServicesHelper;
 
 public class AllytoursApplication extends Application {
 
     public static AllytoursApplication app;
-//    public static QBManager qbManager;
     public static SharedPreferences appPrefs;
-//    public static HttpCommunicator communicator;
-//    public static RequestBuilder requestBuilder;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SugarContext.init(this);
         app = this;
         appPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-//        communicator = new HttpCommunicator(Constant.SEVER_URL);
-//        requestBuilder = new RequestBuilder();
+
+
+
     }
 
-//    public static void registerDeviceToken(Activity activity) {
-//        PlayServicesHelper playServicesHelper = new PlayServicesHelper(activity);
-//    }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        SugarContext.terminate();
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -40,9 +47,5 @@ public class AllytoursApplication extends Application {
         super.onLowMemory();
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-    }
 
 }

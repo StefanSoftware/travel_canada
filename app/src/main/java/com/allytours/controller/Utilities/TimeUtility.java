@@ -46,7 +46,38 @@ public class TimeUtility {
         return difs;
 
     }
+    public static String getOffset() {
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
 
+        TimeZone.getDefault().getDisplayName();
+        return getHourFromTimeStamp(String.valueOf(tz.getRawOffset()));
+    }
+    public static TimeZone getTimeZone() {
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+
+        TimeZone.getDefault().getDisplayName();
+        return tz;
+    }
+    public static String convertTimeZone(String currentTime) {
+        SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sourceFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date parsed = null; // => Date is in UTC now "2011-03-01 15:10:37"
+        try {
+            parsed = sourceFormat.parse(currentTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+//		TimeZone tz = TimeZone.getTimeZone("America/Chicago");
+        TimeZone timeZone = getTimeZone();
+        SimpleDateFormat destFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        destFormat.setTimeZone(timeZone);
+
+        String result = destFormat.format(parsed);
+        return result;
+    }
     public static String dateWithCustomFormat(String date, String curFormat,
                                               String format) {
         DateFormat dateFormat = new SimpleDateFormat(curFormat);
@@ -272,6 +303,14 @@ public class TimeUtility {
         String showDate1 = df2.format(date);
 
         return showDate1;
+    }
+    public static String getHourFromTimeStamp(String timstamp) {
+
+        DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+        Date date = new Date(Long.parseLong(timstamp) * 1000);
+        String strDate = dateFormat.format(date).toString();
+
+        return strDate;
     }
 
     public static int getCurrentDAY() {

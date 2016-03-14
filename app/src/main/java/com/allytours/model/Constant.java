@@ -20,6 +20,7 @@ public class Constant {
     public static String LAST_NAME = "lastname";
     public static String FULLNAME = "fullname";
     public static String PHONE_NUMBER = "phonenumber";
+    public static String SSN_SIN = "ssn_sin";
     public static String BIRTHDAY = "birthday";
     public static String GENDER = "gender";
     public static String USER_PHOTO = "userphoto";
@@ -49,4 +50,18 @@ public class Constant {
     //////////number parameters
     public static float maxZoomin = 15;
     public static float minZoomout = 1;
+
+    public static String TITLE_HOME = "AllyTours";
+    public static String TITLE_TOURS = "Tours";
+    public static String TITLE_CONTACT_US = "Contact us";
+    public static String TITLE_ABOUT = "About";
+    public static String TITLE_SIGN_IN = "Sign in";
+    public static String TITLE_SIGN_UP = "Customer Sign up";
+    public static String TITLE_SIGN_UP_1 = "Operator Sign up";
+    public static String TITLE_SIGN_UP_2 = "Banking Information";
+    public static String TITLE_PROFILE = "Profile";
+    public static String TITLE_CHECKOUT = "Check out";
+    public static String TITLE_CONFIRMATION = "Confirmation";
+    public static String TITLE_DETAIL_TOUR = "Detail Tour";
+
 }

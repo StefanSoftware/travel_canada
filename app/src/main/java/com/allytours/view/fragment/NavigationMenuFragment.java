@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.allytours.controller.Utilities.Utils;
 import com.allytours.model.Constant;
@@ -21,14 +22,14 @@ import java.util.ArrayList;
 public class NavigationMenuFragment extends Fragment {
 
     ListView menuListView ;
-
+    TextView tvSignin, tvUsername;
     Activity mActivity;
     ArrayList<String> arrCurrentTitles;
     ArrayList<MenuModel> arrMenu;
     ArrayList<MenuModel> arrCurrentMenu;
 
-    String[] titles = {"AllyTours", "Tours", "My Tours", "Change Password", "Payment Detail", "Contact Us",
-            "About", "Sign in", "Tour Listing", "My Tours", "Profile", "Sign Out"};
+    String[] titles = {"My Tours","My Tours", "Tour Search", "Tour List", "Promotion", "Contact Us",
+            "About", "Sign Out"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +52,7 @@ public class NavigationMenuFragment extends Fragment {
     private void initVariables() {
         arrMenu = new ArrayList<>();
 
-        for (int i = 0; i < 12; i ++ ) {
+        for (int i = 0; i < 8; i ++ ) {
             MenuModel menuModel = new MenuModel();
             menuModel.setId(i);
             menuModel.setTitle(titles[i]);
@@ -69,59 +70,49 @@ public class NavigationMenuFragment extends Fragment {
     }
     private void creatDefaultMenu() {
         arrCurrentMenu = new ArrayList<>();
+        arrCurrentMenu.add(arrMenu.get(2));
+        arrCurrentMenu.add(arrMenu.get(5));
+        arrCurrentMenu.add(arrMenu.get(6));
+
+        arrCurrentTitles = new ArrayList<>();
+        arrCurrentTitles.add(arrMenu.get(2).getTitle());
+        arrCurrentTitles.add(arrMenu.get(5).getTitle());
+        arrCurrentTitles.add(arrMenu.get(6).getTitle());
+    }
+    private void creatCustomerMenu() {
+        arrCurrentMenu = new ArrayList<>();
         arrCurrentMenu.add(arrMenu.get(0));
-        arrCurrentMenu.add(arrMenu.get(1));
+        arrCurrentMenu.add(arrMenu.get(2));
+        arrCurrentMenu.add(arrMenu.get(4));
         arrCurrentMenu.add(arrMenu.get(5));
         arrCurrentMenu.add(arrMenu.get(6));
         arrCurrentMenu.add(arrMenu.get(7));
 
         arrCurrentTitles = new ArrayList<>();
         arrCurrentTitles.add(arrMenu.get(0).getTitle());
-        arrCurrentTitles.add(arrMenu.get(1).getTitle());
+        arrCurrentTitles.add(arrMenu.get(2).getTitle());
+        arrCurrentTitles.add(arrMenu.get(4).getTitle());
         arrCurrentTitles.add(arrMenu.get(5).getTitle());
         arrCurrentTitles.add(arrMenu.get(6).getTitle());
         arrCurrentTitles.add(arrMenu.get(7).getTitle());
     }
-    private void creatCustomerMenu() {
+
+    private void creatOperatorMenu() {
         arrCurrentMenu = new ArrayList<>();
-        arrCurrentMenu.add(arrMenu.get(0));
         arrCurrentMenu.add(arrMenu.get(1));
-        arrCurrentMenu.add(arrMenu.get(2));
         arrCurrentMenu.add(arrMenu.get(3));
         arrCurrentMenu.add(arrMenu.get(4));
         arrCurrentMenu.add(arrMenu.get(5));
         arrCurrentMenu.add(arrMenu.get(6));
-        arrCurrentMenu.add(arrMenu.get(11));
+        arrCurrentMenu.add(arrMenu.get(7));
 
         arrCurrentTitles = new ArrayList<>();
-        arrCurrentTitles.add(arrMenu.get(0).getTitle());
         arrCurrentTitles.add(arrMenu.get(1).getTitle());
-        arrCurrentTitles.add(arrMenu.get(2).getTitle());
         arrCurrentTitles.add(arrMenu.get(3).getTitle());
         arrCurrentTitles.add(arrMenu.get(4).getTitle());
         arrCurrentTitles.add(arrMenu.get(5).getTitle());
         arrCurrentTitles.add(arrMenu.get(6).getTitle());
-        arrCurrentTitles.add(arrMenu.get(11).getTitle());
-    }
-
-    private void creatOperatorMenu() {
-        arrCurrentMenu = new ArrayList<>();
-        arrCurrentMenu.add(arrMenu.get(0));
-        arrCurrentMenu.add(arrMenu.get(1));
-        arrCurrentMenu.add(arrMenu.get(8));
-        arrCurrentMenu.add(arrMenu.get(9));
-        arrCurrentMenu.add(arrMenu.get(5));
-        arrCurrentMenu.add(arrMenu.get(6));
-        arrCurrentMenu.add(arrMenu.get(11));
-
-        arrCurrentTitles = new ArrayList<>();
-        arrCurrentTitles.add(arrMenu.get(0).getTitle());
-        arrCurrentTitles.add(arrMenu.get(1).getTitle());
-        arrCurrentTitles.add(arrMenu.get(8).getTitle());
-        arrCurrentTitles.add(arrMenu.get(9).getTitle());
-        arrCurrentTitles.add(arrMenu.get(5).getTitle());
-        arrCurrentTitles.add(arrMenu.get(6).getTitle());
-        arrCurrentTitles.add(arrMenu.get(11).getTitle());
+        arrCurrentTitles.add(arrMenu.get(7).getTitle());
     }
     private class MenuModel {
         int id;
@@ -152,6 +143,30 @@ public class NavigationMenuFragment extends Fragment {
     }
     ///////////////init menu
     private void initView(View view) {
+        tvSignin = (TextView)view.findViewById(R.id.tv_menu_signin);
+        tvSignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)mActivity).navigationTo(11);
+            }
+        });
+        tvUsername = (TextView)view.findViewById(R.id.tv_menu_username);
+        tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)mActivity).navigationTo(10);
+            }
+        });
+
+        String userType = Utils.getFromPreference(mActivity, Constant.USER_TYPE);
+        if (userType.equals("")) {
+            tvSignin.setVisibility(View.VISIBLE);
+            tvUsername.setVisibility(View.GONE);
+        } else {
+            tvSignin.setVisibility(View.GONE);
+            tvUsername.setVisibility(View.VISIBLE);
+            tvUsername.setText(Utils.getFromPreference(mActivity, Constant.FULLNAME));
+        }
 
         menuListView = (ListView)view.findViewById(R.id.lv_menu);
 

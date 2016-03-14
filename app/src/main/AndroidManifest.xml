@@ -32,13 +32,20 @@
         <activity
             android:name=".view.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--database-->
+        <meta-data android:name="DATABASE" android:value="allytours.db" />
+        <meta-data android:name="VERSION" android:value="2" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.allytours" />
 
         <!--google map-->
         <meta-data
@@ -58,7 +65,8 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            />
 
         <!--<provider-->
             <!--android:name="com.facebook.FacebookContentProvider"-->
@@ -67,24 +75,28 @@
 
 
         <activity
-            android:name=".controller.ExceptionViewActivity"
+            android:name=".controller.Utilities.ExceptionViewActivity"
             android:label="@string/title_activity_exception_view"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
         </activity>
         <activity
             android:name=".view.PurchaseActivity"
             android:label="@string/title_activity_detail_tour"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
         </activity>
         <activity
             android:name=".view.ChatActivity"
             android:label="@string/title_activity_chat"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
         </activity>
         <activity
             android:name=".view.AddNewTourActivity"
             android:label="@string/title_activity_add_new_tour"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
         </activity>
     </application>
 

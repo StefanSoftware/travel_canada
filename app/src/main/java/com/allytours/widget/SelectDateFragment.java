@@ -31,7 +31,7 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
             populateSetDate(yy, mm+1, dd);
         }
         public void populateSetDate(int year, int month, int day) {
-            editText.setText(month+"/"+day+"/"+year);
-            }
+            editText.setText(year + "-" + month + "-" + day);
+        }
 
     }

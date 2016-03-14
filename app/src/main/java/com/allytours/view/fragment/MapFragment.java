@@ -18,7 +18,8 @@ import com.allytours.R;
 import com.allytours.controller.API;
 import com.allytours.controller.Utilities.Utils;
 import com.allytours.model.Constant;
-import com.allytours.model.SummallyModel;
+import com.allytours.controller.Helpers.DBHelper;
+import com.allytours.model.LocationModel;
 import com.allytours.widget.markerclusterer.MarkerCluster;
 import com.allytours.widget.markerclusterer.MarkerClusterer;
 import com.android.volley.Request;
@@ -45,10 +46,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -64,7 +63,7 @@ public class MapFragment extends Fragment {
 
     private Activity mActivity;
 
-    ArrayList<SummallyModel> marrLocations;
+    List<LocationModel> marrLocations;
     ///for google map
     float mCurrentZoom;
     ArrayList<Marker> mMarkers;
@@ -85,15 +84,32 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-       initVariables();
+        initDB();
+
+        initVariables();
 
         initUI(view);
 
-//        getLocation();
-        setupMap();
+        getLocation();
+//        setupMap();
 
         return view;
     }
+
+    /////////////////=========================================================================================
+
+
+
+
+    private void initDB() {
+        DBHelper.deleteAllLocation();
+    }
+
+
+
+
+
+
     private void initVariables() {
         // initialize marker list
         mMarkers = new ArrayList<Marker>();
@@ -126,14 +142,16 @@ public class MapFragment extends Fragment {
     ///get location
     private void getLocation() {
 
-        Map<String, String> params = new HashMap<String, String>();
+        Utils.showProgress(mActivity);
 
-
-        CustomRequest signinRequest = new CustomRequest(Request.Method.POST, API.GET_LOCATIOIN, params,
-                new Response.Listener<JSONObject>() {
+        CustomRequest signinRequest = new CustomRequest(Request.Method.POST, API.GET_LOCATIOIN, null,
+        new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        Utils.hideProgress();
                         try {
+
                             String success = response.getString("success");
                             if (success.equals("true")) {
 
@@ -142,23 +160,23 @@ public class MapFragment extends Fragment {
                                 for (int i = 0; i < n; i ++) {
                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                                    String location_id = jsonObject.getString("location_id");
+                                    String location_id = jsonObject.getString("locationId");
                                     String city = jsonObject.getString("city");
                                     String region = jsonObject.getString("region");
-                                    String region_group = jsonObject.getString("region_group");
+                                    String region_group = jsonObject.getString("regionGroup");
                                     String country = jsonObject.getString("country");
-                                    String default_currency = jsonObject.getString("default_currency");
-                                    String totop = jsonObject.getString("totop");
-                                    String tot_tours = jsonObject.getString("tot_tours");
-                                    String tot_tours_amount = jsonObject.getString("tot_tours_amount");
-                                    String tour_count = jsonObject.getString("tour_count");
-                                    String tot_reviews = jsonObject.getString("tot_reviews");
-                                    String average_rating = jsonObject.getString("average_rating");
-                                    String updated_date = jsonObject.getString("updated_date");
+                                    String default_currency = jsonObject.getString("defaultCurrency");
+                                    String totop = jsonObject.getString("totalOp");
+                                    String tot_tours = jsonObject.getString("totalTours");
+                                    String tot_tours_amount = jsonObject.getString("totalToursAmt");
+                                    String tour_count = jsonObject.getString("tourCnt");
+                                    String tot_reviews = jsonObject.getString("totalReviews");
+                                    String average_rating = jsonObject.getString("avgRating");
+                                    String updated_date = jsonObject.getString("updated_at");
                                     String latitude = jsonObject.getString("latitude");
                                     String longitude = jsonObject.getString("longitude");
 
-                                    SummallyModel summallyModel = new SummallyModel();
+                                    LocationModel summallyModel = new LocationModel();
 
                                     summallyModel.setLocation_id(location_id);
                                     summallyModel.setCity(city);
@@ -167,17 +185,18 @@ public class MapFragment extends Fragment {
                                     summallyModel.setCountry(country);
                                     summallyModel.setDefault_currency(default_currency);
                                     summallyModel.setTours_region_country(city + " " + region + " " + country);
-                                    summallyModel.setTotop(totop);
-                                    summallyModel.setTourcnt(tour_count);
-                                    summallyModel.setTottours(tot_tours);
-                                    summallyModel.setTottoursamt(tot_tours_amount);
-                                    summallyModel.setTotreviews(tot_reviews);
-                                    summallyModel.setAvgrating(average_rating);
-                                    summallyModel.setUpdatedt(updated_date);
+                                    summallyModel.setTotal_op(totop);
+                                    summallyModel.setTour_count(tour_count);
+                                    summallyModel.setTotal_tours(tot_tours);
+                                    summallyModel.setTotal_tour_amount(tot_tours_amount);
+                                    summallyModel.setTotal_reviews(tot_reviews);
+                                    summallyModel.setAverage_rating(average_rating);
+                                    summallyModel.setUpdated_date(updated_date);
                                     summallyModel.setLatitude(latitude);
                                     summallyModel.setLongitude(longitude);
 
-                                    marrLocations.add(summallyModel);
+                                    DBHelper.insertLocation(summallyModel);
+//                                    marrLocations.add(summallyModel);
                                 }
                                 setupMap();
                             } else {
@@ -197,6 +216,7 @@ public class MapFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Utils.hideProgress();
                         Toast.makeText(mActivity, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -217,8 +237,8 @@ public class MapFragment extends Fragment {
 //                mCurrentZoom = getGoogleMap().getCameraPosition().zoom;
                 mCurrentZoom = Constant.minZoomout;
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50, -90), Constant.minZoomout));
-//                createMarkers();
-                createRandomMarkers(100);
+                createMarkers();
+//                createRandomMarkers(100);
 
                 getGoogleMap().setOnCameraChangeListener(
                         new GoogleMap.OnCameraChangeListener() {
@@ -280,6 +300,7 @@ public class MapFragment extends Fragment {
         double minLng = -50;
         double maxLng = -130;
 
+        marrLocations = DBHelper.getAllLocation();
         // create random markers
         for (int i = 0; i < marrLocations.size(); i++) {
             // create random position
@@ -292,9 +313,9 @@ public class MapFragment extends Fragment {
             // create marker as non-visible
             MarkerOptions markerOptions = new MarkerOptions()
                     .title(marrLocations.get(i).getCity())
-                    .snippet(marrLocations.get(i).getTottours())
+                    .snippet(marrLocations.get(i).getTotal_tours())
                     .position(markerPos)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.logo_72))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.logo_25))
                     .visible(false);
 
             // create marker

@@ -18,6 +18,14 @@
             android:src="@drawable/navigation_icon"
             android:background="@color/transparent"
             android:layout_centerVertical="true"/>
+        <TextView
+            android:id="@+id/tv_home_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_18sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/pad_10dp"/>
 
         <!--<SearchView-->
             <!--android:layout_width="match_parent"-->

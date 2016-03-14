@@ -18,6 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
@@ -32,4 +35,9 @@ dependencies {
     compile project(':volleylibrary')
     compile project(':facebook-android-sdk-4.10.0')
     compile 'io.card:android-sdk:5.3.0'
+
+    compile 'com.android.support:multidex:1.0.0'
+//    compile files('libs/activeandroid-3.1-beta.jar')
+
+    compile 'com.github.satyan:sugar:1.4'
 }

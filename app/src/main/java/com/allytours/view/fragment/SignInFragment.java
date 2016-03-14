@@ -4,6 +4,7 @@ package com.allytours.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allytours.R;
@@ -57,6 +59,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 
     private Button btnToSignup, btnSignin;
     private EditText etEmail, etPassword;
+    private TextView tvForgotPassword;
     private Context mContext;
 
     private Button btnFacebookSingin;
@@ -191,17 +194,45 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         btnFacebookSingin.setOnClickListener(this);
 
         etEmail = (EditText)view.findViewById(R.id.et_signin_email);
+        final Drawable originalDrawable = etEmail.getBackground();
+        etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etEmail.getText().toString().trim().length() == 0) {
+                        etEmail.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etEmail.setBackground(originalDrawable);
+
+                }
+            }
+        });
         etPassword = (EditText)view.findViewById(R.id.et_signin_password);
+        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etPassword.getText().toString().trim().length() == 0) {
+                        etPassword.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etPassword.setBackground(originalDrawable);
+
+                }
+            }
+        });
+        tvForgotPassword = (TextView)view.findViewById(R.id.tv_signin_forgot_pass);
+        tvForgotPassword.setOnClickListener(this);
+
+        ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_IN);
     }
 
     @Override
     public void onClick(View v) {
         if (v == btnToSignup) {
-            if (Utils.getFromPreference(mContext, Constant.VERIFY_CODE).length() > 0) {
-                ((HomeActivity)mContext).goToPhoneVerify();
-            } else {
-                ((HomeActivity)mContext).goToSignup();
-            }
+            ((HomeActivity)mContext).goToSignup();
+
 
         }
         if (v == btnSignin) {
@@ -210,6 +241,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         if (v == btnFacebookSingin) {
             checkToSigninFacebook();
         }
+        if (v == tvForgotPassword) {
+            forgotPassword();
+        }
     }
 //    fb sign in
     private void fbSignIn(){
@@ -217,6 +251,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 
         if (email.length() == 0) {
         } else {
+            Utils.showProgress(mContext);
             Map<String, String> params = new HashMap<String, String>();
             params.put("email", email);
 
@@ -224,6 +259,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Utils.hideProgress();
                             try {
                                 String success = response.getString("success");
                                 if (success.equals("true")) {
@@ -248,7 +284,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                         String address = jsonObject.getString("address");
                                         String gender = jsonObject.getString("gender");
 
-                                        String licensePhoto = jsonObject.getString("licensePhoto");
+                                        String licensePhoto = jsonObject.getString("licensephoto");
 
 
                                         Utils.setOnPreference(mContext, Constant.PHONE_NUMBER, phonenumber);
@@ -270,9 +306,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                 } else {
                                     String reason = response.getString("reason");
                                     if (reason.equals("401")) {
-                                        Utils.showOKDialog(mContext, "Email is unregistered");
+                                        Utils.showOKDialog(mContext, "Please sign up first");
                                     } else if (reason.equals("402")) {
-                                        Utils.showOKDialog(mContext, "Password incorrect");
+                                        Utils.showOKDialog(mContext, "Please sign up first");
                                     }
                                 }
                             }catch (Exception e) {
@@ -284,6 +320,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            Utils.hideProgress();
                             Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();
                         }
                     });
@@ -296,8 +333,21 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         String email = etEmail.getText().toString();
         final String password = etPassword.getText().toString();
 
-        if (email.length() == 0 || password.length() == 0) {
-        } else {
+        if (email.length() == 0 ) {
+            Utils.showOKDialog(mContext, "Please input email");
+            return;
+        } else if (!Utils.isEmailValid(email)) {
+            Utils.showOKDialog(mContext, "Please input correct email");
+            return;
+        }
+        else if (password.length() == 0) {
+            Utils.showOKDialog(mContext, "Please input password");
+            return;
+        }
+        {
+
+            Utils.showProgress(mContext);
+
             Map<String, String> params = new HashMap<String, String>();
             params.put("email", email);
             params.put("password", password);
@@ -306,6 +356,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Utils.hideProgress();
                             try {
                                 String success = response.getString("success");
                                 if (success.equals("true")) {
@@ -333,7 +384,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                         String address = jsonObject.getString("address");
                                         String gender = jsonObject.getString("gender");
 
-//                                        String licensePhoto = jsonObject.getString("licensePhoto");
+                                        String licensePhoto = jsonObject.getString("licensephoto");
 
 
                                         Utils.setOnPreference(mContext, Constant.PHONE_NUMBER, phonenumber);
@@ -341,7 +392,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                         Utils.setOnPreference(mContext, Constant.ADDRESS, address);
                                         Utils.setOnPreference(mContext, Constant.GENDER, gender);
 
-//                                        Utils.setOnPreference(mContext, Constant.LICENSE_PHOTO, licensePhoto);
+                                        Utils.setOnPreference(mContext, Constant.LICENSE_PHOTO, licensePhoto);
                                     } else if (userType.equals(Constant.USER_TYPE_CUSTOMER)) {
 //                                        String cardnumber = jsonObject.getString("cardnumber");
 //                                        String cvv = jsonObject.getString("cvv");
@@ -372,6 +423,55 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            Utils.hideProgress();
+                            Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+            RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+            requestQueue.add(signinRequest);
+        }
+
+    }
+    private void forgotPassword() {
+        String email = etEmail.getText().toString();
+
+        if (email.length() == 0 ) {
+            Utils.showOKDialog(mContext, "Please input email");
+        } else {
+
+            Utils.showProgress(mContext);
+
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("email", email);
+
+            CustomRequest signinRequest = new CustomRequest(Request.Method.POST, API.FORGOT_PASSWORD, params,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Utils.hideProgress();
+                            try {
+                                String success = response.getString("success");
+                                if (success.equals("true")) {
+                                    Utils.showOKDialog(mContext, "We sent new password to your email");
+
+                                } else {
+                                    String reason = response.getString("reason");
+                                    if (reason.equals("401")) {
+                                        Utils.showOKDialog(mContext, "Email is unregistered");
+                                    } else if (reason.equals("402")) {
+                                        Utils.showOKDialog(mContext, "Email address does not exist");
+                                    }
+                                }
+                            }catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Utils.hideProgress();
                             Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();
                         }
                     });

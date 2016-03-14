@@ -4,12 +4,12 @@ package com.allytours.controller;
  * Created by Administrator on 2/16/2016.
  */
 public class API {
-//    public static String BASE_URL = "http://192.168.2.16/AllyTour5.1/public/mobile/";
-
-    public static String BASE_URL = "http://54.213.114.248/Allytour/public/mobile/";
+    public static String BASE_URL = "http://192.168.2.16/AllyTour5.1/public/mobile/";
+//    public static String BASE_URL = "http://54.213.114.248/Allytour/public/mobile/";
 
     public static String SINGIN = BASE_URL + "signin";
     public static String FB_SINGIN = BASE_URL + "fb_signin";
+    public static String FORGOT_PASSWORD = BASE_URL + "forgot_password";
     public static String CUSTOMER_SIGNUP = BASE_URL + "customer_signup";
     public static String SIGNUP_STEP1 = BASE_URL + "signup_step1";
     public static String SIGNUP_STEP2 = BASE_URL + "signup_step2";

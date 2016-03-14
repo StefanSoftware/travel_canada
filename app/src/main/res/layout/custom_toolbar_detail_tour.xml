@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:text="Title"
             android:textColor="@color/white"
-            android:textSize="@dimen/txt_15sp"
+            android:textSize="@dimen/txt_18sp"
+            android:textStyle="bold"
             android:layout_toRightOf="@+id/btn_back_from_detail"
             android:layout_marginLeft="@dimen/pad_10dp"
             android:layout_centerVertical="true"/>

@@ -14,13 +14,22 @@
         <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
             android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
 
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/custom_toolbar_detail_tour">
-            </include>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/add_new_tour_toolbar"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_add_new_tour_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/txt_18sp"
+                    android:textStyle="bold"/>
+                </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
         <FrameLayout
-            android:id="@+id/fragment_container"
+            android:id="@+id/add_new_tour_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>

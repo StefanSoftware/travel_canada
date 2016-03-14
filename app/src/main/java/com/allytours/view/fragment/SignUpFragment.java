@@ -4,7 +4,6 @@ package com.allytours.view.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.support.v4.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,11 +18,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,33 +36,34 @@ import android.widget.Toast;
 
 import com.allytours.R;
 import com.allytours.controller.API;
+import com.allytours.controller.Helpers.InitHelper;
+import com.allytours.controller.Helpers.TimeZoneHelper;
 import com.allytours.controller.Utilities.MediaUtility;
+import com.allytours.controller.Utilities.StringUtility;
+import com.allytours.controller.Utilities.TimeUtility;
 import com.allytours.controller.Utilities.UIUtility;
 import com.allytours.controller.Utilities.Utils;
+import com.allytours.controller.Utils.GPSTracker;
 import com.allytours.view.camera.AlbumStorageDirFactory;
 import com.allytours.view.camera.BaseAlbumDirFactory;
 import com.allytours.view.camera.FroyoAlbumDirFactory;
 import com.allytours.model.Constant;
 import com.allytours.model.UserModel;
 import com.allytours.view.HomeActivity;
+import com.allytours.widget.CircularImageView;
 import com.allytours.widget.SelectDateFragment;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.CustomMultipartRequest;
-import com.android.volley.request.CustomRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
@@ -68,7 +71,7 @@ import io.card.payment.CreditCard;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SignUpFragment extends Fragment implements View.OnClickListener{
+public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     private static final int ACTION_TAKE_USER_PHOTO = 1;
     private static final int ACTION_TAKE_LICENSE_PHOTO = 2;
@@ -77,11 +80,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
     private static final String JPEG_FILE_SUFFIX = ".jpg";
 
     private Button ibBack, btnDone;
-    private EditText etFullname, etEmail, etPassword, etCountryCode,etPhoneNumber, etBirthday,etCityCountry, etAddress;
-    private ImageView ivUserPhoto, ivLicense;
+    private EditText etFullname, etEmail, etPassword,etReenterPassword, etCountryCode,etPhoneNumber,etSSN, etBirthday, etAddress;
+    private AutoCompleteTextView actv;
+    private ImageView  ivLicense;
+    private CircularImageView ivUserPhoto;
     private TextView tvLicense;
     private RadioButton rbCustomer, rbOperator, rbMale, rbFemale;
-    private LinearLayout llContainer1, llContainer2;
+    private LinearLayout llContainer1, llContainer2, llContainerOperatorOptions;
     private EditText etCardNumber, etCVV, etExprieDate;
     private Button btnCardScan;
     private LinearLayout llCardInfoContainer, llCardInfo;
@@ -107,6 +112,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
         initVariable();
         initUI(view);
+        getTimeZoneOffset();
         return view;
     }
 
@@ -134,20 +140,132 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         btnCardScan.setOnClickListener(this);
 
         etFullname = (EditText)view.findViewById(R.id.et_signup_fullname);
+        final Drawable originalDrawable = etFullname.getBackground();
+        etFullname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etFullname.getText().toString().trim().length() == 0) {
+                        etFullname.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etFullname.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+                }
+            }
+        });
+
         etEmail = (EditText)view.findViewById(R.id.et_signup_email);
+        etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etEmail.getText().toString().trim().length() == 0) {
+                        etEmail.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etEmail.setBackgroundColor(getResources().getColor(R.color.transparent));
+//                    etEmail.setBackground(getResources().getDrawable(android.R.drawable.edit_text));
+                }
+            }
+        });
+
         etPassword = (EditText)view.findViewById(R.id.et_signup_password);
+
+        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etPassword.getText().toString().trim().length() == 0) {
+                        etPassword.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etPassword.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
+
+        etReenterPassword = (EditText)view.findViewById(R.id.et_signup_retype_password);
+
+        etReenterPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etReenterPassword.getText().toString().trim().length() == 0) {
+                        etReenterPassword.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etReenterPassword.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
+
         etCountryCode = (EditText)view.findViewById(R.id.et_signup_country_code);
+        etCountryCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etCountryCode.getText().toString().trim().length() == 0) {
+                        etCountryCode.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etCountryCode.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
+
         etPhoneNumber = (EditText)view.findViewById(R.id.et_signup_phonenumber);
+        etPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etPhoneNumber.getText().toString().trim().length() < 10) {
+                        etPhoneNumber.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etPhoneNumber.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
+
+        etSSN = (EditText)view.findViewById(R.id.et_signup_ssn);
+        etSSN.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etSSN.getText().toString().trim().length() < 9) {
+                        etSSN.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etSSN.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
+
         etBirthday = (EditText)view.findViewById(R.id.et_signup_birthday);
         etBirthday.setOnClickListener(this);
-        etCityCountry = (EditText)view.findViewById(R.id.et_signup_city_country);
+//        etCityCountry = (EditText)view.findViewById(R.id.et_signup_city_country);
+
         etAddress = (EditText)view.findViewById(R.id.et_signup_address);
+        etAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (etAddress.getText().toString().trim().length() == 0) {
+                        etAddress.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    etAddress.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
+
 
         etCardNumber = (EditText)view.findViewById(R.id.et_signup_cardnumber);
         etCVV = (EditText)view.findViewById(R.id.et_signup_cvv);
         etExprieDate = (EditText)view.findViewById(R.id.et_signup_expire_date);
 
-        ivUserPhoto = (ImageView)view.findViewById(R.id.iv_signup_userphoto);
+        ivUserPhoto = (CircularImageView)view.findViewById(R.id.iv_signup_userphoto);
         ivUserPhoto.setOnClickListener(this);
         ivLicense = (ImageView)view.findViewById(R.id.iv_signup_license);
         ivLicense.setOnClickListener(this);
@@ -165,25 +283,57 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
         llContainer1 = (LinearLayout)view.findViewById(R.id.ll_signup_container1);
         llContainer2 = (LinearLayout)view.findViewById(R.id.ll_signup_container2);
+        llContainerOperatorOptions = (LinearLayout)view.findViewById(R.id.ll_signup_operator_options);
         llCardInfo = (LinearLayout)view.findViewById(R.id.ll_signup_card_info);
         llCardInfoContainer = (LinearLayout)view.findViewById(R.id.ll_signup_card_info_container);
+
+        ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_1);
+        initAutoCompleteTextView(view);
     }
 
-    @Override
+    private void initAutoCompleteTextView(View view) {
+        String[] arrCountry = getResources().getStringArray(R.array.country_state_city);
+        //Creating the instance of ArrayAdapter containing list of language names
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.select_dialog_item, arrCountry);
+        //Getting the instance of AutoCompleteTextView
+        actv= (AutoCompleteTextView)view.findViewById(R.id.sp_signup_city_country);
+        actv.setThreshold(1);//will start working from first character
+        actv.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
+        actv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (actv.getText().toString().trim().length() == 0) {
+                        actv.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    }
+                } else {
+                    actv.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
+    }
+
+
     public void onClick(View v) {
         if (!(v instanceof EditText)) {
             UIUtility.hideSoftKeyboard(getActivity());
         }
         if (v == ibBack) {
+            InitHelper.initPreference(mContext);
             ((HomeActivity)mContext).backToSingin();
         }
         if (v == btnDone) {
             if (checkValue()) {
                 if (rbOperator.isChecked()) {
                     operatorSignupStep1();
+//                    if (Utils.getFromPreference(mContext, Constant.PHONE_NUMBER).length() > 0) {
+//                        showVerifyDialog();
+//                    } else {
+//
+//                    }
+
                 } else {
                     customerSignup();
-//                    testSignup();
                 }
             }
         }
@@ -191,18 +341,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
             onScanPress();
         }
         if (v == rbCustomer) {
-            llContainer1.setVisibility(View.GONE);
             llContainer2.setVisibility(View.GONE);
-            etCityCountry.setVisibility(View.GONE);
-            etAddress.setVisibility(View.GONE);
+            llContainerOperatorOptions.setVisibility(View.GONE);
             llCardInfoContainer.setVisibility(View.VISIBLE);
+            ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP);
         }
         if (v == rbOperator) {
-            llContainer1.setVisibility(View.VISIBLE);
             llContainer2.setVisibility(View.VISIBLE);
-            etCityCountry.setVisibility(View.VISIBLE);
-            etAddress.setVisibility(View.VISIBLE);
+            llContainerOperatorOptions.setVisibility(View.VISIBLE);
             llCardInfoContainer.setVisibility(View.GONE);
+            ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_1);
         }
         if (v == ivUserPhoto) {
             showChooseDialog(mContext, "Choose picture from", ACTION_TAKE_USER_PHOTO);
@@ -216,49 +364,46 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
             newFragment.show(getFragmentManager(), "Birthday");
         }
     }
-    ///photo choose dialog
-    public void showChooseDialog(Context context, String message, final int type){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(Constant.INDECATOR);
-        builder.setMessage(message);
-        builder.setCancelable(true);
-        builder.setPositiveButton("Camera",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dispatchTakePictureIntent(type);
-                        dialog.cancel();
-                    }
-                });
-        builder.setNegativeButton("Gallary",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        takePictureFromGallery(type);
-                        dialog.cancel();
-                    }
-                });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int arg1) {
-                dialog.cancel();
-
-            }
-        });
-//        dialog.setCancelable(true);
-//        dialog.setCanceledOnTouchOutside(false);
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
     ///check values to sign up
     private boolean checkValue() {
         userModel = new UserModel();
         userModel.setUserPhotoURL(userPhotoPath);
-        if (TextUtils.isEmpty(etFullname.getText().toString()) || TextUtils.isEmpty(etEmail.getText().toString()) || TextUtils.isEmpty(etPassword.getText().toString())
-                || TextUtils.isEmpty(etPhoneNumber.getText().toString()) || TextUtils.isEmpty(etCountryCode.getText().toString())
-                 ) {
-            Utils.showOKDialog(mContext, "Please input data");
+
+        if (TextUtils.isEmpty(etEmail.getText().toString())) {
+            Utils.showOKDialog(mContext, "Please input email");
             return false;
         }
+        if (TextUtils.isEmpty(etPassword.getText().toString())) {
+            Utils.showOKDialog(mContext, "Please input password");
+            return false;
+        }
+        if (TextUtils.isEmpty(etReenterPassword.getText().toString())) {
+            Utils.showOKDialog(mContext, "Please reenter password");
+            return false;
+        }
+        if (!etReenterPassword.getText().toString().equals(etPassword.getText().toString())) {
+            Utils.showOKDialog(mContext, "Passwords are not matching");
+            return false;
+        }
+        if (TextUtils.isEmpty(etFullname.getText().toString()) ) {
+            Utils.showOKDialog(mContext, "Please input full name");
+            return false;
+        }
+        if (TextUtils.isEmpty(etPhoneNumber.getText().toString())) {
+            Utils.showOKDialog(mContext, "Please input phone number");
+            return false;
+        }
+        if (etPhoneNumber.getText().toString().trim().length() < 10) {
+            Utils.showOKDialog(mContext, "Phone number must be 10 digits");
+            return false;
+        }
+        if (TextUtils.isEmpty(etCountryCode.getText().toString())) {
+            Utils.showOKDialog(mContext, "Please input country code");
+            return false;
+        }
+
+
         String email = etEmail.getText().toString().trim();
         if ( !Utils.isEmailValid(email)) {
             Utils.showOKDialog(mContext, "Invalid email");
@@ -271,12 +416,33 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         userModel.setUsertype("C");
         ////in case of operator
         if (rbOperator.isChecked()) {
-            if ( TextUtils.isEmpty(etBirthday.getText().toString()) || TextUtils.isEmpty(etCityCountry.getText().toString()) || TextUtils.isEmpty(etAddress.getText().toString()) || TextUtils.isEmpty(licensePhotoPath)) {
-                Utils.showOKDialog(mContext, "Please input data");
+            if (TextUtils.isEmpty(etSSN.getText().toString())) {
+                Utils.showOKDialog(mContext, "Please input SSN/SIN number");
                 return false;
             }
+            if (etSSN.getText().toString().trim().length() < 9) {
+                Utils.showOKDialog(mContext, "SSN/SIN number must be 9 digits");
+                return false;
+            }
+            if (TextUtils.isEmpty(etBirthday.getText().toString())) {
+                Utils.showOKDialog(mContext, "Please input birthday");
+                return false;
+            }
+            if (TextUtils.isEmpty(actv.getText().toString())) {
+                Utils.showOKDialog(mContext, "Please input city/country");
+                return false;
+            }
+            if (TextUtils.isEmpty(etAddress.getText().toString())) {
+                Utils.showOKDialog(mContext, "Please input address");
+                return false;
+            }
+            if (  TextUtils.isEmpty(licensePhotoPath)) {
+                Utils.showOKDialog(mContext, "Please input license photo");
+                return false;
+            }
+            userModel.setSsn_sin(etSSN.getText().toString());
             userModel.setBirthday(etBirthday.getText().toString());
-            userModel.setCity_country(etCityCountry.getText().toString());
+            userModel.setCity_country(actv.getText().toString());
             userModel.setAddress(etAddress.getText().toString());
             userModel.setLicensePhotoURL(licensePhotoPath);
             if (rbFemale.isChecked()) {
@@ -290,21 +456,31 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 Utils.showOKDialog(mContext, "Please input card information");
                 return false;
             } else {
-                userModel.setCardNumber(etCardNumber.getText().toString());
-                userModel.setCvv(etCVV.getText().toString());
+//                userModel.setCardNumber(etCardNumber.getText().toString());
+//                userModel.setCvv(etCVV.getText().toString());
                 String strExpireDate = etExprieDate.getText().toString().trim();
                 userModel.setExpireday_month(strExpireDate.substring(0, strExpireDate.lastIndexOf("/")));
                 userModel.setExpireday_year(strExpireDate.substring(strExpireDate.lastIndexOf("/") + 1));
+                //for test
+                userModel.setCardNumber("4242424242424242");
+                userModel.setCvv("314");
+
+
             }
         }
+        String offset = Utils.getFromPreference(mContext, "rawOffset");
+        offset = TimeUtility.getHourFromTimeStamp(offset);
+        userModel.setOffset(TimeUtility.getOffset());
         return true;
     }
     ///operator sign up step 1
     private void operatorSignupStep1(){
+        Utils.showProgress(mContext);
         CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(API.SIGNUP_STEP1,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Utils.hideProgress();
                         try {
                             String success = response.getString("success");
                             if (success.equals("true")) {
@@ -317,12 +493,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                                 Utils.setOnPreference(mContext, Constant.PASSWORD, userModel.getPassword());
                                 Utils.setOnPreference(mContext, Constant.FULLNAME, userModel.getFullname());
 
+                                Utils.setOnPreference(mContext, Constant.SSN_SIN, userModel.getSsn_sin());
                                 Utils.setOnPreference(mContext, Constant.COUNTRY_CITY, userModel.getCity_country());
                                 Utils.setOnPreference(mContext, Constant.ADDRESS, userModel.getAddress());
                                 Utils.setOnPreference(mContext, Constant.GENDER, userModel.getGender());
                                 Utils.setOnPreference(mContext, Constant.BIRTHDAY, userModel.getBirthday());
 
-                                ((HomeActivity) mContext).goToPhoneVerify();
+                                showVerifyDialog();
                             } else {
                                 String reason = response.getString("reason");
                                 if (reason.equals("402")) {
@@ -339,7 +516,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainActivity.this,error.toString(), Toast.LENGTH_LONG).show();
+                        Utils.hideProgress();
+                        Toast.makeText(mContext,error.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
         customMultipartRequest
@@ -350,7 +528,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 .addStringPart("country_city", userModel.getCity_country())
                 .addStringPart("address", userModel.getAddress())
                 .addStringPart("birthday", userModel.getBirthday())
+                .addStringPart("ssn", userModel.getSsn_sin())
                 .addStringPart("gender", userModel.getGender())
+                .addStringPart("offset", userModel.getOffset())
                 .addFilePart("licensephoto", licensePhotoPath);
         if (userPhotoPath.length() > 0) {
             customMultipartRequest
@@ -367,11 +547,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
     }
     ///customer Sign up
     private void customerSignup() {
-
+        Utils.showProgress(mContext);
         CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(API.CUSTOMER_SIGNUP,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Utils.hideProgress();
                         try {
                             String success = response.getString("success");
                             if (success.equals("true")) {
@@ -400,12 +581,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                             } else {
                                 String reason = response.getString("reason");
                                 if (reason.equals("401")) {
-                                    Utils.showOKDialog(mContext, "Invalid parameter");
+                                    Utils.showOKDialog(mContext, response.getString("comment"));
                                 }else if (reason.equals("402")) {
-                                    Utils.showOKDialog(mContext, "Failed validation check");
+                                    Utils.showOKDialog(mContext, "Email is registered already");
                                 }else if (reason.equals("403")) {
-                                    Utils.showOKDialog(mContext, "Email or phone number registered already");
-                                }else if (reason.equals("404")) {
                                     Utils.showOKDialog(mContext, "Invalid card");
                                 }
                             }
@@ -417,6 +596,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Utils.hideProgress();
                         Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -428,7 +608,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 .addStringPart("cvv", userModel.getCvv())
                 .addStringPart("expire_date_year", userModel.getExpireday_year())
                 .addStringPart("expire_date_month", userModel.getExpireday_month())
-                .addStringPart("phonenumber", userModel.getPhoneNumber());
+                .addStringPart("phonenumber", userModel.getPhoneNumber())
+                .addStringPart("offset", userModel.getOffset());
+
         if (userPhotoPath.length() > 0) {
             customMultipartRequest
                     .addFilePart("userphoto", userPhotoPath);
@@ -442,19 +624,55 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    //////////////////take a picture from gallery
-    private void takePictureFromGallery(int type)
-    {
+    private void getTimeZoneOffset() {
+        GPSTracker gpsTracker = new GPSTracker(mContext);
+        String currentTime = TimeUtility.getCurrentTimeStamp();
+        TimeZoneHelper timeZoneHelper = new TimeZoneHelper(mContext, String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()), currentTime);
+        timeZoneHelper.getTimeZone();
+    }
 
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        if (type == ACTION_TAKE_USER_PHOTO) {
-            startActivityForResult(photoPickerIntent, 1010);
-        } else if (type == ACTION_TAKE_LICENSE_PHOTO) {
-            startActivityForResult(photoPickerIntent, 1011);
+    //show phone verify dialog
+    private void showVerifyDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Enter the verification code");
+
+        // Set up the input
+        final EditText input = new EditText(mContext);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType( InputType.TYPE_CLASS_NUMBER);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("Verify", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                verify(input.getText().toString().trim());
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                InitHelper.initPreference(mContext);
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+    ///do verify
+    private void verify(String verifyCode) {
+
+        if (verifyCode.equals(Utils.getFromPreference(getContext(), Constant.VERIFY_CODE))) {
+            Utils.setOnPreference(getContext(), Constant.VERIFY_CODE, "");
+            ((HomeActivity) getContext()).goToSingupStep2();
+        } else {
+            Utils.showOKDialog(getContext(), "Verification code is incorrect");
         }
 
+
     }
+
 
     ///card scan
     private static final int MY_SCAN_REQUEST_CODE = 100; // arbitrary int
@@ -507,6 +725,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
                 }
                 break;
+
             case 1011:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri selectedImage = data.getData();
@@ -532,36 +751,36 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
 
-
-
-
-
             case ACTION_TAKE_USER_PHOTO: {
+//                if (resultCode == Activity.RESULT_OK) {
+//                    Uri selectedImage = data.getData();
+//                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//
+//                    Cursor cursor = mContext.getContentResolver().query(
+//                            selectedImage, filePathColumn, null, null, null);
+//                    cursor.moveToFirst();
+//
+//                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                    userPhotoPath = cursor.getString(columnIndex);
+//                    cursor.close();
+//
+//                    handleSmallCameraPhoto(data, ACTION_TAKE_USER_PHOTO);
+////                    handleBigCameraPhoto();
+//
+//                }
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    Cursor cursor = mContext.getContentResolver().query(
-                            selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    userPhotoPath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    handleSmallCameraPhoto(data, ACTION_TAKE_USER_PHOTO);
-//                    handleBigCameraPhoto();
-
+                    handleBigCameraPhoto(ACTION_TAKE_USER_PHOTO);
                 }
                 break;
             } // ACTION_TAKE_USER_PHOTO
 
             case ACTION_TAKE_LICENSE_PHOTO: {
                 if (resultCode == Activity.RESULT_OK) {
-                    handleBigCameraPhoto();
+                    handleBigCameraPhoto(ACTION_TAKE_LICENSE_PHOTO);
                 }
                 break;
             } // ACTION_TAKE_LICENSE_PHOTO
+
             case MY_SCAN_REQUEST_CODE:
                 String resultStr;
                 if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
@@ -571,8 +790,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                     // Never log a raw card number. Avoid displaying it, but if necessary use getFormattedCardNumber()
                     resultStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
                     etCardNumber.setText(scanResult.getRedactedCardNumber());
-                    ///test card
-                    etCardNumber.setText("4242424242424242");
 
                     // Do something with the raw number, e.g.:
                     // myService.setCardNumber( scanResult.cardNumber );
@@ -586,8 +803,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                         // Never log or display a CVV
                         resultStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
                         etCVV.setText(scanResult.cvv);
-                        ///test card
-                        etCVV.setText("314");
                     }
 
                     if (scanResult.postalCode != null) {
@@ -618,6 +833,52 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
 
 
+    ///photo choose dialog
+    public void showChooseDialog(Context context, String message, final int type){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(Constant.INDECATOR);
+        builder.setMessage(message);
+        builder.setCancelable(true);
+        builder.setPositiveButton("Camera",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dispatchTakePictureIntent(type);
+                        dialog.cancel();
+                    }
+                });
+        builder.setNegativeButton("Gallary",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        takePictureFromGallery(type);
+                        dialog.cancel();
+                    }
+                });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int arg1) {
+                dialog.cancel();
+
+            }
+        });
+//        dialog.setCancelable(true);
+//        dialog.setCanceledOnTouchOutside(false);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+    //////////////////take a picture from gallery
+    private void takePictureFromGallery(int type)
+    {
+
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        if (type == ACTION_TAKE_USER_PHOTO) {
+            startActivityForResult(photoPickerIntent, 1010);
+        } else if (type == ACTION_TAKE_LICENSE_PHOTO) {
+            startActivityForResult(photoPickerIntent, 1011);
+        }
+
+    }
 
     /////////////capture photo
     public void dispatchTakePictureIntent(int actionCode) {
@@ -625,19 +886,19 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         switch(actionCode) {
-//            case ACTION_TAKE_USER_PHOTO:
-//                File f = null;
-//
-//                try {
-//                    f = setUpPhotoFile(ACTION_TAKE_USER_PHOTO);
-//                    userPhotoPath = f.getAbsolutePath();
-//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    f = null;
-//                    userPhotoPath = "";
-//                }
-//                break;
+            case ACTION_TAKE_USER_PHOTO:
+                File f = null;
+
+                try {
+                    f = setUpPhotoFile(ACTION_TAKE_USER_PHOTO);
+                    userPhotoPath = f.getAbsolutePath();
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    f = null;
+                    userPhotoPath = "";
+                }
+                break;
 
             case ACTION_TAKE_LICENSE_PHOTO:
                 File f1 = null;
@@ -703,12 +964,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
         return storageDir;
     }
+
     ///process result of captured photo
-    private void handleBigCameraPhoto() {
+    private void handleBigCameraPhoto(int type) {
 
         if (licensePhotoPath != null) {
-            setPic();
-            galleryAddPic();
+            setPic(type);
+//            galleryAddPic();
         }
 
     }
@@ -728,7 +990,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    private void setPic() {
+    private void setPic(int type) {
 
 		/* There isn't enough memory to open up more than a couple camera photos */
 		/* So pre-scale the target bitmap into which the file is decoded */
@@ -740,7 +1002,15 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 		/* Get the size of the image */
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(licensePhotoPath, bmOptions);
+        switch (type) {
+            case 1:
+                BitmapFactory.decodeFile(userPhotoPath, bmOptions);
+                break;
+            case 2:
+                BitmapFactory.decodeFile(licensePhotoPath, bmOptions);
+                break;
+        }
+
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
@@ -755,12 +1025,25 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(licensePhotoPath, bmOptions);
+		Bitmap bitmap = null;
 
 		/* Associate the Bitmap to the ImageView */
-        ivLicense.setImageBitmap(bitmap);
-        tvLicense.setVisibility(View.GONE);
+        switch (type) {
+            case 1:
+                /* Decode the JPEG file into a Bitmap */
+                bitmap = BitmapFactory.decodeFile(userPhotoPath, bmOptions);
+//                bitmap = MediaUtility.rotateImage(bitmap, 90);
+                ivUserPhoto.setImageBitmap(bitmap);
+                break;
+            case 2:
+                /* Decode the JPEG file into a Bitmap */
+                bitmap = BitmapFactory.decodeFile(licensePhotoPath, bmOptions);
+                ivLicense.setImageBitmap(bitmap);
+                tvLicense.setVisibility(View.GONE);
+                break;
+
+        }
+
     }
 
     private void galleryAddPic() {
@@ -770,26 +1053,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         mediaScanIntent.setData(contentUri);
         mContext.sendBroadcast(mediaScanIntent);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
