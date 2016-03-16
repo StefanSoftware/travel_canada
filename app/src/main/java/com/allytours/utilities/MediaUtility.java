@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * Created by Administrator on 1/4/2016.
  */
 public class MediaUtility {
-    private static String IMAGEPATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + File.separator;
+    private static String DOWNLOAD_IMAGE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + File.separator;
 
     public static boolean checkFileExist(String fileName, String PATH){
 
@@ -277,7 +277,7 @@ public class MediaUtility {
         return BitmapFactory.decodeFile(path, options);
     }
     //////rotate bitmap accoring to it's orientation
-    public static Bitmap adjustBitmap(String photopath) {
+    public static Bitmap adjustBitmap(String photopath) {////////////good
         Uri uri = Uri.parse(photopath);
         ExifInterface exif = null;
         try {
@@ -303,13 +303,15 @@ public class MediaUtility {
         BitmapFactory.decodeFile(photopath, options);
         //////
 //        options.inSampleSize = 7;
-        options.inSampleSize = 3;
+        options.inSampleSize = 4;
         options.inJustDecodeBounds = false;
 
         //get bitmap with local path
         Bitmap yourSelectedImage = BitmapFactory.decodeFile(photopath, options);
         ////create a new rotated image
         Bitmap adjustedBitmap = Bitmap.createBitmap(yourSelectedImage, 0, 0, yourSelectedImage.getWidth(), yourSelectedImage.getHeight(), matrix, true);
+        ///save adjusted bitmap
+        saveBitmapToLocal(adjustedBitmap, photopath, photopath);
         return adjustedBitmap;
     }
 
@@ -330,8 +332,8 @@ public class MediaUtility {
         ///creat download request
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
-        if (checkFileExist(fileName, IMAGEPATH)) {
-            File file = new File(IMAGEPATH + fileName);
+        if (checkFileExist(fileName, DOWNLOAD_IMAGE_PATH)) {
+            File file = new File(DOWNLOAD_IMAGE_PATH + fileName);
             file.delete();
         }
         ///set destinatin storage path
@@ -367,6 +369,33 @@ public class MediaUtility {
         }
     }
 
+    public static void saveBitmapToLocal(Bitmap bitmap, String originalPath, String destinationPath) {
+        if (bitmap == null || destinationPath.length() == 0) {
+            return;
+        }
+        File myDir = new File(destinationPath);
+        myDir.mkdirs();
+        Random generator = new Random();
+        ///generate random number
+//        int n = 10000;
+//        n = generator.nextInt(n);
+//        String fname = "Image-"+ n +".jpg";
+
+        File file = new File(myDir, originalPath.substring(originalPath.lastIndexOf("/") + 1));
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            if(bitmap != null){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            }
+
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static void saveImageToLocal( String originalPath, String destinationPath){///
         ///destination example
         ///public static String CAMERA_ROLL = Environment.getExternalStorageDirectory().toString() + "/camera_roll" ;

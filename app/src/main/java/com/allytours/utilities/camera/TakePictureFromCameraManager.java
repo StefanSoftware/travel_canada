@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.allytours.R;
+import com.allytours.utilities.MediaUtility;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +88,7 @@ public class TakePictureFromCameraManager {
 
         if (photoPath.length() > 0) {
 
-            setPic();
+            setPicture();
 //            galleryAddPic();
         }
 
@@ -98,42 +99,50 @@ public class TakePictureFromCameraManager {
         destinationImageView.setImageBitmap(bitmap);
 
     }
+    private void setPicture() {
+        ////////process image to lower quality
+//        String processedImage = MediaUtility.saveProgressimageToSDCARD(bitmap, photoPath.substring(photoPath.lastIndexOf("/") + 1), "Allytours");
+//        Bitmap finalbitmap = BitmapFactory.decodeFile(processedImage);
 
-    private void setPic() {
-
-		/* There isn't enough memory to open up more than a couple camera photos */
-		/* So pre-scale the target bitmap into which the file is decoded */
-
-		/* Get the size of the ImageView */
-        int targetW = destinationImageView.getWidth();
-        int targetH = destinationImageView.getHeight();
-
-		/* Get the size of the image */
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(photoPath, bmOptions);
-
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-		/* Figure out which way needs to be reduced less */
-        int scaleFactor = 1;
-        if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-        }
-
-		/* Set bitmap options to scale the image decode target */
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = null;
-
-		/* Associate the Bitmap to the ImageView */
-         /* Decode the JPEG file into a Bitmap */
-        bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
-//                bitmap = MediaUtility.rotateImage(bitmap, 90);
-        destinationImageView.setImageBitmap(bitmap);
-
+        destinationImageView.setImageBitmap(MediaUtility.adjustBitmap(photoPath));
     }
+
+//    private void setPic() {
+//
+//		/* There isn't enough memory to open up more than a couple camera photos */
+//		/* So pre-scale the target bitmap into which the file is decoded */
+//
+//		/* Get the size of the ImageView */
+//        int targetW = destinationImageView.getWidth();
+//        int targetH = destinationImageView.getHeight();
+//
+//		/* Get the size of the image */
+//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//        bmOptions.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(photoPath, bmOptions);
+//
+//        int photoW = bmOptions.outWidth;
+//        int photoH = bmOptions.outHeight;
+//
+//		/* Figure out which way needs to be reduced less */
+//        int scaleFactor = 1;
+//        if ((targetW > 0) || (targetH > 0)) {
+//            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+//        }
+//
+//		/* Set bitmap options to scale the image decode target */
+//        bmOptions.inJustDecodeBounds = false;
+//        bmOptions.inSampleSize = scaleFactor;
+//        bmOptions.inPurgeable = true;
+//
+//        Bitmap bitmap = null;
+//
+//		/* Associate the Bitmap to the ImageView */
+//         /* Decode the JPEG file into a Bitmap */
+//        bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
+////                bitmap = MediaUtility.rotateImage(bitmap, 90);
+//
+//        destinationImageView.setImageBitmap(bitmap);
+//
+//    }
 }

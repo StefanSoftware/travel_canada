@@ -25,7 +25,6 @@ public class Constant {
     public static String BIRTHDAY = "birthday";
     public static String GENDER = "gender";
     public static String USER_PHOTO = "userphoto";
-    public static String ID = "id";
     public static String COUNTRY_CITY = "country_city";
     public static String ADDRESS = "address";
     public static String CARD_NUMBER = "cardnumber";

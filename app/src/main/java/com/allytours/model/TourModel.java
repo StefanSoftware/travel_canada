@@ -43,12 +43,22 @@ public class TourModel  implements Serializable{
 
     String adultPrice, childPrice;
     String locationIds, roundTripLocatioIds;
-    String pictureCount, picture1, picture2, picture3, picture4, picture5;
+    String pictureCount;
+    ArrayList<String> arrPicturePath;
     String active;
     String tourType;
     String languages;
     String attractions;
     String inclusions;
+
+    public ArrayList<String> getArrPicturePath() {
+        return arrPicturePath;
+    }
+
+    public void setArrPicturePath(ArrayList<String> arrPicturePath) {
+        this.arrPicturePath = arrPicturePath;
+    }
+
     String specifiedCityIds;
 
     public String getInclusionOthers() {
@@ -103,45 +113,7 @@ public class TourModel  implements Serializable{
         this.pictureCount = pictureCount;
     }
 
-    public String getPicture1() {
-        return picture1;
-    }
 
-    public void setPicture1(String picture1) {
-        this.picture1 = picture1;
-    }
-
-    public String getPicture2() {
-        return picture2;
-    }
-
-    public void setPicture2(String picture2) {
-        this.picture2 = picture2;
-    }
-
-    public String getPicture3() {
-        return picture3;
-    }
-
-    public void setPicture3(String picture3) {
-        this.picture3 = picture3;
-    }
-
-    public String getPicture4() {
-        return picture4;
-    }
-
-    public void setPicture4(String picture4) {
-        this.picture4 = picture4;
-    }
-
-    public String getPicture5() {
-        return picture5;
-    }
-
-    public void setPicture5(String picture5) {
-        this.picture5 = picture5;
-    }
 
     public String getActive() {
         return active;

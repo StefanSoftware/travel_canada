@@ -68,19 +68,20 @@
         <item>14</item>
     </string-array>
     <string-array name="start_time_day">
-        <item>Sun</item>
-        <item>Mon</item>
-        <item>Tue</item>
-        <item>Wen</item>
-        <item>Thu</item>
-        <item>Fri</item>
-        <item>Sat</item>
+        <item>Alldays</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thusday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
     </string-array>
     <string-array name="start_time">
-        <item>Morning (8AM -11AM)</item>
-        <item>Afternoon (12PM – 3PM)</item>
-        <item>Evening (4PM – 7PM)</item>
-        <item>Night (8PM – 11PM)</item>
+        <item>Morning(8AM-11AM)</item>
+        <item>Afternoon(12PM-3PM)</item>
+        <item>Evening(4PM-7PM)</item>
+        <item>Night(8PM-11PM)</item>
 
     </string-array>
     <string-array name="country_state_city">

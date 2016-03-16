@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,17 +30,28 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.allytours.R;
+import com.allytours.controller.API;
 import com.allytours.controller.Helpers.DBHelper;
 import com.allytours.utilities.MediaUtility;
+import com.allytours.utilities.StringUtility;
 import com.allytours.utilities.UIUtility;
 import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.model.LocationModel;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.camera.TakePictureFromCameraManager;
+import com.allytours.view.HomeActivity;
 import com.allytours.widget.SelectDateFragment;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.CustomMultipartRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,7 +139,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         takePictureFromCameraManager = new TakePictureFromCameraManager(mContext);
     }
 //////    /////
-     Drawable originalDrawableOfFlag;
+    Drawable originalDrawableOfFlag;
     private void initUI(View view) {
         initMultiAutoCompletTextView(view);
 
@@ -303,7 +315,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         // Spinner click listener
 //        spinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
-        String[] holderType;
+        final String[] holderType;
         holderType = getResources().getStringArray(arrayId);
         // Creating adapter for spinner
         ArrayAdapter<String> holderTypeAdapter = new ArrayAdapter <String>(mContext, android.R.layout.simple_spinner_item, holderType);
@@ -312,6 +324,20 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         // attaching data adapter to spinner
         spinner.setAdapter(holderTypeAdapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Utils.showToast(mContext, holderType[position]);
+                if (llStartTimeContainer.getChildCount() > 0) {
+                    llStartTimeContainer.removeAllViews();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private ArrayList<String> getWholeCities() {
@@ -322,22 +348,123 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         }
         return arrCity;
     }
+
+    ///customer Sign up
+    private void showReviewDialog() {
+        new AlertDialog.Builder(mContext)
+                .setMessage("Plese confirm information again")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        postNewTour();
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Review", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+    private void postNewTour() {
+        Utils.showProgress(mContext);
+        CustomMultipartRequest customMultipartRequest = new CustomMultipartRequest(API.ADD_TOUR,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Utils.hideProgress();
+                        try {
+                            String success = response.getString("success");
+                            if (success.equals("true")) {
+
+
+                                ((HomeActivity) mContext).navigationTo(1);
+                            } else {
+                                String reason = response.getString("reason");
+                                if (reason.equals("401")) {
+                                    Utils.showOKDialog(mContext, "Failed add tour");
+                                }else if (reason.equals("402")) {
+                                    Utils.showOKDialog(mContext, "Email is registered already");
+                                }else if (reason.equals("403")) {
+                                    Utils.showOKDialog(mContext, "Invalid card");
+                                }
+                            }
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Utils.hideProgress();
+                        Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+        customMultipartRequest
+                .addStringPart("id", mNewTourModel.getUserId() )
+                .addStringPart("locationid", mNewTourModel.getLocationIds())
+                .addStringPart("title", mNewTourModel.getTitle())
+                .addStringPart("adult_price", mNewTourModel.getAdultPrice())
+                .addStringPart("child_price", mNewTourModel.getChildPrice())
+                .addStringPart("picture_count", mNewTourModel.getPictureCount())
+                .addStringPart("active", "1")
+                .addStringPart("tourtype", mNewTourModel.getTourType())
+                .addStringPart("private", mNewTourModel.getIs_private())
+                .addStringPart("language", mNewTourModel.getLanguages())
+                .addStringPart("attractions", mNewTourModel.getAttractions())
+                .addStringPart("inclusions", mNewTourModel.getInclusions())
+                .addStringPart("frequency", mNewTourModel.getFrequency())
+                .addStringPart("start_time", mNewTourModel.getStartTime())
+                .addStringPart("tour_duration_hours", mNewTourModel.getDurationTime())
+                .addStringPart("tour_duration_days", mNewTourModel.getDurationDay());
+        if (cbRoundTrip.isChecked()) {
+            customMultipartRequest.addStringPart("specified_city", mNewTourModel.getSpecifiedCityIds());
+        } else {
+            customMultipartRequest.addStringPart("specified_city", "");
+        }
+        if (cbOther.isChecked()) {
+            customMultipartRequest.addStringPart("notes", mNewTourModel.getInclusionOthers());
+        } else {
+            customMultipartRequest.addStringPart("notes", "");
+        }
+        if (mNewTourModel.getFrequency().equals("Once")) {
+            customMultipartRequest.addStringPart("start_date", mNewTourModel.getStartDate());
+            customMultipartRequest.addStringPart("start_day", "");
+        } else {
+            customMultipartRequest.addStringPart("start_day", mNewTourModel.getStartDate());
+            customMultipartRequest.addStringPart("start_date", "");
+        }
+
+
+        for (int i = 0; i < pictureCount; i ++ ) {
+            customMultipartRequest.addFilePart("picture" + String.valueOf(i + 1), mNewTourModel.getArrPicturePath().get(i));
+        }
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        requestQueue.add(customMultipartRequest);
+
+    }
 ////////
     private boolean checkFields() {
         mNewTourModel.setUserId(Utils.getFromPreference(mContext, Constant.USER_ID));
+        ///check city
         if (TextUtils.isEmpty(mactLocation.getText().toString().trim())) {
             Utils.showOKDialog(mContext, "Please input city");
             return false;
         } else {
-            mNewTourModel.setLocationIds(getLocationIdFromCityName(mactLocation.getText().toString().trim()));
+            mNewTourModel.setLocationIds(getLocationIdFromCityName(mactLocation.getText().toString()));
         }
+        //check title
         if (TextUtils.isEmpty(etTitle.getText().toString().trim())) {
             Utils.showOKDialog(mContext, "Please input title");
             return false;
         } else {
             mNewTourModel.setTitle(etTitle.getText().toString().trim());
         }
-
+        ///check price
         String strAdultPrice = etAdultPrice.getText().toString().trim();
         if (TextUtils.isEmpty(strAdultPrice)) {
             Utils.showOKDialog(mContext, "Please input adult price");
@@ -346,7 +473,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             Utils.showOKDialog(mContext, "Please input adult price bigger than 10");
             return false;
         } else {
-            mNewTourModel.setTitle(strAdultPrice);
+            mNewTourModel.setAdultPrice(strAdultPrice);
         }
 
         String strChildPrice = etChildPrice.getText().toString().trim();
@@ -358,13 +485,15 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             return false;
         }
         else {
-            mNewTourModel.setTitle(strChildPrice);
+            mNewTourModel.setChildPrice(strChildPrice);
         }
+        //check private
         if (rbPrivate.isChecked()) {
             mNewTourModel.setIs_private("Y");
         } else if (rbPublic.isChecked()) {
             mNewTourModel.setIs_private("N");
         }
+        ///check tour type
         String tourType = "";
         if (cbAdventure.isChecked()) tourType = tourType + "A,";
         if (cbSightseeing.isChecked()) tourType = tourType + "S,";
@@ -373,22 +502,21 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             Utils.showOKDialog(mContext, "Please input tour type");
             return false;
         } else {
-            mNewTourModel.setTourType(tourType.substring(0, tourType.length() - 2));
+            mNewTourModel.setTourType(tourType.substring(0, tourType.length() - 1));
         }
+        ///set frequency
         mNewTourModel.setFrequency(spFrequency.getSelectedItem().toString());
-        if (mNewTourModel.getFrequency().equals("Once")) {
-
-        } else if (mNewTourModel.getFrequency().equals("Recurring")) {
-
-        }
+        ////set duration
         mNewTourModel.setDurationDay(spDurationDay.getSelectedItem().toString());
         mNewTourModel.setDurationTime(spDurationHour.getSelectedItem().toString());
+        ///check attraction
         if (TextUtils.isEmpty(etAttraction.getText().toString().trim())) {
             Utils.showOKDialog(mContext, "Please input attraction");
             return false;
         } else {
             mNewTourModel.setAttractions(etAttraction.getText().toString().trim());
         }
+        ///check inclusion
         String strInclustion = "";
         if (cbTaxes.isChecked()) {
             strInclustion = strInclustion + "0,";
@@ -427,8 +555,9 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             Utils.showOKDialog(mContext, "Please input inclusion");
             return false;
         } else {
-            mNewTourModel.setInclusions(strInclustion.substring(0, strInclustion.length() - 2));
+            mNewTourModel.setInclusions(strInclustion.substring(0, strInclustion.length() - 1));
         }
+        /////check language
         String strFlag = "";
         if (bFlags[0]) {
             strFlag = strFlag + "E,";
@@ -455,12 +584,72 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             Utils.showOKDialog(mContext, "Please input language");
             return false;
         } else {
-            mNewTourModel.setLanguages(strFlag.substring(0, strFlag.length() - 2));
+            mNewTourModel.setLanguages(strFlag.substring(0, strFlag.length() - 1));
+
+        }
+        ///check pictures
+        if (arrPhotoPathes.size() < 2) {
+            Utils.showOKDialog(mContext, "Please input at least 2 pictures");
+            return false;
+        } else {
+            mNewTourModel.setArrPicturePath(arrPhotoPathes);
+            mNewTourModel.setPictureCount(String.valueOf(arrPhotoPathes.size()));
+        }
+        ///check start time
+        String strDate  = "";
+        String strTime = "";
+        int startTimeCount = llStartTimeContainer.getChildCount();
+        if (startTimeCount == 0) {
+            Utils.showOKDialog(mContext, "Please input start time");
+            return false;
+        } else {
+            for (int i = 0; i < startTimeCount; i ++) {
+                View view = llStartTimeContainer.getChildAt(i);
+                EditText etDate = (EditText)view.findViewById(R.id.tv_item_nt_start_date);
+                EditText etTime = (EditText)view.findViewById(R.id.tv_item_nt_start_time);
+
+                String date = etDate.getText().toString().trim();
+                String time = etTime.getText().toString().trim();
+
+                if (spFrequency.getSelectedItem().toString().equals("Once")) {
+                    strDate = strDate + etDate.getText().toString() + ",";
+                } else {
+                    strDate = strDate + convertDayToNumber(date) + ",";
+                }
+                strTime = strTime + convertTimeToNumber(time) + ",";
+
+
+            }
+            mNewTourModel.setStartTime(strTime);
+            mNewTourModel.setStartDate(strDate);
 
         }
         return true;
     }
+    private String convertDayToNumber(String day) {
+        String num = "0";
+        String[] strings = getResources().getStringArray(R.array.start_time_day);
+        for(int i = 0; i < strings.length; i ++) {
+            if (day.equals(strings[i])) {
+                num = String.valueOf(i);
+                break;
+            }
+        }
+        return num;
+    }
+    private String convertTimeToNumber(String time) {
+        String num = "0";
+        String[] strings = getResources().getStringArray(R.array.start_time);
+        for(int i = 0; i < strings.length; i ++) {
+            if (time.equals(strings[i])) {
+                num = String.valueOf(i);
+                break;
+            }
+        }
+        return num;
+    }
     private String getLocationIdFromCityName(String cityNames) {
+//        ArrayList<String> arrayList = StringUtility.spliteStringByCommaReturnArray(cityNames);
         String[] cities = spliteStringByComma(cityNames + " ");
         int cityCount = cities.length;
         String cityIds = "";
@@ -472,17 +661,17 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             }
         }
         if (cityIds.length() > 0) {
-            return cityIds.substring(0, cityIds.length() - 2);
+            return cityIds.substring(0, cityIds.length() - 1);
         } else {
             return cityIds;
         }
 
     }
-
     private String[] spliteStringByComma(String str) {
         String[] strings = str.split(", ");
         return strings;
     }
+
 
     @Override
     public void onClick(View v) {
@@ -509,7 +698,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         }
         if (v == btnDone) {
             if (checkFields()) {
-
+               showReviewDialog();
             }
         }
         if (v == cbRoundTrip) {
@@ -617,8 +806,6 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             public void onClick(View v) {
                 if (spFrequency.getSelectedItem().toString().equals("Once")) {
 
-
-
                     DialogFragment newFragment = new SelectDateFragment(tvDate);
                     newFragment.show(getFragmentManager(), "Start Date");
                 } else {
@@ -629,12 +816,6 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
 
                                      /* User clicked on a radio button do some stuff */
                                     tvDate.setText(strDays[whichButton]);
-                                }
-                            })
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int whichButton) {
-
                                     dialog.dismiss();
                                 }
                             })
@@ -658,20 +839,15 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
 
                                      /* User clicked on a radio button do some stuff */
                                 tvTime.setText(strTimes[whichButton]);
-                            }
-                        })
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.dismiss();
                             }
                         })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
 
             }
         });
@@ -707,14 +883,15 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                     arrPhotoPathes.add(cursor.getString(columnIndex));
                     pictureCount = arrPhotoPathes.size();
                     cursor.close();
+
                     ///create new image view
                     addNewImageview();
 
                     //convert bitmap to drawable
-                    Drawable d = Drawable.createFromPath(arrPhotoPathes.get(arrPhotoPathes.size() - 1));
-//                    ImageView ivUser = (ImageView)findViewById(R.id.iv_register_user);
-                    Drawable drawable = new BitmapDrawable(getResources(), MediaUtility.adjustBitmap(arrPhotoPathes.get(arrPhotoPathes.size() - 1)));
-                    arrImageViews.get(pictureCount - 1).setImageDrawable(drawable);
+//                    Drawable d = Drawable.createFromPath(arrPhotoPathes.get(arrPhotoPathes.size() - 1));
+//                    Drawable drawable = new BitmapDrawable(getResources(), MediaUtility.adjustBitmap(arrPhotoPathes.get(arrPhotoPathes.size() - 1)));
+//                    arrImageViews.get(pictureCount - 1).setImageDrawable(drawable);
+                    arrImageViews.get(pictureCount - 1).setImageBitmap(MediaUtility.adjustBitmap(arrPhotoPathes.get(arrPhotoPathes.size() - 1)));
 
                 }
                 break;
@@ -723,6 +900,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                     pictureCount = arrPhotoPathes.size();
                     addNewImageview();
                     takePictureFromCameraManager.handleBigCameraPhoto();
+                } else {
+                    arrPhotoPathes.remove(arrPhotoPathes.size() - 1);
                 }
                 break;
         }

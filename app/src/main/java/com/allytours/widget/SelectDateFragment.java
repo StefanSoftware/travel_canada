@@ -8,6 +8,10 @@ import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.allytours.R;
+import com.allytours.utilities.TimeUtility;
+import com.allytours.utilities.Utils;
+
 import java.util.Calendar;
 
 @SuppressLint("ValidFragment")
@@ -31,7 +35,15 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
             populateSetDate(yy, mm+1, dd);
         }
         public void populateSetDate(int year, int month, int day) {
-            editText.setText(year + "-" + month + "-" + day);
+            // Show selected date
+            String date = String.valueOf(day) + "/"  + String.valueOf(month + 1) + "/" + String.valueOf(year);
+            String timeStamp = String.valueOf(TimeUtility.getTimeStampFromString(date));
+            if ((Long.parseLong(timeStamp) + 12 * 3600) < Long.parseLong(TimeUtility.getCurrentTimeStamp())) {
+
+            } else {
+                editText.setText(year + "-" + month + "-" + day);
+            }
+
         }
 
     }

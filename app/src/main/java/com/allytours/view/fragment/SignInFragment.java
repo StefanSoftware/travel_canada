@@ -270,7 +270,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                     Utils.setOnPreference(mContext, Constant.USER_TYPE, userType);
                                     Utils.setOnPreference(mContext, Constant.EMAIL, email);
                                     Utils.setOnPreference(mContext, Constant.FULLNAME, fullname);
-                                    Utils.setOnPreference(mContext, Constant.ID, id);
+                                    Utils.setOnPreference(mContext, Constant.USER_ID, id);
                                     Utils.setOnPreference(mContext, Constant.USER_PHOTO, userphoto);
 
                                     if (userType.equals(Constant.USER_TYPE_OPERATOR)) {
@@ -368,7 +368,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                     Utils.setOnPreference(mContext, Constant.EMAIL, email);
                                     Utils.setOnPreference(mContext, Constant.PASSWORD, password);
                                     Utils.setOnPreference(mContext, Constant.FULLNAME, fullname);
-                                    Utils.setOnPreference(mContext, Constant.ID, id);
+                                    Utils.setOnPreference(mContext, Constant.USER_ID, id);
                                     Utils.setOnPreference(mContext, Constant.USER_PHOTO, userphoto);
 
 

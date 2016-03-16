@@ -484,7 +484,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             String success = response.getString("success");
                             if (success.equals("true")) {
                                 Utils.setOnPreference(mContext, Constant.USER_PHOTO, response.getJSONObject("data").getString("photo"));
-                                Utils.setOnPreference(mContext, Constant.ID, response.getJSONObject("data").getString("id"));
+                                Utils.setOnPreference(mContext, Constant.USER_ID, response.getJSONObject("data").getString("id"));
                                 Utils.setOnPreference(mContext, Constant.VERIFY_CODE, response.getJSONObject("data").getString("code"));
 
                                 Utils.setOnPreference(mContext, Constant.PHONE_NUMBER, userModel.getPhoneNumber());
@@ -557,7 +557,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             if (success.equals("true")) {
 
                                 Utils.setOnPreference(mContext, Constant.USER_PHOTO, response.getJSONObject("data").getString("photo"));
-                                Utils.setOnPreference(mContext, Constant.ID, response.getJSONObject("data").getString("id"));
+                                Utils.setOnPreference(mContext, Constant.USER_ID, response.getJSONObject("data").getString("id"));
 
                                 Utils.setOnPreference(mContext, Constant.USER_TYPE, Constant.USER_TYPE_CUSTOMER);
                                 Utils.setOnPreference(mContext, Constant.PHONE_NUMBER, userModel.getPhoneNumber());

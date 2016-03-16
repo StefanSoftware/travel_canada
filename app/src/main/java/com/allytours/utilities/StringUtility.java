@@ -28,7 +28,19 @@ public class StringUtility {
         }
         return phrase;
     }
+    public static String[] spliteStringByComma(String str) {
+        String[] strings = str.split(", ");
+        return strings;
+    }
+    public static ArrayList<String> spliteStringByCommaReturnArray (String str) {
+        String[] strings = str.split(", ");
 
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < strings.length; i ++) {
+            arrayList.add(strings[i]);
+        }
+        return arrayList;
+    }
     public static String getEmoji(String str) {
         String strKey = "\\ud83d";
         while(str.contains(strKey)) {
