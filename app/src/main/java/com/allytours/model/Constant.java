@@ -48,7 +48,7 @@ public class Constant {
     public static String FB_PHOTO = "fb_photo";
 
     //////////number parameters
-    public static float maxZoomin = 15;
+    public static float maxZoomin = 11;
     public static float minZoomout = 1;
 
     public static String TITLE_HOME = "AllyTours";

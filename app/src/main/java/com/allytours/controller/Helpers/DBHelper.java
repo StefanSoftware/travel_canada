@@ -1,7 +1,9 @@
 package com.allytours.controller.Helpers;
 
 import com.allytours.model.LocationModel;
+import com.android.volley.request.StringRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,4 +34,13 @@ public class DBHelper {
             locationModel.delete();
         }
     }
+    public static ArrayList<String> getAllCityName() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        List<LocationModel> arrLocations = getAllLocation();
+        for(int i = 0; i < arrLocations.size(); i ++) {
+            arrayList.add(arrLocations.get(i).getCity());
+        }
+        return arrayList;
+    }
+
 }

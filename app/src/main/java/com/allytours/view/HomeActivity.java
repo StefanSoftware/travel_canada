@@ -32,6 +32,7 @@ import com.allytours.view.fragment.PromotionFragment;
 import com.allytours.view.fragment.SignInFragment;
 import com.allytours.view.fragment.SignUpFragment;
 import com.allytours.view.fragment.SignupStep2Fragment;
+import com.allytours.view.fragment.ToursFragment;
 import com.allytours.view.fragment.customer.CustomerToursFragment;
 import com.allytours.view.fragment.NavigationMenuFragment;
 import com.allytours.view.fragment.operator.OperatorToursFragment;
@@ -50,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     public  static int fromWhere;//0: default, 1: from purchaseActivity to log in for payment
+    public static String strCityIDs;// need to fetch tours in search tour page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
     private void initVariable() {
         mContext = this;
         fromWhere = getIntent().getIntExtra("login_for_payment", 0);
+        strCityIDs = "";
     }
     private void initUI() {
 
@@ -134,6 +137,11 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, new SignupStep2Fragment(), "")
                 .commit();
     }
+    public void goToTourSearchPage() {
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, new ToursFragment(), "")
+                .commit();
+    }
     public void navigationTo(int num) {
         switch (num) {
 
@@ -157,7 +165,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, "")
                         .commit();
-                searchItem.setVisible(true);
+                searchItem.setVisible(false);
                 newTourItem.setVisible(false);
                 break;
             case 3:
@@ -269,8 +277,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
-//                Toast.makeText(HomeActivity.this, query, Toast.LENGTH_SHORT).show();
-                mainFragment.search(query);
+//                mainFragment.search(query);
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();
@@ -283,7 +290,7 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
-        searchItem.setVisible(true);
+        searchItem.setVisible(false);
         newTourItem.setVisible(false);
         return super.onCreateOptionsMenu(menu);
 

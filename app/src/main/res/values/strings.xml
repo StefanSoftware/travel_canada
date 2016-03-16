@@ -6,6 +6,9 @@
     <string name="title_activity_exception_view">ExceptionViewActivity</string>
 
     <string name="map_api_key">AIzaSyAg9TKKZa9dV6r4qHLwl1qSfLGe6RyYzMc</string>
+    <string name="browser_key">AIzaSyD3I92eLyhgDzw9nWi26ZMcIPOrFQKZH54</string>
+    <string name="server_key">AIzaSyAqu2crj6ztDgOgim4beLkjpsgimi6AYxA</string>
+    <string name="gcm_project_number">433675293423</string>
 
     <string name="facebook_app_id">552345238273778</string>
     <string name="key_hash">3zMxj/ECDwxahhd5TeTlieYYvKk=</string>

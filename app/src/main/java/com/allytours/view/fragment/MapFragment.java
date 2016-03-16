@@ -9,17 +9,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allytours.R;
 import com.allytours.controller.API;
+import com.allytours.utilities.UIUtility;
 import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.controller.Helpers.DBHelper;
 import com.allytours.model.LocationModel;
+import com.allytours.view.HomeActivity;
 import com.allytours.widget.markerclusterer.MarkerCluster;
 import com.allytours.widget.markerclusterer.MarkerClusterer;
 import com.android.volley.Request;
@@ -52,7 +58,7 @@ import java.util.Locale;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements View.OnClickListener{
 
     private GoogleMap googleMap;
     LinearLayout llContainer;
@@ -60,6 +66,8 @@ public class MapFragment extends Fragment {
     TextView tvTourCount;
     TextView tvTourTitles;
     ImageView ivFlag;
+    AutoCompleteTextView autoCompleteTextView;
+    ImageButton ibSearch;
 
     private Activity mActivity;
 
@@ -97,18 +105,9 @@ public class MapFragment extends Fragment {
     }
 
     /////////////////=========================================================================================
-
-
-
-
     private void initDB() {
         DBHelper.deleteAllLocation();
     }
-
-
-
-
-
 
     private void initVariables() {
         // initialize marker list
@@ -120,10 +119,20 @@ public class MapFragment extends Fragment {
     private void initUI(View view) {
         llContainer = (LinearLayout)view.findViewById(R.id.ll_markerview);
         llContainer.setVisibility(View.INVISIBLE);
+        llContainer.setOnClickListener(this);
         tvTour = (TextView)view.findViewById(R.id.tv_markerview_tour);
         tvTourCount = (TextView)view.findViewById(R.id.tv_markerview_tour_count);
         tvTourTitles = (TextView)view.findViewById(R.id.tv_markerview_tour_titles);
         ivFlag = (ImageView)view.findViewById(R.id.iv_markerview_flag);
+        ibSearch = (ImageButton)view.findViewById(R.id.ib_map_search);
+        ibSearch.setOnClickListener(this);
+        autoCompleteTextView = (AutoCompleteTextView)view.findViewById(R.id.act_map_search);
+    }
+    private void initAutoCompletTextView() {
+        ///init first MultiAutoCompleteTextView
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity ,android.R.layout.simple_dropdown_item_1line, DBHelper.getAllCityName());
+        autoCompleteTextView.setAdapter(adapter);
     }
     @Override
     public void onResume() {
@@ -138,7 +147,60 @@ public class MapFragment extends Fragment {
         }
 
     }
+    @Override
+    public void onClick(View v) {
+        if (!(v instanceof AutoCompleteTextView)) {
+            UIUtility.hideSoftKeyboard(mActivity);
+        }
+        if (v == ibSearch) {
+            searchKey = autoCompleteTextView.getText().toString();
+            if (searchKey.length() == 0) {
+                createMarkers();
+            } else {
+                initMarkerwithSearchQuery();
+            }
+        }
+        if (v == llContainer) {
+            ((HomeActivity)mActivity).goToTourSearchPage();
+        }
+    }
+    ///init marker with search query and refresh map
+    private void initMarkerwithSearchQuery() {
+        llContainer.setVisibility(View.INVISIBLE);
 
+        getGoogleMap().clear();
+        mMarkers.clear();
+        mClusterMarkers.clear();
+        // create  markers
+        for (int i = 0; i < marrLocations.size(); i++) {
+
+            // add to list
+            if (marrLocations.get(i).getCity().equals(searchKey)) {
+                // create random position
+//            LatLng markerPos = new LatLng(minLat
+//                    + (Math.random() * (maxLat - minLat)), minLng
+//                    + (Math.random() * (maxLng - minLng)));
+                LatLng markerPos = new LatLng(Double.parseDouble(marrLocations.get(i).getLatitude()),
+                        Double.parseDouble(marrLocations.get(i).getLongitude()));
+
+                // create marker as non-visible
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .title(marrLocations.get(i).getCity())
+                        .snippet(marrLocations.get(i).getTotal_tours())
+                        .position(markerPos)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.logo_25))
+                        .visible(false);
+
+                // create marker
+                Marker marker = getGoogleMap().addMarker(markerOptions);
+                mClusterMarkers.add(marker);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constant.minZoomout));
+            }
+
+        }
+//        createClusterMarkers();
+        redrawMap();
+    }
     ///get location
     private void getLocation() {
 
@@ -196,8 +258,10 @@ public class MapFragment extends Fragment {
                                     summallyModel.setLongitude(longitude);
 
                                     DBHelper.insertLocation(summallyModel);
+
 //                                    marrLocations.add(summallyModel);
                                 }
+                                initAutoCompletTextView();
                                 setupMap();
                             } else {
                                 String reason = response.getString("reason");
@@ -224,20 +288,13 @@ public class MapFragment extends Fragment {
         requestQueue.add(signinRequest);
 
     }
-
-
-
-
-
-
-
-
+    ///init map
     private void setupMap() {
             if (getGoogleMap() != null) {
 //                mCurrentZoom = getGoogleMap().getCameraPosition().zoom;
                 mCurrentZoom = Constant.minZoomout;
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50, -90), Constant.minZoomout));
-                createMarkers();
+//                createMarkers();
 //                createRandomMarkers(100);
 
                 getGoogleMap().setOnCameraChangeListener(
@@ -253,7 +310,10 @@ public class MapFragment extends Fragment {
                                     }
                                     else {
                                         // create cluster markers for new position
-                                        recreateClusterMarkers();
+                                        if (searchKey.length() == 0) {
+                                            recreateClusterMarkers();
+                                        }
+
 //                                    // redraw map
 //                                    redrawMap();
                                         mCurrentZoom = newPosition.zoom;
@@ -265,22 +325,6 @@ public class MapFragment extends Fragment {
                         });
             }
     }
-
-
-
-
-
-
-    public void search(String searchKey) {
-        llContainer.setVisibility(View.INVISIBLE);
-        this.searchKey = searchKey;
-        createMarkers();
-    }
-
-
-
-
-
 
     private void createMarkers() {
         // clear map
@@ -321,14 +365,13 @@ public class MapFragment extends Fragment {
             // create marker
             Marker marker = getGoogleMap().addMarker(markerOptions);
             // add to list
-            if (marrLocations.get(i).getTours_region_country().contains(searchKey)) {
-                mMarkers.add(marker);
-            }
+            mMarkers.add(marker);
+
 
         }
         createClusterMarkers();
     }
-///for test
+    ///test method
     private void createRandomMarkers(int numberOfMarkers) {
         // clear map
         getGoogleMap().clear();
@@ -448,7 +491,8 @@ public class MapFragment extends Fragment {
         // clear cluster markers list
         mClusterMarkers.clear();
         // create mew cluster markers
-        createClusterMarkers();
+//        createClusterMarkers();
+        createMarkers();
 
     }
 
@@ -496,11 +540,37 @@ public class MapFragment extends Fragment {
 //                    llContainer.setBackground(getResources().getDrawable(R.drawable.custom_info_bubble));
                     tvTourTitles.setText(marker.getTitle());
                     tvTourCount.setText(marker.getSnippet());
+
+                    String strCity = marker.getTitle();
+                    if (strCity.length() > 40) {
+                        strCity = strCity.substring(0, 37) + "...";
+                        tvTourTitles.setText(strCity);
+                    }
+
+                    getArrayOfSelectedCitiesId(marker.getTitle());
                     return true;
                 }
             });
         }
         return googleMap;
+    }
+    private void getArrayOfSelectedCitiesId(String strCityName) {
+        String[] strings = strCityName.split(", ");
+        String strCityID = "";
+        List<LocationModel> arrayList = DBHelper.getAllLocation();
+        for( int k = 0; k < strings.length; k ++) {
+            for (int i = 0; i < arrayList.size(); i ++) {
+                if (strings[k].equals(arrayList.get(i).getCity())) {
+                    strCityID = strCityID + "," + (arrayList.get(i).getLocation_id());
+                    break;
+                }
+            }
+        }
+        if (strCityID.length() > 0) {
+            strCityID = strCityID.substring(1, strCityID.length());
+            ((HomeActivity)mActivity).strCityIDs = strCityID;
+        }
+
     }
 
     public static Bitmap createDrawableFromView(View view) {
@@ -515,6 +585,9 @@ public class MapFragment extends Fragment {
 
         return bitmap;
     }
+
+
+
     /** Demonstrates customizing the info window and/or its contents. */
     class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
