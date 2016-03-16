@@ -31,6 +31,58 @@
         <item>individual</item>
         <item>business</item>
     </string-array>
+    <string-array name="frequency">
+        <item>Once</item>
+        <item>Recurring</item>
+    </string-array>
+    <string-array name="duratin_hour">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+    </string-array>
+    <string-array name="duratin_day">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+    </string-array>
+    <string-array name="start_time_day">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wen</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+    <string-array name="start_time">
+        <item>Morning (8AM -11AM)</item>
+        <item>Afternoon (12PM – 3PM)</item>
+        <item>Evening (4PM – 7PM)</item>
+        <item>Night (8PM – 11PM)</item>
+
+    </string-array>
     <string-array name="country_state_city">
         <item>Acme,Alberta,Canada</item>
         <item>Airdrie,Alberta,Canada</item>

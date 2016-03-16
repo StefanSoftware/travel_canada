@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.allytours.R;
 import com.allytours.controller.API;
-import com.allytours.controller.Utilities.Utils;
+import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.model.UserModel;
 import com.allytours.view.HomeActivity;
@@ -32,9 +32,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

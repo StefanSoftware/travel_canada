@@ -1,4 +1,4 @@
-package com.allytours.view.camera;
+package com.allytours.utilities.camera;
 
 import java.io.File;
 

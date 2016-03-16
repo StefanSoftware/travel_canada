@@ -75,7 +75,7 @@
 
 
         <activity
-            android:name=".controller.Utilities.ExceptionViewActivity"
+            android:name=".view.ExceptionViewActivity"
             android:label="@string/title_activity_exception_view"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize">

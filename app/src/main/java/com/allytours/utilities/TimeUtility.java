@@ -1,4 +1,4 @@
-package com.allytours.controller.Utilities;
+package com.allytours.utilities;
 
 import android.annotation.SuppressLint;
 

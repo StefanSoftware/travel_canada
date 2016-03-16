@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.allytours.R;
 import com.allytours.controller.API;
-import com.allytours.controller.Utilities.Utils;
+import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.controller.Helpers.DBHelper;
 import com.allytours.model.LocationModel;

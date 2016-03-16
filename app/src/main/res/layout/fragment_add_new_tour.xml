@@ -21,34 +21,34 @@
                 <MultiAutoCompleteTextView
                     android:id="@+id/mact_nt_cities"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:textStyle="bold"
                     android:hint="Tour Location"
-                    android:maxEms="5"/>
+                    android:maxEms="5"
+                    android:background="@color/transparent"/>
             </LinearLayout>
 
             <!--tour title-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/round_corner_gray"
                 android:layout_marginTop="@dimen/pad_10dp"
-                android:padding="@dimen/pad_5dp"
                 android:gravity="center_vertical">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <!--<android.support.design.widget.TextInputLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
                 <EditText
                     android:id="@+id/et_nt_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:hint="Tour Title"
                     android:textColor="@color/black"
                     android:maxLength="50"
                     android:singleLine="true"
-                    android:background="@null"/>
-                </android.support.design.widget.TextInputLayout>
+                    android:background="@color/transparent"/>
+                <!--</android.support.design.widget.TextInputLayout>-->
             </LinearLayout>
             <!--price-->
             <LinearLayout
@@ -79,7 +79,7 @@
                         android:singleLine="true"
                         android:inputType="numberDecimal"
                         android:layout_toLeftOf="@+id/tv_nt_adult_currency"
-                        android:background="@null"
+                        android:background="@color/transparent"
                         android:layout_centerVertical="true"/>
                     <TextView
                         android:id="@+id/tv_nt_adult_currency"
@@ -112,7 +112,7 @@
                         android:singleLine="true"
                         android:inputType="numberDecimal"
                         android:layout_toLeftOf="@+id/tv_nt_child_currency"
-                        android:background="@null"
+                        android:background="@color/transparent"
                         android:layout_centerVertical="true"/>
                     <TextView
                         android:id="@+id/tv_nt_child_currency"
@@ -141,13 +141,28 @@
                     android:orientation="vertical">
 
                 </LinearLayout>
-                <Button
-                    android:id="@+id/btn_nt_add_picture"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Picture"
-                    android:textColor="@color/blue"
-                    android:background="@color/transparent"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/btn_nt_add_picture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Picture"
+                        android:textColor="@color/blue"
+                        android:background="@color/transparent"
+                        android:layout_marginRight="@dimen/pad_20dp"/>
+                    <Button
+                        android:id="@+id/btn_nt_remove_picture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Remove Picture"
+                        android:textColor="@color/blue"
+                        android:background="@color/transparent"/>
+                </LinearLayout>
+
 
             </LinearLayout>
             <!--Language-->
@@ -177,7 +192,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/britsh"
+                            android:src="@drawable/fg_britsh"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -189,7 +204,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/canada"
+                            android:src="@drawable/fg_spanish"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -201,7 +216,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/france"
+                            android:src="@drawable/fg_france"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -213,7 +228,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/france"
+                            android:src="@drawable/fg_portuguese"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -225,7 +240,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/france"
+                            android:src="@drawable/fg_china"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -237,7 +252,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/france"
+                            android:src="@drawable/fg_german"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -249,7 +264,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/france"
+                            android:src="@drawable/fg_japan"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -338,6 +353,8 @@
                         android:id="@+id/sp_nt_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
+                        android:textAlignment="center"
+                        android:gravity="center_horizontal"
                         >
 
                     </Spinner>
@@ -392,14 +409,24 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:padding="@dimen/pad_5dp"
-                            android:layout_marginTop="@dimen/pad_5dp">
-                            <TextView
-                                android:layout_width="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+                            <Button
+                                android:id="@+id/btn_nt_add_start_time"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="+"
-                                android:textSize="@dimen/txt_20sp"
-                                android:textColor="@color/blue"/>
+                                android:text="Add"
+                                android:textColor="@color/blue"
+                                android:layout_weight="1"
+                                android:background="@color/transparent"/>
+                            <Button
+                                android:id="@+id/btn_nt_remove_start_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Remove"
+                                android:textColor="@color/blue"
+                                android:layout_weight="1"
+                                android:background="@color/transparent"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -460,8 +487,9 @@
                 <EditText
                     android:id="@+id/et_nt_attraction"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="4000"/>
+                    android:layout_height="42dp"
+                    android:maxLength="4000"
+                    android:background="@color/transparent"/>
             </LinearLayout>
             <!--inclusion-->
             <LinearLayout
@@ -549,10 +577,12 @@
                 <EditText
                     android:id="@+id/et_nt_inclusion_other"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:maxLength="50"
                     android:layout_marginLeft="@dimen/pad_10dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:background="@color/transparent"
+                    android:hint="Write something here"/>
             </LinearLayout>
             <Button
                 android:id="@+id/btn_nt_done"

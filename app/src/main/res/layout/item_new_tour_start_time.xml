@@ -4,31 +4,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/pad_5dp">
+        android:layout_marginBottom="@dimen/pad_10dp">
         <EditText
-            android:id="@+id/et_item_nt_start_date"
+            android:id="@+id/tv_item_nt_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Date"
             android:textColor="@color/black"
+            android:textSize="@dimen/txt_15sp"
             android:maxLength="30"
             android:singleLine="true"
             android:background="@null"
             android:layout_weight="1"
             android:textAlignment="center"
+            android:editable="false"
             />
         <EditText
-            android:id="@+id/et_item_nt_start_time"
+            android:id="@+id/tv_item_nt_start_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Time"
             android:textColor="@color/black"
+            android:textSize="@dimen/txt_15sp"
             android:maxLength="30"
             android:singleLine="true"
             android:background="@null"
             android:layout_marginLeft="@dimen/pad_10dp"
             android:layout_weight="1"
             android:textAlignment="center"
+            android:editable="false"
+
             />
     </LinearLayout>
 </LinearLayout>

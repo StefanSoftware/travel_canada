@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.allytours.R;
-import com.allytours.controller.Utilities.Utils;
-import com.allytours.model.Constant;
 import com.allytours.view.PurchaseActivity;
 import com.allytours.widget.HorizontalListView;
 

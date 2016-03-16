@@ -8,6 +8,15 @@ import java.util.ArrayList;
  * Created by Administrator on 2/9/2016.
  */
 public class TourModel  implements Serializable{
+    String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     ArrayList<Integer> arrImage = new ArrayList<>();
     String title;
     String price;
@@ -30,7 +39,7 @@ public class TourModel  implements Serializable{
     boolean is_romantic ;
     boolean is_sightseeing;
     boolean is_adventure;
-    boolean is_private;
+    String is_private;
 
     String adultPrice, childPrice;
     String locationIds, roundTripLocatioIds;
@@ -38,7 +47,19 @@ public class TourModel  implements Serializable{
     String active;
     String tourType;
     String languages;
-    String attractions, inclusions, specifiedCityIds;
+    String attractions;
+    String inclusions;
+    String specifiedCityIds;
+
+    public String getInclusionOthers() {
+        return inclusionOthers;
+    }
+
+    public void setInclusionOthers(String inclusionOthers) {
+        this.inclusionOthers = inclusionOthers;
+    }
+
+    String inclusionOthers;
     String frequency, startDate, startDay, startTime;
     String durationDay, durationTime;
 
@@ -385,15 +406,13 @@ public class TourModel  implements Serializable{
         this.is_adventure = is_adventure;
     }
 
-    public boolean is_private() {
+    public String getIs_private() {
         return is_private;
     }
 
-    public void setIs_private(boolean is_private) {
+    public void setIs_private(String is_private) {
         this.is_private = is_private;
     }
-
-
 
     public ArrayList<Integer> getArrImage() {
         return arrImage;

@@ -1,9 +1,8 @@
-package com.allytours.controller.Helpers;
+package com.allytours.utilities;
 
 import android.content.Context;
 import android.net.Uri;
 
-import com.allytours.controller.Utilities.Utils;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;

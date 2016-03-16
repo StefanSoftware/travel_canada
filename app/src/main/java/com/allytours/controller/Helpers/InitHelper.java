@@ -2,7 +2,7 @@ package com.allytours.controller.Helpers;
 
 import android.content.Context;
 
-import com.allytours.controller.Utilities.Utils;
+import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 
 /**

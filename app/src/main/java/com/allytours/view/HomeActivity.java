@@ -20,12 +20,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.allytours.R;
-import com.allytours.controller.Utilities.ExceptionHandler;
+import com.allytours.utilities.ExceptionHandler;
 import com.allytours.controller.Helpers.InitHelper;
-import com.allytours.controller.Utilities.Utils;
+import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.view.fragment.AboutFragment;
-import com.allytours.view.fragment.ChangePasswordFragment;
 import com.allytours.view.fragment.ContactUsFragment;
 import com.allytours.view.fragment.MapFragment;
 import com.allytours.view.fragment.ProfileFragment;
@@ -35,8 +34,6 @@ import com.allytours.view.fragment.SignUpFragment;
 import com.allytours.view.fragment.SignupStep2Fragment;
 import com.allytours.view.fragment.customer.CustomerToursFragment;
 import com.allytours.view.fragment.NavigationMenuFragment;
-import com.allytours.view.fragment.ToursFragment;
-import com.allytours.view.fragment.customer.PaymentDetailFragment;
 import com.allytours.view.fragment.operator.OperatorToursFragment;
 import com.allytours.view.fragment.operator.TourListingFragment;
 

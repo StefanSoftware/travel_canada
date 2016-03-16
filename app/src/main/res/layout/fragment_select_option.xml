@@ -194,12 +194,12 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="15dp"
-                        android:src="@drawable/france"
+                        android:src="@drawable/fg_france"
                         android:layout_marginRight="3dp"/>
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="15dp"
-                        android:src="@drawable/britsh"
+                        android:src="@drawable/fg_britsh"
                         android:layout_marginRight="3dp"/>
 
                 </LinearLayout>

@@ -10,6 +10,7 @@ public class Constant {
     public static String INDECATOR = "AllyTours";
     public static String DEVICE_TYPE = "android";
 
+    public static String USER_ID = "user_id";
     public static String USER_TYPE = "USER_TYPE";
     public static String USER_TYPE_CUSTOMER = "c";
     public static String USER_TYPE_OPERATOR = "o";

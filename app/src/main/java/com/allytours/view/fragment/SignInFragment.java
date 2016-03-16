@@ -3,7 +3,6 @@ package com.allytours.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allytours.R;
 import com.allytours.controller.API;
-import com.allytours.controller.Utilities.SocialUtility;
-import com.allytours.controller.Utilities.Utils;
+import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.view.HomeActivity;
 import com.android.volley.Request;
@@ -39,7 +36,6 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,8 +43,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import io.card.payment.CardIOActivity;
 
 /**
  * A simple {@link Fragment} subclass.

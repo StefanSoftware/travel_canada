@@ -1,4 +1,4 @@
-package com.allytours.controller.Utilities;
+package com.allytours.utilities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -60,8 +60,11 @@ public class UIUtility {
         mImm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        if (keyboardShown(activity)) {
+            InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
+
     }
     public static boolean keyboardShown(Context mContext) {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);

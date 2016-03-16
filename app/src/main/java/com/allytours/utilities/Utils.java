@@ -1,4 +1,4 @@
-package com.allytours.controller.Utilities;
+package com.allytours.utilities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

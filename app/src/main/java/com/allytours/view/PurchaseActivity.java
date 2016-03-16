@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.allytours.R;
-import com.allytours.controller.Utilities.Utils;
+import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.model.TourModel;
 import com.allytours.view.fragment.customer.CheckOutFragment;

@@ -7,6 +7,8 @@ import com.orm.SugarRecord;
  * Created by Administrator on 2/9/2016.
  */
 public class LocationModel  extends SugarRecord {
+
+
     String location_id;
     String total_op;
     String tour_count;

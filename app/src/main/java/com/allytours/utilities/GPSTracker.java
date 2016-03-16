@@ -1,5 +1,5 @@
 
-package com.allytours.controller.Utils;
+package com.allytours.utilities;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;

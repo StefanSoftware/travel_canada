@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
-import com.allytours.controller.Utilities.TimeUtility;
-import com.allytours.controller.Utils.GPSTracker;
 import com.orm.SugarContext;
 
 
