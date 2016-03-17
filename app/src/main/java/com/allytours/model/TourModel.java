@@ -17,9 +17,18 @@ public class TourModel  implements Serializable{
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    ArrayList<Integer> arrImage = new ArrayList<>();
+    ArrayList<String> arrImage = new ArrayList<>();
     String title;
     String price;
+    String tour_id;
+
+    public String getTour_id() {
+        return tour_id;
+    }
+
+    public void setTour_id(String tour_id) {
+        this.tour_id = tour_id;
+    }
 
     String currency_unit;
     String review_count;
@@ -50,6 +59,32 @@ public class TourModel  implements Serializable{
     String languages;
     String attractions;
     String inclusions;
+
+    String created_date, total_reviews, average_rating;
+
+    public String getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(String created_date) {
+        this.created_date = created_date;
+    }
+
+    public String getTotal_reviews() {
+        return total_reviews;
+    }
+
+    public void setTotal_reviews(String total_reviews) {
+        this.total_reviews = total_reviews;
+    }
+
+    public String getAverage_rating() {
+        return average_rating;
+    }
+
+    public void setAverage_rating(String average_rating) {
+        this.average_rating = average_rating;
+    }
 
     public ArrayList<String> getArrPicturePath() {
         return arrPicturePath;
@@ -386,11 +421,11 @@ public class TourModel  implements Serializable{
         this.is_private = is_private;
     }
 
-    public ArrayList<Integer> getArrImage() {
+    public ArrayList<String> getArrImage() {
         return arrImage;
     }
 
-    public void setArrImage(ArrayList<Integer> arrImage) {
+    public void setArrImage(ArrayList<String> arrImage) {
         this.arrImage = arrImage;
     }
 }

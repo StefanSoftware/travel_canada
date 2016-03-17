@@ -10,6 +10,7 @@ public class LocationModel  extends SugarRecord {
 
 
     String location_id;
+
     String total_op;
     String tour_count;
     String total_tours;

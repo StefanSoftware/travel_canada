@@ -58,8 +58,8 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
 //            llButtonContainer.setVisibility(View.GONE);
 //        }
         HorizontalListView horizontalListView = (HorizontalListView)view.findViewById(R.id.horizontalListView);
-        ImageAdapter imageAdapter = new ImageAdapter(mContext, PurchaseActivity.tourModel.getArrImage());
-        horizontalListView.setAdapter(imageAdapter);
+//        ImageAdapter imageAdapter = new ImageAdapter(mContext, PurchaseActivity.tourModel.getArrImage());
+//        horizontalListView.setAdapter(imageAdapter);
 
     }
 

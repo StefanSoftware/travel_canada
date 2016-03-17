@@ -17,14 +17,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="@dimen/pad_5dp">
-            <ImageView
-                android:layout_width="@dimen/pad_20dp"
+            <ImageButton
+                android:id="@+id/ib_tours_back"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/pad_20dp"
-                android:background="@drawable/ic_chevron_left_black_24dp"/>
+                android:background="@drawable/ic_arrow_back_black_24dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Toronto"
+                android:text=""
                 android:textColor="@color/black"
                 android:layout_marginLeft="@dimen/pad_20dp"/>
         </LinearLayout>

@@ -20,6 +20,7 @@
                 android:requiresFadingEdge="horizontal"
                 />
             <TextView
+                android:id="@+id/tv_it_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="tour title"
@@ -49,43 +50,91 @@
                 android:layout_height="fill_parent"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_weight="1.2">
+                android:layout_weight="1.1">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/canada"
-                    android:layout_marginRight="3dp"/>
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/fg_france"
-                    android:layout_marginRight="3dp"/>
-                <ImageView
-                    android:layout_width="30dp"
+                    android:id="@+id/iv_it_fg_e"
+                    android:layout_width="23dp"
                     android:layout_height="15dp"
                     android:src="@drawable/fg_britsh"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/iv_it_fg_s"
+                    android:layout_width="23dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_spanish"
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/iv_it_fg_f"
+                    android:layout_width="23dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_french"
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/iv_it_fg_p"
+                    android:layout_width="23dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_portuguese"
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/iv_it_fg_c"
+                    android:layout_width="23dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_china"
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/iv_it_fg_g"
+                    android:layout_width="23dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_german"
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/iv_it_fg_j"
+                    android:layout_width="23dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_japan"
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+
 
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/pad_20dp"
+                android:layout_marginLeft="@dimen/pad_10dp"
                 android:gravity="center_vertical"
-                android:layout_weight="1.8">
+                android:layout_weight="1.9">
                 <ImageView
+                    android:id="@+id/iv_it_romentic"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/like_filled"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
                 <ImageView
+                    android:id="@+id/iv_it_sightseeing"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/add_favorit_fill"
-                    android:layout_marginRight="3dp"/>
-
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/iv_it_adventure"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/add_favorit_fill"
+                    android:layout_marginRight="3dp"
+                    android:visibility="gone"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,26 +144,49 @@
                 android:gravity="center_vertical"
                 android:layout_weight="2">
                 <TextView
+                    android:id="@+id/tv_it_private"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="private"/>
+                    android:text="private"
+                    android:textColor="@color/black"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="4"
             android:padding="@dimen/pad_10dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="8 hours"/>
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Adult Price"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:id="@+id/tv_it_adult_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10"
+                        android:layout_marginLeft="@dimen/pad_20dp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:id="@+id/tv_it_adult_price_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CAD"
+                        android:layout_marginLeft="@dimen/pad_15dp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -123,51 +195,112 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="MTWTFS"/>
+                        android:text="Child Price"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:id="@+id/tv_it_child_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10"
+                        android:layout_marginLeft="@dimen/pad_20dp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:id="@+id/tv_it_child__price_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CAD"
+                        android:layout_marginLeft="@dimen/pad_15dp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/pad_10dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8 AM"
-                        android:layout_marginLeft="@dimen/pad_20dp"/>
+                        android:text="Duration"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:id="@+id/tv_it_duration_hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginLeft="@dimen/pad_15dp"
+                        android:textColor="@color/black"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2 PM"
-                        android:layout_marginLeft="@dimen/pad_15dp"/>
+                        android:text="Hours"
+                        android:layout_marginLeft="@dimen/pad_10dp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:id="@+id/tv_it_duration_days"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginLeft="@dimen/pad_15dp"
+                        android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Days"
+                        android:layout_marginLeft="@dimen/pad_10dp"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/pad_10dp">
+                    <TextView
+                        android:id="@+id/tv_it_start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Time"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/tv_it_start_time_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monday"
+                        android:layout_marginLeft="@dimen/pad_20dp"
+                        android:textColor="@color/black"/>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="2 PM"-->
+                        <!--android:layout_marginLeft="@dimen/pad_15dp"/>-->
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="$ 100"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="CAD"/>
-                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/iv_it_mark"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/smile5"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/tv_it_review_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100 reviews"/>
+                    android:text="0 reviews"
+                    android:textColor="@color/black"/>
             </LinearLayout>
         </LinearLayout>
         <TextView

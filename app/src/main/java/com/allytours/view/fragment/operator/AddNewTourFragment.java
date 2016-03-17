@@ -35,6 +35,8 @@ import android.widget.Toast;
 import com.allytours.R;
 import com.allytours.controller.API;
 import com.allytours.controller.Helpers.DBHelper;
+import com.allytours.utilities.GPSTracker;
+import com.allytours.utilities.LocationUtility;
 import com.allytours.utilities.MediaUtility;
 import com.allytours.utilities.StringUtility;
 import com.allytours.utilities.UIUtility;
@@ -50,6 +52,7 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.CustomMultipartRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
@@ -281,6 +284,16 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         initSpinners(spDurationHour, R.array.duratin_hour);
         initSpinners(spFrequency, R.array.frequency);
 
+        GPSTracker gpsTracker = new GPSTracker(mContext);
+        LatLng latLng = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+        String countryName = LocationUtility.getCountryName(mContext, latLng);
+        if (countryName.equals("Canada")) {
+            tvAdultCurrnceUnit.setText("CAD");
+            tvChildCurrencyUnit.setText("CAD");
+        } else if (countryName.equals("United States")) {
+            tvAdultCurrnceUnit.setText("USD");
+            tvChildCurrencyUnit.setText("USD");
+        }
     }
 
     private void initMultiAutoCompletTextView(View view) {
@@ -310,7 +323,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         mactRoundTrip.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
     }
 
-    private void initSpinners(Spinner spinner, int arrayId) {
+    private void initSpinners(final Spinner spinner, int arrayId) {
 
         // Spinner click listener
 //        spinner.setOnItemSelectedListener(this);
@@ -328,7 +341,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                Utils.showToast(mContext, holderType[position]);
-                if (llStartTimeContainer.getChildCount() > 0) {
+                if (llStartTimeContainer.getChildCount() > 0 && spinner == spFrequency) {
                     llStartTimeContainer.removeAllViews();
                 }
             }
@@ -379,7 +392,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                             if (success.equals("true")) {
 
 
-                                ((HomeActivity) mContext).navigationTo(1);
+//                                ((HomeActivity) mContext).navigationTo(1);
                             } else {
                                 String reason = response.getString("reason");
                                 if (reason.equals("401")) {
@@ -403,11 +416,13 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                     }
                 });
         customMultipartRequest
-                .addStringPart("id", mNewTourModel.getUserId() )
+                .addStringPart("id", mNewTourModel.getUserId())
                 .addStringPart("locationid", mNewTourModel.getLocationIds())
                 .addStringPart("title", mNewTourModel.getTitle())
                 .addStringPart("adult_price", mNewTourModel.getAdultPrice())
                 .addStringPart("child_price", mNewTourModel.getChildPrice())
+//                .addStringPart("currency_unit", mNewTourModel.getCurrency_unit())
+                .addStringPart("currency_unit", "CAD")
                 .addStringPart("picture_count", mNewTourModel.getPictureCount())
                 .addStringPart("active", "1")
                 .addStringPart("tourtype", mNewTourModel.getTourType())
@@ -487,6 +502,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         else {
             mNewTourModel.setChildPrice(strChildPrice);
         }
+        ///set currency unit
+        mNewTourModel.setCurrency_unit(tvChildCurrencyUnit.getText().toString());
         //check private
         if (rbPrivate.isChecked()) {
             mNewTourModel.setIs_private("Y");
@@ -650,13 +667,13 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
     }
     private String getLocationIdFromCityName(String cityNames) {
 //        ArrayList<String> arrayList = StringUtility.spliteStringByCommaReturnArray(cityNames);
-        String[] cities = spliteStringByComma(cityNames + " ");
+        String[] cities = spliteStringByComma(cityNames);
         int cityCount = cities.length;
         String cityIds = "";
         for (int i = 0; i < cityCount; i ++ ) {
             for (int k = 0; k < arrCiies.length; k ++ ) {
                 if (cities[i].equals(arrCiies[k])) {
-                    cityIds = cityIds + arrLocation.get(k).getId() + ",";
+                    cityIds = cityIds + arrLocation.get(k).getLocation_id() + ",";
                 }
             }
         }

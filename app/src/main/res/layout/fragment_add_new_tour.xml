@@ -47,7 +47,9 @@
                     android:textColor="@color/black"
                     android:maxLength="50"
                     android:singleLine="true"
-                    android:background="@color/transparent"/>
+                    android:background="@color/transparent"
+                    android:text="kjhg"
+                    />
                 <!--</android.support.design.widget.TextInputLayout>-->
             </LinearLayout>
             <!--price-->
@@ -80,7 +82,8 @@
                         android:inputType="numberDecimal"
                         android:layout_toLeftOf="@+id/tv_nt_adult_currency"
                         android:background="@color/transparent"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:text="15"/>
                     <TextView
                         android:id="@+id/tv_nt_adult_currency"
                         android:layout_width="wrap_content"
@@ -89,7 +92,8 @@
                         android:textColor="@color/black"
                         android:padding="@dimen/pad_5dp"
                         android:layout_alignParentRight="true"
-                        android:maxLength="10"/>
+                        android:maxLength="10"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -113,7 +117,8 @@
                         android:inputType="numberDecimal"
                         android:layout_toLeftOf="@+id/tv_nt_child_currency"
                         android:background="@color/transparent"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:text="10"/>
                     <TextView
                         android:id="@+id/tv_nt_child_currency"
                         android:layout_width="wrap_content"
@@ -284,17 +289,22 @@
                     android:id="@+id/cb_nt_romantic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Romantic"/>
+                    android:text="Romantic"
+                    android:checked="true"
+                    />
                 <CheckBox
                     android:id="@+id/cb_nt_sightseeing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sightseeing"/>
+                    android:text="Sightseeing"
+                    android:checked="true"
+                    />
                 <CheckBox
                     android:id="@+id/cb_nt_adventure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Adventure"
+                    android:checked="true"
                     />
             </LinearLayout>
             <!--public/private-->
@@ -489,7 +499,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:maxLength="4000"
-                    android:background="@color/transparent"/>
+                    android:background="@color/transparent"
+                    android:text="adfasdfa"
+                    />
             </LinearLayout>
             <!--inclusion-->
             <LinearLayout
