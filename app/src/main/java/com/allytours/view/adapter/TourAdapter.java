@@ -11,13 +11,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allytours.R;
 import com.allytours.controller.API;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.BitmapUtil;
+import com.allytours.utilities.DiskBitmapCache;
 import com.allytours.view.PurchaseActivity;
+import com.allytours.view.ReviewActivity;
 import com.allytours.widget.FadeInImageListener;
 import com.allytours.widget.HorizontalListView;
 import com.android.volley.Cache;
@@ -47,49 +50,7 @@ public class TourAdapter extends BaseAdapter {
 	 * Also implements ImageCache, so that we can pass this custom implementation
 	 * to ImageLoader.
 	 */
-    public  class DiskBitmapCache extends DiskBasedCache implements ImageCache {
 
-        public DiskBitmapCache(File rootDirectory, int maxCacheSizeInBytes) {
-            super(rootDirectory, maxCacheSizeInBytes);
-        }
-
-        public DiskBitmapCache(File cacheDir) {
-            super(cacheDir);
-        }
-
-        public Bitmap getBitmap(String url) {
-            final Cache.Entry requestedItem = get(url);
-
-            if (requestedItem == null)
-                return null;
-
-            return BitmapFactory.decodeByteArray(requestedItem.data, 0, requestedItem.data.length);
-        }
-
-        public void putBitmap(String url, Bitmap bitmap) {
-
-            final Cache.Entry entry = new Cache.Entry();
-
-/*			//Down size the bitmap.If not done, OutofMemoryError occurs while decoding large bitmaps.
- 			// If w & h is set during image request ( using ImageLoader ) then this is not required.
-	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			Bitmap downSized = BitmapUtil.downSizeBitmap(bitmap, 50);
-
-			downSized.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-			byte[] data = baos.toByteArray();
-
-			System.out.println("####### Size of bitmap is ######### "+url+" : "+data.length);
-	        entry.data = data ; */
-
-            entry.data = BitmapUtil.convertBitmapToBytes(bitmap) ;
-            put(url, entry);
-        }
-
-        @Override
-        public void invalidateBitmap(String url) {
-
-        }
-    }
 
     public TourAdapter (Context context, ArrayList<TourModel> arrTours) {
         this.arrTours = arrTours;
@@ -155,8 +116,17 @@ public class TourAdapter extends BaseAdapter {
         ImageView ivAdventure = (ImageView)view.findViewById(R.id.iv_it_adventure);
         ImageView ivMark = (ImageView)view.findViewById(R.id.iv_it_mark);
 
-        TourModel tourModel = arrTours.get(position);
+        LinearLayout llReviewContainer = (LinearLayout)view.findViewById(R.id.ll_it_review_container);
 
+        final TourModel tourModel = arrTours.get(position);
+        llReviewContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ReviewActivity.class);
+                intent.putExtra("tour_id", tourModel.getTour_id());
+                mContext.startActivity(intent);
+            }
+        });
         tvTitle.setText(tourModel.getTitle());
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override

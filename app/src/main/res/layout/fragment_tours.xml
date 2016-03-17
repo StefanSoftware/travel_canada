@@ -12,23 +12,24 @@
         <include
             android:id="@+id/tour_tabbar"
             layout="@layout/custom_tabbar_tour"/>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/pad_5dp">
-            <ImageButton
-                android:id="@+id/ib_tours_back"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/pad_20dp"
-                android:background="@drawable/ic_arrow_back_black_24dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/black"
-                android:layout_marginLeft="@dimen/pad_20dp"/>
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:padding="@dimen/pad_5dp">-->
+            <!--<ImageButton-->
+                <!--android:id="@+id/ib_tours_back"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="@dimen/pad_20dp"-->
+                <!--android:background="@drawable/ic_arrow_back_black_24dp"-->
+                <!--android:visibility="gone"/>-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text=""-->
+                <!--android:textColor="@color/black"-->
+                <!--android:layout_marginLeft="@dimen/pad_20dp"/>-->
+        <!--</LinearLayout>-->
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent">

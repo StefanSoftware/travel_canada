@@ -71,6 +71,9 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                 .commit();
 
     }
+    public static void setTitle(String title) {
+        tvTitle.setText(title);
+    }
     public static void pushFragment(int pageNum) {
         switch (pageNum) {
             case 1:
@@ -79,7 +82,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                         .replace(R.id.fragment_container, fragments[1])
                         .commit();
                 currentPageNumber = 1;
-                tvTitle.setText("Select Options");
+                setTitle("Select Options");
                 tvPrice.setVisibility(View.GONE);
                 break;
             case 2:
@@ -88,7 +91,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                         .replace(R.id.fragment_container, fragments[2])
                         .commit();
                 currentPageNumber = 2;
-                tvTitle.setText("Check Out");
+                setTitle("Check Out");
                 break;
             case 3:
                 if (!Utils.getFromPreference(mContext, Constant.USER_TYPE).equals(Constant.USER_TYPE_CUSTOMER)) {
@@ -101,7 +104,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                         .replace(R.id.fragment_container, fragments[3])
                         .commit();
                 currentPageNumber = 3;
-                tvTitle.setText("Confirmation");
+                setTitle("Confirmation");
                 break;
             case 4:
 

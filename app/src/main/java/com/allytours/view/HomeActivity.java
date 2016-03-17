@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -142,6 +143,13 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, new ToursFragment(), "")
                 .commit();
     }
+    public void showHideSearchView(boolean flag) {
+        if (flag) {
+            searchItem.setVisible(true);
+        } else {
+            searchItem.setVisible(false);
+        }
+    }
     public void navigationTo(int num) {
         switch (num) {
 
@@ -149,14 +157,14 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new CustomerToursFragment(), "")
                         .commit();
-                searchItem.setVisible(true);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new OperatorToursFragment(), "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
 
@@ -165,35 +173,35 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 3:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new TourListingFragment(), "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(true);
                 break;
             case 4:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new PromotionFragment(), "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 5:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ContactUsFragment(), "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 6:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new AboutFragment(), "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 7:
@@ -203,14 +211,14 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ProfileFragment(), "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 11:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new SignInFragment(), "")
                         .commit();
-                searchItem.setVisible(false);
+                showHideSearchView(false);
                 newTourItem.setVisible(false);
                 break;
         }
@@ -278,6 +286,7 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
 //                mainFragment.search(query);
+                ToursFragment.search(query);
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();

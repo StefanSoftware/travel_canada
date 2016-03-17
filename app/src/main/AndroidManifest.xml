@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.allytours" >
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="23" />
+
+    <uses-sdk
+        android:minSdkVersion="4"
+        android:targetSdkVersion="23" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -11,6 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -22,6 +27,8 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".controller.AllytoursApplication"
         android:allowBackup="true"
@@ -31,9 +38,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".view.HomeActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,13 +48,21 @@
             </intent-filter>
         </activity>
 
-        <!--database-->
-        <meta-data android:name="DATABASE" android:value="allytours.db" />
-        <meta-data android:name="VERSION" android:value="2" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.allytours" />
+        <!-- database -->
+        <meta-data
+            android:name="DATABASE"
+            android:value="allytours.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.allytours" />
 
-        <!--google map-->
+        <!-- google map -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/map_api_key" />
@@ -55,8 +70,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!--facebook-->
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <!-- facebook -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationName"
             android:value="@string/app_name" />
@@ -65,38 +82,41 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--<provider-->
-            <!--android:name="com.facebook.FacebookContentProvider"-->
-            <!--android:authorities="com.facebook.FacebookContentProvider"-->
-            <!--android:exported="true" />-->
-
+        <!-- <provider -->
+        <!-- android:name="com.facebook.FacebookContentProvider" -->
+        <!-- android:authorities="com.facebook.FacebookContentProvider" -->
+        <!-- android:exported="true" /> -->
 
         <activity
             android:name=".view.ExceptionViewActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_exception_view"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.PurchaseActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_detail_tour"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.ChatActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_chat"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.AddNewTourActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_add_new_tour"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".view.ReviewActivity"
+            android:label="@string/title_activity_review"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

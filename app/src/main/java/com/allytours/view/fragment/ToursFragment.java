@@ -45,10 +45,17 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
     private Button btnPopular, btnSight, btnAdventure, btnRomantic;
     private ListView lvHome;
     private PullToRefreshListView mPullRefreshHomeListView;
-    private ImageButton ivBack;
+    private static TourAdapter tourAdapter;
+//    private ImageButton ivBack;
 
+    static String searchQuery;
     private Context mContext;
-    boolean isLast;
+    static boolean isLast;
+    static ArrayList<TourModel> arrTourModel;
+    static ArrayList<TourModel> arrBufferTourModel;
+    static ArrayList<TourModel> arrBufferTourModel2;
+    static int offset;
+    static int currentState;
 
     public ToursFragment() {
         // Required empty public constructor
@@ -63,12 +70,18 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
 
         initVariable();
         initUI(view);
-//        fetch_tours();
+        fetch_tours();
         return  view;
     }
     private void initVariable() {
         mContext = getContext();
         isLast = false;
+        offset = 0;
+        arrTourModel = new ArrayList<>();
+        arrBufferTourModel = new ArrayList<>();
+        arrBufferTourModel2 = new ArrayList<>();
+        searchQuery = "";
+        currentState = 0;
     }
     private void initUI(View view) {
         btnAdventure = (Button)view.findViewById(R.id.btn_tours_adventure);
@@ -81,7 +94,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         btnPopular.setOnClickListener(this);
         btnRomantic.setOnClickListener(this);
 
-        ivBack = (ImageButton)view.findViewById(R.id.ib_tours_back);
+//        ivBack = (ImageButton)view.findViewById(R.id.ib_tours_back);
 
         ///create listview
         mPullRefreshHomeListView = (PullToRefreshListView)view.findViewById(R.id.lv_tour_list);
@@ -92,17 +105,24 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
             public void onLastItemVisible() {
                 if (!isLast) {
 //                    defaluteFetchTrip(currentCategory, GlobalVariable.getInstance().currentCountryName);
+                    reDrawListView();
                 }
                 mPullRefreshHomeListView.onRefreshComplete();
 
             }
         });
         lvHome = mPullRefreshHomeListView.getRefreshableView();
+        tourAdapter = new TourAdapter(mContext, arrBufferTourModel2);
+        lvHome.setAdapter(tourAdapter);
 
+        ((HomeActivity)getActivity()).showHideSearchView(true);
+    }
+    public static void search(String query) {
+        searchQuery = query;
+        filter2(filter1(), currentState);
 
 
     }
-
 
     private void selectTabbar(int num) {
         switch (num) {
@@ -111,24 +131,33 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                 btnSight.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnRomantic.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                currentState = 0;
+                filter2(arrBufferTourModel, 0);
                 break;
             case 1:
                 btnPopular.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnSight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 btnRomantic.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                currentState = 1;
+                filter2(arrBufferTourModel, 1);
                 break;
             case 2:
                 btnPopular.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnSight.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnRomantic.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                currentState = 2;
+                filter2(arrBufferTourModel, 2);
                 break;
             case 3:
                 btnPopular.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnSight.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnRomantic.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                currentState = 3;
+                filter2(arrBufferTourModel, 3);
                 break;
         }
     }
@@ -147,9 +176,71 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         if (v == btnAdventure) {
             selectTabbar(3);
         }
-        if (v == ivBack) {
-            ((HomeActivity)getActivity()).navigationTo(2);
+//        if (v == ivBack) {
+//            ((HomeActivity)getActivity()).navigationTo(2);
+//        }
+    }
+    private static ArrayList<TourModel> filter1() {
+        if (searchQuery.length() == 0) {
+            return arrTourModel;
+        } else {
+            ArrayList<TourModel> arrayList = new ArrayList<>();
+            for (int i = 0; i < arrTourModel.size(); i ++ ) {
+                if (arrTourModel.get(i).getTitle().contains(searchQuery) || arrTourModel.get(i).getAttractions().contains(searchQuery)) {
+                    arrayList.add(arrTourModel.get(i));
+                }
+            }
+            return arrayList;
         }
+    }
+    private static void filter2(ArrayList<TourModel> arrTours, int type) {
+        arrBufferTourModel.clear();
+        offset = 0;
+        isLast = false;
+        switch (type) {
+            case 0://default
+                arrBufferTourModel = arrTours;
+                break;
+            case 1://romantic
+                for (int i = 0; i < arrTours.size(); i ++ ) {
+                    if (arrTours.get(i).getTourType().contains("R")) {
+                        arrBufferTourModel.add(arrTours.get(i));
+                    }
+                }
+                break;
+            case 2://sightseeing
+                for (int i = 0; i < arrTours.size(); i ++ ) {
+                    if (arrTours.get(i).getTourType().contains("S")) {
+                        arrBufferTourModel.add(arrTours.get(i));
+                    }
+                }
+
+                break;
+            case 3://adventure
+                for (int i = 0; i < arrTours.size(); i ++ ) {
+                    if (arrTours.get(i).getTourType().contains("A")) {
+                        arrBufferTourModel.add(arrTours.get(i));
+                    }
+                }
+                break;
+
+
+        }
+        reDrawListView();
+    }
+    private static void reDrawListView() {
+        int num = 0;
+        if ((offset * 5 + 5) > arrBufferTourModel.size()) {
+            num = arrBufferTourModel.size();
+            isLast = true;
+        } else {
+            num = (offset * 5 + 5);
+        }
+
+        for (int i = offset * 5; i < num; i ++ ) {
+            arrBufferTourModel2.add(arrBufferTourModel.get(i));
+        }
+        tourAdapter.notifyDataSetChanged();
     }
     private void fetch_tours() {
 
@@ -158,7 +249,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
             Utils.showProgress(mContext);
 
             Map<String, String> params = new HashMap<String, String>();
-            params.put("tours", ((HomeActivity) getActivity()).strCityIDs);
+            params.put("location_id", ((HomeActivity) getActivity()).strCityIDs);
 
             CustomRequest signinRequest = new CustomRequest(Request.Method.POST, API.FETCH_TOUR, params,
                     new Response.Listener<JSONObject>() {
@@ -205,7 +296,11 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                             arrayList.add(strings[k]);
                                         }
                                         tourModel.setArrImage(arrayList);
+
+                                        arrTourModel.add(tourModel);
+
                                     }
+                                    filter2(filter1(), 0);
 
                                 } else {
                                     String reason = response.getString("reason");

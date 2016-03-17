@@ -229,7 +229,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                                     String country = jsonObject.getString("country");
                                     String default_currency = jsonObject.getString("defaultCurrency");
                                     String totop = jsonObject.getString("totalOp");
-                                    String tot_tours = jsonObject.getString("totalTours");
+                                    String tot_tours = jsonObject.getString("count");
                                     String tot_tours_amount = jsonObject.getString("totalToursAmt");
                                     String tour_count = jsonObject.getString("tourCnt");
                                     String tot_reviews = jsonObject.getString("totalReviews");

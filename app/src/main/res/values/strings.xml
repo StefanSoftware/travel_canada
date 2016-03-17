@@ -17332,4 +17332,5 @@
         <item>Zion,Pennsylvania,United States</item>
 
     </string-array>
+    <string name="title_activity_review">ReviewActivity</string>
 </resources>

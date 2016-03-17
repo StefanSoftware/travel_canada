@@ -391,7 +391,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                             String success = response.getString("success");
                             if (success.equals("true")) {
 
-
+                                getActivity().finish();
 //                                ((HomeActivity) mContext).navigationTo(1);
                             } else {
                                 String reason = response.getString("reason");
