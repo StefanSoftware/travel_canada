@@ -4,7 +4,6 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/allytours/utilities/BitmapUtil.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/allytours/widget/FadeInImageListener.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim/fade_in.xml" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/volleylibrary/src/com/android/volley/FadeInImageListener.java" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
