@@ -48,7 +48,6 @@
                     android:maxLength="50"
                     android:singleLine="true"
                     android:background="@color/transparent"
-                    android:text="kjhg"
                     />
                 <!--</android.support.design.widget.TextInputLayout>-->
             </LinearLayout>
@@ -83,7 +82,7 @@
                         android:layout_toLeftOf="@+id/tv_nt_adult_currency"
                         android:background="@color/transparent"
                         android:layout_centerVertical="true"
-                        android:text="15"/>
+                        />
                     <TextView
                         android:id="@+id/tv_nt_adult_currency"
                         android:layout_width="wrap_content"
@@ -118,7 +117,7 @@
                         android:layout_toLeftOf="@+id/tv_nt_child_currency"
                         android:background="@color/transparent"
                         android:layout_centerVertical="true"
-                        android:text="10"/>
+                        />
                     <TextView
                         android:id="@+id/tv_nt_child_currency"
                         android:layout_width="wrap_content"
@@ -290,21 +289,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Romantic"
-                    android:checked="true"
                     />
                 <CheckBox
                     android:id="@+id/cb_nt_sightseeing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sightseeing"
-                    android:checked="true"
                     />
                 <CheckBox
                     android:id="@+id/cb_nt_adventure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Adventure"
-                    android:checked="true"
                     />
             </LinearLayout>
             <!--public/private-->
@@ -460,23 +456,15 @@
                         android:layout_marginLeft="@dimen/pad_15dp">
 
                     </Spinner>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="hours"
-                        android:textColor="@color/black"/>
+
                     <Spinner
                         android:id="@+id/sp_nt_duration_days"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginLeft="@dimen/pad_15dp">
 
                     </Spinner>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="days"
-                        android:textColor="@color/black"/>
+
                 </LinearLayout>
             </LinearLayout>
             <!--attraction-->
@@ -497,10 +485,9 @@
                 <EditText
                     android:id="@+id/et_nt_attraction"
                     android:layout_width="match_parent"
-                    android:layout_height="42dp"
+                    android:layout_height="wrap_content"
                     android:maxLength="4000"
-                    android:background="@color/transparent"
-                    android:text="adfasdfa"
+                    android:textSize="@dimen/txt_14sp"
                     />
             </LinearLayout>
             <!--inclusion-->
@@ -517,19 +504,22 @@
                     android:layout_height="wrap_content"
                     android:text="Inclusion"
                     android:textColor="@color/black"
+
                     />
                 <CheckBox
                     android:id="@+id/cb_nt_taxes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Taxes"
-                    android:checked="true"/>
+                    android:checked="true"
+                    android:enabled="false"/>
                 <CheckBox
                     android:id="@+id/cb_nt_tips"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Tips"
-                    android:checked="true"/>
+                    android:checked="true"
+                    android:enabled="false"/>
                 <CheckBox
                     android:id="@+id/cb_nt_round_trip_transfer"
                     android:layout_width="match_parent"

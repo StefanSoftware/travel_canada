@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.allytours.R;
 import com.allytours.utilities.MediaUtility;
+import com.allytours.utilities.UIUtility;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,8 +104,10 @@ public class TakePictureFromCameraManager {
         ////////process image to lower quality
 //        String processedImage = MediaUtility.saveProgressimageToSDCARD(bitmap, photoPath.substring(photoPath.lastIndexOf("/") + 1), "Allytours");
 //        Bitmap finalbitmap = BitmapFactory.decodeFile(processedImage);
-
-        destinationImageView.setImageBitmap(MediaUtility.adjustBitmap(photoPath));
+        Bitmap adjustBitmap = MediaUtility.adjustBitmap(photoPath);
+        Bitmap croppedBitmap = MediaUtility.cropBitmapAnySize(adjustBitmap, 200, 200);
+        MediaUtility.saveBitmapToLocal(croppedBitmap, photoPath, photoPath);
+        destinationImageView.setImageBitmap(croppedBitmap);
     }
 
 //    private void setPic() {

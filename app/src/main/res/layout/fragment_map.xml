@@ -11,31 +11,31 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:layout="@layout/google_map_fragment_layout"
         />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_margin="@dimen/pad_10dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/white">
-        <AutoCompleteTextView
-            android:id="@+id/act_map_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/transparent"
-            android:hint="Search"
-            android:paddingLeft="@dimen/pad_5dp"
-            android:paddingRight="@dimen/pad_5dp"
-            android:layout_centerVertical="true"
-            />
-        <ImageButton
-            android:id="@+id/ib_map_search"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_search_black_24dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@color/transparent"/>
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="42dp"-->
+        <!--android:layout_margin="@dimen/pad_10dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="@color/white">-->
+        <!--<AutoCompleteTextView-->
+            <!--android:id="@+id/act_map_search"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/transparent"-->
+            <!--android:hint="Search"-->
+            <!--android:paddingLeft="@dimen/pad_5dp"-->
+            <!--android:paddingRight="@dimen/pad_5dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--/>-->
+        <!--<ImageButton-->
+            <!--android:id="@+id/ib_map_search"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/ic_search_black_24dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:background="@color/transparent"/>-->
+    <!--</RelativeLayout>-->
 
 
     <include

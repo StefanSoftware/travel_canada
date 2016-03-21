@@ -44,7 +44,7 @@ public class CheckOutFragment extends Fragment implements View.OnClickListener{
         return view;
     }
     private void initVariable() {
-        mContext = getContext();
+        mContext = getActivity();
     }
 
     private void initUI(View view) {

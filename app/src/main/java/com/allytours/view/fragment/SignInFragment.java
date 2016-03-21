@@ -1,6 +1,7 @@
 package com.allytours.view.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -20,6 +21,7 @@ import com.allytours.controller.API;
 import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.view.HomeActivity;
+import com.allytours.view.SigninActivity;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -79,7 +81,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         return view;
     }
     private void initVariable() {
-        mContext = getContext();
+        mContext = getActivity();
 //        String keyhash = SocialUtility.printKeyHash(mContext);
 
         initFBLogin();
@@ -219,13 +221,13 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         tvForgotPassword = (TextView)view.findViewById(R.id.tv_signin_forgot_pass);
         tvForgotPassword.setOnClickListener(this);
 
-        ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_IN);
+        ((SigninActivity)mContext).setTitle(Constant.TITLE_SIGN_IN);
     }
 
     @Override
     public void onClick(View v) {
         if (v == btnToSignup) {
-            ((HomeActivity)mContext).goToSignup();
+            ((SigninActivity)mContext).pushFragment(1);
 
 
         }
@@ -289,13 +291,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                         Utils.setOnPreference(mContext, Constant.LICENSE_PHOTO, licensePhoto);
                                     }
 
+                                    getActivity().setResult(Activity.RESULT_OK);
+                                    getActivity().finish();
 
-                                    if (HomeActivity.fromWhere == 0) {
-                                        mContext.startActivity(new Intent(mContext, HomeActivity.class));
-                                        ((HomeActivity) mContext).finish();
-                                    } else if (HomeActivity.fromWhere == 1) {
-                                        ((HomeActivity) mContext).finishForPurchase(-1);
-                                    }
 
                                 } else {
                                     String reason = response.getString("reason");
@@ -398,8 +396,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                     }
 
 
-                                    mContext.startActivity(new Intent(mContext, HomeActivity.class));
-                                    ((HomeActivity) mContext).finish();
+                                    getActivity().setResult(Activity.RESULT_OK);
+                                    getActivity().finish();
                                 } else {
                                     String reason = response.getString("reason");
                                     if (reason.equals("401")) {

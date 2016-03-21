@@ -56,7 +56,7 @@ public class TourListingFragment extends Fragment implements View.OnClickListene
     }
 
     private void initVariable() {
-        mContext = getContext();
+        mContext = getActivity();
         isLast = false;
         isActive = true;
     }

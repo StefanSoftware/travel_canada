@@ -35,7 +35,7 @@ public class SelectOptionFragment extends Fragment implements View.OnClickListen
     }
 
     private void initVariables() {
-        mContext = getContext();
+        mContext = getActivity();
     }
 
     private void initUI(View view) {

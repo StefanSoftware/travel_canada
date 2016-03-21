@@ -77,11 +77,11 @@ public class UIUtility {
 
 
     }
-    public static void dismissKeyboard(Context mContext, View registerPlan) {
-        InputMethodManager inputMethodManager = (InputMethodManager) mContext
-                .getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                registerPlan.getWindowToken(), 0);
-
-    }
+//    public static void dismissKeyboard(Context mContext, View registerPlan) {
+//        InputMethodManager inputMethodManager = (InputMethodManager) mContext
+//                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        inputMethodManager.hideSoftInputFromWindow(
+//                registerPlan.getWindowToken(), 0);
+//
+//    }
 }

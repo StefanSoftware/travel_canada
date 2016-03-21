@@ -74,7 +74,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         return  view;
     }
     private void initVariable() {
-        mContext = getContext();
+        mContext = getActivity();
         isLast = false;
         offset = 0;
         arrTourModel = new ArrayList<>();
@@ -115,7 +115,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         tourAdapter = new TourAdapter(mContext, arrBufferTourModel2);
         lvHome.setAdapter(tourAdapter);
 
-        ((HomeActivity)getActivity()).showHideSearchView(true);
+        ((HomeActivity)getActivity()).showSearchView(true);
     }
     public static void search(String query) {
         searchQuery = query;
@@ -132,23 +132,23 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                 btnRomantic.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 currentState = 0;
-                filter2(arrBufferTourModel, 0);
+                filter2(filter1(), 0);
                 break;
             case 1:
                 btnPopular.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnSight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 btnRomantic.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
-                currentState = 1;
-                filter2(arrBufferTourModel, 1);
+                currentState = 2;
+                filter2(filter1(), 2);
                 break;
             case 2:
                 btnPopular.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnSight.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 btnRomantic.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
-                currentState = 2;
-                filter2(arrBufferTourModel, 2);
+                currentState = 1;
+                filter2(filter1(), 1);
                 break;
             case 3:
                 btnPopular.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
@@ -157,7 +157,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                 btnAdventure.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
                 currentState = 3;
-                filter2(arrBufferTourModel, 3);
+                filter2(filter1(), 3);
                 break;
         }
     }
@@ -194,32 +194,34 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         }
     }
     private static void filter2(ArrayList<TourModel> arrTours, int type) {
-        arrBufferTourModel.clear();
+        ArrayList<TourModel> arrayList = arrTours;
+        arrBufferTourModel = new ArrayList<>();
+        arrBufferTourModel2.clear();
         offset = 0;
         isLast = false;
         switch (type) {
             case 0://default
-                arrBufferTourModel = arrTours;
+                arrBufferTourModel = arrayList;
                 break;
             case 1://romantic
-                for (int i = 0; i < arrTours.size(); i ++ ) {
-                    if (arrTours.get(i).getTourType().contains("R")) {
-                        arrBufferTourModel.add(arrTours.get(i));
+                for (int i = 0; i < arrayList.size(); i ++ ) {
+                    if (arrayList.get(i).getTourType().contains("R")) {
+                        arrBufferTourModel.add(arrayList.get(i));
                     }
                 }
                 break;
             case 2://sightseeing
-                for (int i = 0; i < arrTours.size(); i ++ ) {
-                    if (arrTours.get(i).getTourType().contains("S")) {
-                        arrBufferTourModel.add(arrTours.get(i));
+                for (int i = 0; i < arrayList.size(); i ++ ) {
+                    if (arrayList.get(i).getTourType().contains("S")) {
+                        arrBufferTourModel.add(arrayList.get(i));
                     }
                 }
 
                 break;
             case 3://adventure
-                for (int i = 0; i < arrTours.size(); i ++ ) {
-                    if (arrTours.get(i).getTourType().contains("A")) {
-                        arrBufferTourModel.add(arrTours.get(i));
+                for (int i = 0; i < arrayList.size(); i ++ ) {
+                    if (arrayList.get(i).getTourType().contains("A")) {
+                        arrBufferTourModel.add(arrayList.get(i));
                     }
                 }
                 break;
@@ -240,6 +242,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         for (int i = offset * 5; i < num; i ++ ) {
             arrBufferTourModel2.add(arrBufferTourModel.get(i));
         }
+        offset ++;
         tourAdapter.notifyDataSetChanged();
     }
     private void fetch_tours() {
@@ -265,10 +268,10 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                                         TourModel tourModel = new TourModel();
 
-                                        tourModel.setLocationIds(jsonObject.getString("locationId"));
+//                                        tourModel.setLocationIds(jsonObject.getString("locationId"));
                                         tourModel.setTour_id(jsonObject.getString("tourId"));
                                         tourModel.setTitle(jsonObject.getString("title"));
-                                        tourModel.setUserId(jsonObject.getString("operationId"));
+                                        tourModel.setUserId(jsonObject.getString("operatorId"));
                                         tourModel.setActive(jsonObject.getString("active"));
                                         tourModel.setTourType(jsonObject.getString("tourType"));
                                         tourModel.setCurrency_unit(jsonObject.getString("currency"));
@@ -282,12 +285,12 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                         tourModel.setStart_time(jsonObject.getString("startTime"));
                                         tourModel.setStartDate(jsonObject.getString("startDate"));
                                         tourModel.setStartDay(jsonObject.getString("startDay"));
-                                        tourModel.setDurationDay(jsonObject.getString("tourDurationDays"));
-                                        tourModel.setDurationTime(jsonObject.getString("tourDuratinHours"));
+                                        tourModel.setDurationDay(jsonObject.getString("tourDurationUnit"));
+                                        tourModel.setDurationTime(jsonObject.getString("tourDuration"));
                                         tourModel.setAdultPrice(jsonObject.getString("priceAdult"));
                                         tourModel.setChildPrice(jsonObject.getString("priceChild"));
                                         tourModel.setCreated_date(jsonObject.getString("created_at"));
-                                        tourModel.setAverage_rating(jsonObject.getString("average_rating"));
+                                        tourModel.setAverage_rating(jsonObject.getString("avgRating"));
                                         tourModel.setTotal_reviews(jsonObject.getString("totalReviews"));
                                         String pictures = jsonObject.getString("pictures");
                                         String[] strings = pictures.split(",");

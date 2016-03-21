@@ -2,14 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/cluster_marker_background"
-    android:padding="10dp" >
+    android:background="@drawable/two_tour_buses"
+    android:padding="3dp"
+    >
 
     <TextView
         android:id="@+id/marker_count"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:textColor="#FFFFFF"
+        android:textAlignment="center"
         android:textIsSelectable="false" />
 
 </FrameLayout>

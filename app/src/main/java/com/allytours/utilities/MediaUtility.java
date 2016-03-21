@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -368,7 +369,65 @@ public class MediaUtility {
             e.printStackTrace();
         }
     }
+    public static Bitmap cropBitmapAnySize(Bitmap bitmap, int imgWidth, int imgHeigh){
 
+        int temp;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        try {
+
+            if (width >= height && imgWidth >= imgHeigh) {
+
+                if ((float) imgWidth / (float) imgHeigh > (float) width / (float) height) {
+                    temp = imgWidth;
+                    imgWidth = (int) ((float) imgHeigh * (float) width / (float) height);
+                    return Bitmap.createBitmap(bitmap, (temp - imgWidth) / 2, 0, imgWidth, imgHeigh);
+                } else {
+                    temp = imgHeigh;
+                    imgHeigh = (int) ((float) imgWidth / ((float) width / (float) height));
+                    return Bitmap.createBitmap(bitmap, 0, (temp - imgHeigh) / 2, imgWidth, imgHeigh);
+                }
+            }
+
+            if (width >= height && imgWidth < imgHeigh) {
+                temp = imgHeigh;
+                imgHeigh = (int) ((float) imgWidth / ((float) width / (float) height));
+                return Bitmap.createBitmap(bitmap, 0, (temp - imgHeigh) / 2, imgWidth, imgHeigh);
+            }
+
+            if (width < height && imgWidth >= imgHeigh) {
+                temp = imgWidth;
+                imgWidth = (int) ((float) imgHeigh * (float) width / (float) height);
+                return Bitmap.createBitmap(bitmap, (temp - imgWidth) / 2, 0, imgWidth, imgHeigh);
+            }
+
+            if (width < height && imgWidth < imgHeigh) {
+
+                if ((float) imgHeigh / (float) imgWidth > (float) height / (float) width) {
+                    temp = imgHeigh;
+                    imgHeigh = (int) ((float) imgWidth / ((float) width / (float) height));
+                    return Bitmap.createBitmap(bitmap, 0, (temp - imgHeigh) / 2, imgWidth, imgHeigh);
+                } else {
+                    temp = imgWidth;
+                    imgWidth = (int) ((float) imgHeigh * (float) width / (float) height);
+                    return Bitmap.createBitmap(bitmap, (temp - imgWidth) / 2, 0, imgWidth, imgHeigh);
+                }
+            }
+
+
+            return bitmap;
+        }catch (OutOfMemoryError e){
+            e.printStackTrace();
+            Log.d("OOMDetailImgAdapter", "");
+            return null;
+        }catch (Throwable e){
+            if (!(e instanceof ThreadDeath)){
+                e.printStackTrace(System.err);
+                Log.d("OOMDetailImgAdapter", "");
+            }
+            return null;
+        }
+    }
     public static void saveBitmapToLocal(Bitmap bitmap, String originalPath, String destinationPath) {
         if (bitmap == null || destinationPath.length() == 0) {
             return;

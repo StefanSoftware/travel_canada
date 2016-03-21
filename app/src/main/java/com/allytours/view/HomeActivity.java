@@ -45,13 +45,14 @@ public class HomeActivity extends AppCompatActivity {
     public static FragmentManager fragmentManager;
     private Toolbar toolbar;
     private TextView tvTitle;
-    private MenuItem searchItem, newTourItem;
+    private MenuItem searchItem;
+    private MenuItem newTourItem;
     private NavigationMenuFragment navigationMenuFragment;
     private MapFragment mainFragment;
     private Context mContext;
 
-
-    public  static int fromWhere;//0: default, 1: from purchaseActivity to log in for payment
+    public static int currentFragmentNumber;
+//    public  static int fromWhere;//0: default, 1: from purchaseActivity to log in for payment
     public static String strCityIDs;// need to fetch tours in search tour page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void initVariable() {
         mContext = this;
-        fromWhere = getIntent().getIntExtra("login_for_payment", 0);
+//        fromWhere = getIntent().getIntExtra("login_for_payment", 0);
         strCityIDs = "";
     }
     private void initUI() {
@@ -93,57 +94,38 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
 
         mainFragment = new MapFragment();
-        if (fromWhere == 0) {
-            toolbar.setVisibility(View.VISIBLE);
+
+        toolbar.setVisibility(View.VISIBLE);
+        if (Utils.getFromPreference(mContext, Constant.USER_TYPE).equals(Constant.USER_TYPE_OPERATOR)) {
+            currentFragmentNumber = 1;
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, new OperatorToursFragment())
+                    .commit();
+        } else {
+            currentFragmentNumber = 2;
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, mainFragment)
                     .commit();
-        } else {
-            toolbar.setVisibility(View.INVISIBLE);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, new SignInFragment())
-                    .commit();
         }
 
+        
     }
 
     public void setTitle(String strTitle) {
         tvTitle.setText(strTitle);
-//        toolbar.setTitle(strTitle);
-//        TextView tvTitle = (TextView)toolbar.findViewById(R.id.tv_home_title);
-//        tvTitle.setText(strTitle);
+
     }
     public android.app.FragmentManager getFragmentManager() {
         return getFragmentManager();
     }
-    public void finishForPurchase(int result) {
-        setResult(result);
-        finish();
-    }
-
-    public void goToSignup() {
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, new SignUpFragment(), "")
-                .commit();
-
-    }
-    public void backToSingin() {
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, new SignInFragment(), "")
-                .commit();
-    }
-
-    public void goToSingupStep2() {
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, new SignupStep2Fragment(), "")
-                .commit();
-    }
+     
     public void goToTourSearchPage() {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, new ToursFragment(), "")
                 .commit();
+        currentFragmentNumber = 12;
     }
-    public void showHideSearchView(boolean flag) {
+    public void showSearchView(boolean flag) {
         if (flag) {
             searchItem.setVisible(true);
         } else {
@@ -157,14 +139,16 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new CustomerToursFragment(), "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 0;
+                showSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new OperatorToursFragment(), "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 1;
+                showSearchView(false);
                 newTourItem.setVisible(false);
                 break;
 
@@ -173,35 +157,40 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, mainFragment, "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 2;
+                showSearchView(true);
                 newTourItem.setVisible(false);
                 break;
             case 3:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new TourListingFragment(), "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 3;
+                showSearchView(false);
                 newTourItem.setVisible(true);
                 break;
             case 4:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new PromotionFragment(), "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 4;
+                showSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 5:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ContactUsFragment(), "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 5;
+                showSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 6:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new AboutFragment(), "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 6;
+                showSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 7:
@@ -211,19 +200,17 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ProfileFragment(), "")
                         .commit();
-                showHideSearchView(false);
+                currentFragmentNumber = 10;
+                showSearchView(false);
                 newTourItem.setVisible(false);
                 break;
             case 11:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new SignInFragment(), "")
-                        .commit();
-                showHideSearchView(false);
-                newTourItem.setVisible(false);
+                startActivityForResult(new Intent(this, SigninActivity.class), SIGN_IN);
                 break;
         }
         mDrawerLayout.closeDrawers();
     }
+    private static int SIGN_IN = 103;
     private void signout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(this.getResources().getString(R.string.app_name));
@@ -252,19 +239,20 @@ public class HomeActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-//        builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface arg0, int arg1) {
-//                // TODO Auto-generated method stub
-//                Toast.makeText(getApplicationContext(), "Close is clicked", Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
-//        dialog.setCancelable(true);
-//        dialog.setCanceledOnTouchOutside(false);
+
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                startActivity(new Intent(this, HomeActivity.class));
+                this.finish();
+            }
+        }
     }
 
     @Override
@@ -285,8 +273,13 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
-//                mainFragment.search(query);
-                ToursFragment.search(query);
+                if (currentFragmentNumber == 12) {
+                    ToursFragment.search(query);
+                } else if (currentFragmentNumber == 2) {
+                    mainFragment.search(query);
+                }
+
+
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();
@@ -296,10 +289,34 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText.length() == 0) {
+                    if (currentFragmentNumber == 12) {
+                        ToursFragment.search("");
+                    } else if (currentFragmentNumber == 2) {
+                        mainFragment.search("");
+                    }
+                }
                 return false;
             }
+
         });
-        searchItem.setVisible(false);
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                if (currentFragmentNumber == 12) {
+                    ToursFragment.search("");
+                } else if (currentFragmentNumber == 2) {
+                    mainFragment.search("");
+                }
+                return true;
+            }
+        });
+        if (Utils.getFromPreference(mContext, Constant.USER_TYPE).equals(Constant.USER_TYPE_OPERATOR)) {
+            searchItem.setVisible(false);
+        } else {
+            searchItem.setVisible(true);
+        }
+
         newTourItem.setVisible(false);
         return super.onCreateOptionsMenu(menu);
 

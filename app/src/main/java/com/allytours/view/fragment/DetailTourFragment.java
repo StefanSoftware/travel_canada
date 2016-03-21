@@ -2,11 +2,14 @@ package com.allytours.view.fragment;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +20,8 @@ import com.allytours.R;
 import com.allytours.controller.API;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.DiskBitmapCache;
+import com.allytours.utilities.image_downloader.UrlImageViewCallback;
+import com.allytours.utilities.image_downloader.UrlRectangleImageViewHelper;
 import com.allytours.view.PurchaseActivity;
 import com.allytours.widget.FadeInImageListener;
 import com.allytours.widget.HorizontalListView;
@@ -82,7 +87,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
     }
 
     private void initVariable() {
-        mContext = getContext();
+        mContext = getActivity();
         mTourModel = (TourModel) getActivity().getIntent().getSerializableExtra("tour");
         // Initialise Volley Request Queue.
         mVolleyQueue = Volley.newRequestQueue(mContext);
@@ -293,8 +298,21 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
                 view1 = mlayoutInflater.inflate(R.layout.item_detail_tour_image, null);
             }
             ImageView imageView = (ImageView)view1.findViewById(R.id.iv_image);
-//            imageView.setImageDrawable(mContext.getResources().getDrawable(arrImages.get(position)));
-            mImageLoader.get(API.BASE_URL + arrImages.get(position), new FadeInImageListener(imageView, mContext));
+//            mImageLoader.get(API.BASE_URL + arrImages.get(position), new FadeInImageListener(imageView, mContext));
+
+            if (!arrImages.get(position).equals("")) {
+                UrlRectangleImageViewHelper.setUrlDrawable(imageView, API.TOUR_URL + arrImages.get(position), R.drawable.default_tour, new UrlImageViewCallback() {
+                    @Override
+                    public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
+                        if (!loadedFromCache) {
+                            ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
+                            scale.setDuration(10);
+                            scale.setInterpolator(new OvershootInterpolator());
+                            imageView.startAnimation(scale);
+                        }
+                    }
+                });
+            }
             return view1;
         }
     }

@@ -1,6 +1,7 @@
 package com.allytours.view.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -22,7 +23,7 @@ import com.allytours.controller.API;
 import com.allytours.utilities.Utils;
 import com.allytours.model.Constant;
 import com.allytours.model.UserModel;
-import com.allytours.view.HomeActivity;
+import com.allytours.view.SigninActivity;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -67,7 +68,7 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
     }
 
     private void initVariables(){
-        mContext = getContext();
+        mContext = getActivity();
         strHolderType = "";
         strCountry = "";
         strCurrency = "";
@@ -127,7 +128,7 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
                 }
             }
         });
-        ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_2);
+        ((SigninActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_2);
     }
     ///check bank account info to submit
     private boolean checkValue() {
@@ -184,12 +185,8 @@ public class SignupStep2Fragment extends Fragment implements AdapterView.OnItemS
 
                                 Utils.setOnPreference(mContext, Constant.USER_TYPE, Constant.USER_TYPE_OPERATOR);
 
-                                if (HomeActivity.fromWhere == 0) {
-                                    mContext.startActivity(new Intent(mContext, HomeActivity.class));
-                                    ((HomeActivity) mContext).finish();
-                                } else if (HomeActivity.fromWhere == 1) {
-                                    ((HomeActivity) mContext).finishForPurchase(-1);
-                                }
+                                getActivity().setResult(Activity.RESULT_OK);
+                                getActivity().finish();
                             } else {
                                 String reason = response.getString("reason");
                                 if (reason.equals("401")) {

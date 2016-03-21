@@ -48,8 +48,8 @@ import com.allytours.utilities.camera.BaseAlbumDirFactory;
 import com.allytours.utilities.camera.FroyoAlbumDirFactory;
 import com.allytours.model.Constant;
 import com.allytours.model.UserModel;
-import com.allytours.view.HomeActivity;
-import com.allytours.widget.CircularImageView;
+import com.allytours.view.SigninActivity;
+import com.allytours.widget.MyCircularImageView;
 import com.allytours.widget.SelectDateFragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -78,11 +78,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private static final String JPEG_FILE_PREFIX = "AllyTour_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
 
-    private Button ibBack, btnDone;
+    private Button  btnDone;
     private EditText etFullname, etEmail, etPassword,etReenterPassword, etCountryCode,etPhoneNumber,etSSN, etBirthday, etAddress;
     private AutoCompleteTextView actv;
     private ImageView  ivLicense;
-    private CircularImageView ivUserPhoto;
+    private MyCircularImageView ivUserPhoto;
     private TextView tvLicense;
     private RadioButton rbCustomer, rbOperator, rbMale, rbFemale;
     private LinearLayout llContainer1, llContainer2, llContainerOperatorOptions;
@@ -117,7 +117,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     ///init variables
     private void initVariable() {
-        mContext = getContext();
+        mContext = getActivity();
 
         userPhotoPath = "";
         licensePhotoPath = "";
@@ -130,8 +130,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
     ////init UI
     private void initUI(View view) {
-        ibBack = (Button)view.findViewById(R.id.ib_signup_back);
-        ibBack.setOnClickListener(this);
         btnDone = (Button)view.findViewById(R.id.btn_signup_done);
         btnDone.setOnClickListener(this);
 
@@ -155,6 +153,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         });
 
         etEmail = (EditText)view.findViewById(R.id.et_signup_email);
+        etEmail.requestFocus();
         etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -264,7 +263,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         etCVV = (EditText)view.findViewById(R.id.et_signup_cvv);
         etExprieDate = (EditText)view.findViewById(R.id.et_signup_expire_date);
 
-        ivUserPhoto = (CircularImageView)view.findViewById(R.id.iv_signup_userphoto);
+        ivUserPhoto = (MyCircularImageView)view.findViewById(R.id.iv_signup_userphoto);
         ivUserPhoto.setOnClickListener(this);
         ivLicense = (ImageView)view.findViewById(R.id.iv_signup_license);
         ivLicense.setOnClickListener(this);
@@ -286,7 +285,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         llCardInfo = (LinearLayout)view.findViewById(R.id.ll_signup_card_info);
         llCardInfoContainer = (LinearLayout)view.findViewById(R.id.ll_signup_card_info_container);
 
-        ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_1);
+        ((SigninActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_1);
         initAutoCompleteTextView(view);
     }
 
@@ -311,16 +310,20 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
+    Activity mActivity;
+    @Override
+    public void onAttach(Activity activity) {
+        mActivity = activity;
+        super.onAttach(activity);
+    }
 
     public void onClick(View v) {
         if (!(v instanceof EditText)) {
-            UIUtility.hideSoftKeyboard(getActivity());
+            if (UIUtility.keyboardShown(mActivity)) {
+                UIUtility.hideSoftKeyboard(mActivity);
+            }
         }
-        if (v == ibBack) {
-            InitHelper.initPreference(mContext);
-            ((HomeActivity)mContext).backToSingin();
-        }
+
         if (v == btnDone) {
             if (checkValue()) {
                 if (rbOperator.isChecked()) {
@@ -343,13 +346,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             llContainer2.setVisibility(View.GONE);
             llContainerOperatorOptions.setVisibility(View.GONE);
             llCardInfoContainer.setVisibility(View.VISIBLE);
-            ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP);
+            ((SigninActivity)mContext).setTitle(Constant.TITLE_SIGN_UP);
         }
         if (v == rbOperator) {
             llContainer2.setVisibility(View.VISIBLE);
             llContainerOperatorOptions.setVisibility(View.VISIBLE);
             llCardInfoContainer.setVisibility(View.GONE);
-            ((HomeActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_1);
+            ((SigninActivity)mContext).setTitle(Constant.TITLE_SIGN_UP_1);
         }
         if (v == ivUserPhoto) {
             showChooseDialog(mContext, "Choose picture from", ACTION_TAKE_USER_PHOTO);
@@ -358,7 +361,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             showChooseDialog(mContext, "Choose picture from", ACTION_TAKE_LICENSE_PHOTO);
         }
         if (v == etBirthday) {
-            UIUtility.hideSoftKeyboard(getActivity());
+            UIUtility.hideSoftKeyboard(mActivity);
             DialogFragment newFragment = new SelectDateFragment(etBirthday);
             newFragment.show(getFragmentManager(), "Birthday");
         }
@@ -570,12 +573,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 Utils.setOnPreference(mContext, Constant.EXPIRE_MONTH, userModel.getExpireday_month());
                                 Utils.setOnPreference(mContext, Constant.EXPIRE_YEAR, userModel.getExpireday_year());
 
-                                if (HomeActivity.fromWhere == 0) {
-                                    mContext.startActivity(new Intent(mContext, HomeActivity.class));
-                                    ((HomeActivity) mContext).finish();
-                                } else if (HomeActivity.fromWhere == 1) {
-                                    ((HomeActivity) mContext).finishForPurchase(-1);
-                                }
+                                mActivity.setResult(Activity.RESULT_OK);
+                                mActivity.finish();
 
                             } else {
                                 String reason = response.getString("reason");
@@ -662,11 +661,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     ///do verify
     private void verify(String verifyCode) {
 
-        if (verifyCode.equals(Utils.getFromPreference(getContext(), Constant.VERIFY_CODE))) {
-            Utils.setOnPreference(getContext(), Constant.VERIFY_CODE, "");
-            ((HomeActivity) getContext()).goToSingupStep2();
+        if (verifyCode.equals(Utils.getFromPreference(mContext, Constant.VERIFY_CODE))) {
+            Utils.setOnPreference(mContext, Constant.VERIFY_CODE, "");
+            ((SigninActivity) mContext).pushFragment(2);
         } else {
-            Utils.showOKDialog(getContext(), "Verification code is incorrect");
+            Utils.showOKDialog(mContext, "Verification code is incorrect");
         }
 
 
@@ -679,7 +678,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         // This method is set up as an onClick handler in the layout xml
         // e.g. android:onClick="onScanPress"
 
-        Intent scanIntent = new Intent(getContext(), CardIOActivity.class);
+        Intent scanIntent = new Intent(mContext, CardIOActivity.class);
 
         // customize these values to suit your needs.
         scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true); // default: false

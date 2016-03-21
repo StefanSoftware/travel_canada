@@ -40,8 +40,6 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
         tvTitle = (TextView)toolbar.findViewById(R.id.tv_title_detail);
-        TextView tvPrice = (TextView)toolbar.findViewById(R.id.tv_price_detail);
-        tvPrice.setVisibility(View.GONE);
 
 
     }

@@ -66,8 +66,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     TextView tvTourCount;
     TextView tvTourTitles;
     ImageView ivFlag;
-    AutoCompleteTextView autoCompleteTextView;
-    ImageButton ibSearch;
 
     private Activity mActivity;
 
@@ -86,6 +84,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.mActivity = activity;
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,16 +123,10 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         tvTourCount = (TextView)view.findViewById(R.id.tv_markerview_tour_count);
         tvTourTitles = (TextView)view.findViewById(R.id.tv_markerview_tour_titles);
         ivFlag = (ImageView)view.findViewById(R.id.iv_markerview_flag);
-        ibSearch = (ImageButton)view.findViewById(R.id.ib_map_search);
-        ibSearch.setOnClickListener(this);
-        autoCompleteTextView = (AutoCompleteTextView)view.findViewById(R.id.act_map_search);
-    }
-    private void initAutoCompletTextView() {
-        ///init first MultiAutoCompleteTextView
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity ,android.R.layout.simple_dropdown_item_1line, DBHelper.getAllCityName());
-        autoCompleteTextView.setAdapter(adapter);
+
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -152,16 +145,17 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         if (!(v instanceof AutoCompleteTextView)) {
             UIUtility.hideSoftKeyboard(mActivity);
         }
-        if (v == ibSearch) {
-            searchKey = autoCompleteTextView.getText().toString();
-            if (searchKey.length() == 0) {
-                createMarkers();
-            } else {
-                initMarkerwithSearchQuery();
-            }
-        }
+
         if (v == llContainer) {
             ((HomeActivity)mActivity).goToTourSearchPage();
+        }
+    }
+    public void search(String query) {
+        searchKey = query;
+        if (searchKey.length() == 0) {
+            createMarkers();
+        } else {
+            initMarkerwithSearchQuery();
         }
     }
     ///init marker with search query and refresh map
@@ -175,7 +169,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         for (int i = 0; i < marrLocations.size(); i++) {
 
             // add to list
-            if (marrLocations.get(i).getCity().equals(searchKey)) {
+            if (marrLocations.get(i).getTours_region_country().toLowerCase().contains(searchKey)) {
                 // create random position
 //            LatLng markerPos = new LatLng(minLat
 //                    + (Math.random() * (maxLat - minLat)), minLng
@@ -198,8 +192,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
             }
 
         }
-//        createClusterMarkers();
-        redrawMap();
+        createClusterMarkers();
+//        redrawMap();
     }
     ///get location
     private void getLocation() {
@@ -261,7 +255,6 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
 //                                    marrLocations.add(summallyModel);
                                 }
-                                initAutoCompletTextView();
                                 setupMap();
                             } else {
                                 String reason = response.getString("reason");
@@ -529,6 +522,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 //                    marker.setVisible(false); //disable badge
 //                    marker.remove();
                     marker.hideInfoWindow();
+                    UIUtility.hideSoftKeyboard(mActivity);
 
                     llContainer.setVisibility(View.VISIBLE);
                     if (getCountryName(marker.getPosition()).equals("United States")) {

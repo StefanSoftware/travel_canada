@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,10 @@ import com.android.volley.request.CustomMultipartRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -77,7 +83,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
     private Spinner spFrequency;
     private LinearLayout llStartTimeContainer;
     private Button btnAddStartTime, btnRemoveStartTime;
-    private Spinner spDurationHour, spDurationDay;
+    private Spinner spDuration, spDurationUnit;
     private EditText etAttraction;
     private CheckBox cbTaxes, cbTips, cbRoundTrip, cbBreakfast, cbLunch, cbDinner, cbEquipment, cbEntranceFee,
         cbOther, cbMandataryFee;
@@ -111,7 +117,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
     }
     private void initVariables() {
 
-        mContext = getContext();
+        mContext = getActivity();
 
         mLayoutInflater = getActivity().getLayoutInflater();
 
@@ -275,13 +281,13 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         rbPublic.setOnClickListener(this);
         rbPrivate.setOnClickListener(this);
 
-        spDurationHour = (Spinner)view.findViewById(R.id.sp_nt_duration_hours);
-        spDurationDay = (Spinner)view.findViewById(R.id.sp_nt_duration_days);
+        spDuration = (Spinner)view.findViewById(R.id.sp_nt_duration_hours);
+        spDurationUnit = (Spinner)view.findViewById(R.id.sp_nt_duration_days);
         spFrequency = (Spinner)view.findViewById(R.id.sp_nt_frequency);
 
 
-        initSpinners(spDurationDay, R.array.duratin_day);
-        initSpinners(spDurationHour, R.array.duratin_hour);
+        initSpinners(spDurationUnit, R.array.duration_unit);
+        initSpinners(spDuration, R.array.duration);
         initSpinners(spFrequency, R.array.frequency);
 
         GPSTracker gpsTracker = new GPSTracker(mContext);
@@ -362,7 +368,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         return arrCity;
     }
 
-    ///customer Sign up
+    ////post new tour
     private void showReviewDialog() {
         new AlertDialog.Builder(mContext)
                 .setMessage("Plese confirm information again")
@@ -524,8 +530,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         ///set frequency
         mNewTourModel.setFrequency(spFrequency.getSelectedItem().toString());
         ////set duration
-        mNewTourModel.setDurationDay(spDurationDay.getSelectedItem().toString());
-        mNewTourModel.setDurationTime(spDurationHour.getSelectedItem().toString());
+        mNewTourModel.setDurationDay(spDurationUnit.getSelectedItem().toString());
+        mNewTourModel.setDurationTime(spDuration.getSelectedItem().toString());
         ///check attraction
         if (TextUtils.isEmpty(etAttraction.getText().toString().trim())) {
             Utils.showOKDialog(mContext, "Please input attraction");
@@ -832,6 +838,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                                 public void onClick(DialogInterface dialog, int whichButton) {
 
                                      /* User clicked on a radio button do some stuff */
+
                                     tvDate.setText(strDays[whichButton]);
                                     dialog.dismiss();
                                 }
@@ -854,8 +861,45 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                         .setSingleChoiceItems(strTimes, 0, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                     /* User clicked on a radio button do some stuff */
-                                tvTime.setText(strTimes[whichButton]);
+                                /* User clicked on a radio button do some stuff */
+                                if (tvDate.getText().toString().length() > 0) {
+                                    if (spFrequency.getSelectedItem().toString().equals("Once")) {
+                                        //get time after 12 hours
+                                        DateTime now = DateTime.now();
+                                        DateTime after12hours = now.plusHours(12);
+                                        ///count selected time
+                                        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+                                        DateTime dt = formatter.parseDateTime(tvDate.getText().toString());
+                                        DateTime selectedTime = null;
+                                        switch (whichButton) {
+                                            case 0:
+                                                selectedTime = dt.plusHours(6);
+                                                break;
+                                            case 1:
+                                                selectedTime = dt.plusHours(12);
+                                                break;
+                                            case 2:
+                                                selectedTime = dt.plusHours(16);
+                                                break;
+                                            case 3:
+                                                selectedTime = dt.plusHours(20);
+                                                break;
+                                        }
+                                        //compare time
+                                        int result = DateTimeComparator.getInstance().compare(after12hours, selectedTime);
+                                        if (result == 1) {
+                                            Utils.showOKDialog(mContext, "Please choose date and time after 12 hours");
+                                        } else {
+                                            tvTime.setText(strTimes[whichButton]);
+                                        }
+                                    } else{
+                                        tvTime.setText(strTimes[whichButton]);
+                                    }
+                                } else {
+                                    Utils.showOKDialog(mContext, "Please input date");
+                                }
+
+
                                 dialog.dismiss();
                             }
                         })
@@ -908,7 +952,13 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
 //                    Drawable d = Drawable.createFromPath(arrPhotoPathes.get(arrPhotoPathes.size() - 1));
 //                    Drawable drawable = new BitmapDrawable(getResources(), MediaUtility.adjustBitmap(arrPhotoPathes.get(arrPhotoPathes.size() - 1)));
 //                    arrImageViews.get(pictureCount - 1).setImageDrawable(drawable);
-                    arrImageViews.get(pictureCount - 1).setImageBitmap(MediaUtility.adjustBitmap(arrPhotoPathes.get(arrPhotoPathes.size() - 1)));
+
+                    Bitmap adjustedBitmap = MediaUtility.adjustBitmap(arrPhotoPathes.get(arrPhotoPathes.size() - 1));
+                    //crop image
+//                    Bitmap croppedBitmap = MediaUtility.cropBitmapAnySize(adjustedBitmap, 200, 200);
+//                    MediaUtility.saveBitmapToLocal(croppedBitmap, arrPhotoPathes.get(arrPhotoPathes.size() - 1), arrPhotoPathes.get(arrPhotoPathes.size() - 1));
+
+                    arrImageViews.get(pictureCount - 1).setImageBitmap(adjustedBitmap);
 
                 }
                 break;

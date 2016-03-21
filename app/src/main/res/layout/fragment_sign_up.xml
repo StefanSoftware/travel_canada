@@ -19,13 +19,8 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/pad_10dp"
                 >
-                <Button
-                    android:id="@+id/ib_signup_back"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/ic_arrow_back_black_24dp"
-                    />
-                <com.allytours.widget.CircularImageView
+
+                <com.allytours.widget.MyCircularImageView
                     android:id="@+id/iv_signup_userphoto"
                     android:layout_width="120dp"
                     android:layout_height="120dp"

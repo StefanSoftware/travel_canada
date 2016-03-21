@@ -25,7 +25,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
     public static FragmentManager fragmentManager;
 
-    public static TextView tvTitle, tvPrice;
+    public static TextView tvTitle;
     private ImageButton btnBack;
     private static Context mContext;
 
@@ -43,7 +43,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_tour);
+        setContentView(R.layout.activity_purchase);
 
         initVariable();
         initUI();
@@ -63,7 +63,6 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         btnBack = (ImageButton)toolbar.findViewById(R.id.btn_back_from_detail);
         btnBack.setOnClickListener(this);
         tvTitle = (TextView)toolbar.findViewById(R.id.tv_title_detail);
-        tvPrice = (TextView)toolbar.findViewById(R.id.tv_price_detail);
 
         fragments[0] = new DetailTourFragment();
         fragmentManager.beginTransaction()
@@ -83,7 +82,6 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                         .commit();
                 currentPageNumber = 1;
                 setTitle("Select Options");
-                tvPrice.setVisibility(View.GONE);
                 break;
             case 2:
                 fragments[2] = new CheckOutFragment();
@@ -157,7 +155,6 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         switch (currentPageNumber) {
             case 0:
                 tvTitle.setText(tourModel.getTitle());
-                tvPrice.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 tvTitle.setText("Select Options");

@@ -8,6 +8,8 @@ import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -16,9 +18,12 @@ import android.widget.TextView;
 
 import com.allytours.R;
 import com.allytours.controller.API;
+import com.allytours.model.Constant;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.BitmapUtil;
 import com.allytours.utilities.DiskBitmapCache;
+import com.allytours.utilities.image_downloader.UrlImageViewCallback;
+import com.allytours.utilities.image_downloader.UrlRectangleImageViewHelper;
 import com.allytours.view.PurchaseActivity;
 import com.allytours.view.ReviewActivity;
 import com.allytours.widget.FadeInImageListener;
@@ -140,7 +145,7 @@ public class TourAdapter extends BaseAdapter {
         tvAdultPriceUnit.setText(tourModel.getCurrency_unit());
         tvChildPrice.setText(tourModel.getChildPrice());
         tvChildPriceUnit.setText(tourModel.getCurrency_unit());
-        tvReviewCount.setText(tourModel.getReview_count() + "Reviews");
+        tvReviewCount.setText(tourModel.getTotal_reviews() + " Reviews");
         int averageMark = Integer.parseInt(tourModel.getAverage_rating());
         if (averageMark < 1.5) {
             ivMark.setImageDrawable(mContext.getResources().getDrawable(R.drawable.smile1));
@@ -238,8 +243,22 @@ public class TourAdapter extends BaseAdapter {
                 view1 = mlayoutInflater.inflate(R.layout.item_detail_tour_image, null);
             }
             ImageView imageView = (ImageView)view1.findViewById(R.id.iv_image);
-//            imageView.setImageDrawable(mContext.getResources().getDrawable(arrImages.get(position)));
-            mImageLoader.get(API.BASE_URL + arrImages.get(position), new FadeInImageListener(imageView,mContext));
+
+//            mImageLoader.get(API.TOUR_URL + arrImages.get(position), new FadeInImageListener(imageView,mContext));
+
+            if (!arrImages.get(position).equals("")) {
+                UrlRectangleImageViewHelper.setUrlDrawable(imageView, API.TOUR_URL + arrImages.get(position), R.drawable.default_tour, new UrlImageViewCallback() {
+                    @Override
+                    public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
+                        if (!loadedFromCache) {
+                            ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
+                            scale.setDuration(10);
+                            scale.setInterpolator(new OvershootInterpolator());
+                            imageView.startAnimation(scale);
+                        }
+                    }
+                });
+            }
             return view1;
         }
     }
