@@ -1,6 +1,7 @@
 package com.allytours.view.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
@@ -26,6 +27,7 @@ import com.allytours.model.Constant;
 import com.allytours.controller.Helpers.DBHelper;
 import com.allytours.model.LocationModel;
 import com.allytours.view.HomeActivity;
+import com.allytours.view.PurchaseActivity;
 import com.allytours.widget.markerclusterer.MarkerCluster;
 import com.allytours.widget.markerclusterer.MarkerClusterer;
 import com.android.volley.Request;
@@ -77,7 +79,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     ArrayList<MarkerCluster> markerClusters;
 
     String searchKey;
-
+    String strCityIDs;
+    String strCityNames;
     public MapFragment() {
     }
     @Override
@@ -97,6 +100,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
         initUI(view);
 
+        googleMap = getGoogleMap();
         getLocation();
 //        setupMap();
 
@@ -114,6 +118,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         mClusterMarkers = new ArrayList<Marker>();
         marrLocations = new ArrayList<>();
         searchKey = "";
+        strCityIDs = "";
+        strCityNames = "";
     }
     private void initUI(View view) {
         llContainer = (LinearLayout)view.findViewById(R.id.ll_markerview);
@@ -147,7 +153,10 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         }
 
         if (v == llContainer) {
-            ((HomeActivity)mActivity).goToTourSearchPage();
+            Intent intent = new Intent(mActivity, PurchaseActivity.class);
+            intent.putExtra("city_ids", strCityIDs);
+            intent.putExtra("city_names", strCityNames);
+            mActivity.startActivityForResult(intent, 101);
         }
     }
     public void search(String query) {
@@ -162,7 +171,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     private void initMarkerwithSearchQuery() {
         llContainer.setVisibility(View.INVISIBLE);
 
-        getGoogleMap().clear();
+        googleMap.clear();
         mMarkers.clear();
         mClusterMarkers.clear();
         // create  markers
@@ -186,11 +195,14 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                         .visible(false);
 
                 // create marker
-                Marker marker = getGoogleMap().addMarker(markerOptions);
+                Marker marker = googleMap.addMarker(markerOptions);
                 mClusterMarkers.add(marker);
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), Constant.minZoomout));
             }
 
+        }
+        if (mClusterMarkers.size() == 0) {
+            Utils.showOKDialog(mActivity, "No tours available for this city");
         }
         createClusterMarkers();
 //        redrawMap();
@@ -283,25 +295,24 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     }
     ///init map
     private void setupMap() {
-            if (getGoogleMap() != null) {
+            if (googleMap != null) {
 //                mCurrentZoom = getGoogleMap().getCameraPosition().zoom;
                 mCurrentZoom = Constant.minZoomout;
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50, -90), Constant.minZoomout));
 //                createMarkers();
 //                createRandomMarkers(100);
 
-                getGoogleMap().setOnCameraChangeListener(
+                googleMap.setOnCameraChangeListener(
                         new GoogleMap.OnCameraChangeListener() {
                             @Override
                             public void onCameraChange(CameraPosition newPosition) {
                                 // is clustered?
                                 if (mCurrentZoom != newPosition.zoom) {
-                                    if (newPosition.zoom < Constant.minZoomout ) {
-                                        getGoogleMap().animateCamera(CameraUpdateFactory.zoomTo(Constant.minZoomout));
-                                    }else if (newPosition.zoom > Constant.maxZoomin) {
-                                        getGoogleMap().animateCamera(CameraUpdateFactory.zoomTo(Constant.maxZoomin));
-                                    }
-                                    else {
+                                    if (newPosition.zoom < Constant.minZoomout) {
+                                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.minZoomout));
+                                    } else if (newPosition.zoom > Constant.maxZoomin) {
+                                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.maxZoomin));
+                                    } else {
                                         // create cluster markers for new position
                                         if (searchKey.length() == 0) {
                                             recreateClusterMarkers();
@@ -321,13 +332,13 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
     private void createMarkers() {
         // clear map
-        getGoogleMap().clear();
+        googleMap.clear();
         // clear marker lists
         mMarkers.clear();
         mClusterMarkers.clear();
 
         // get projection area
-        Projection projection = getGoogleMap().getProjection();
+        Projection projection = googleMap.getProjection();
         LatLngBounds bounds = projection.getVisibleRegion().latLngBounds;
         // set min/max for lat/lng
 //
@@ -356,7 +367,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                     .visible(false);
 
             // create marker
-            Marker marker = getGoogleMap().addMarker(markerOptions);
+            Marker marker = googleMap.addMarker(markerOptions);
             // add to list
             mMarkers.add(marker);
 
@@ -367,13 +378,13 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     ///test method
     private void createRandomMarkers(int numberOfMarkers) {
         // clear map
-        getGoogleMap().clear();
+        googleMap.clear();
         // clear marker lists
         mMarkers.clear();
         mClusterMarkers.clear();
 
         // get projection area
-        Projection projection = getGoogleMap().getProjection();
+        Projection projection = googleMap.getProjection();
         LatLngBounds bounds = projection.getVisibleRegion().latLngBounds;
         // set min/max for lat/lng
 //        double minLat = bounds.southwest.latitude;
@@ -401,7 +412,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.logo_25))
                     .visible(false);
             // create marker
-            Marker marker = getGoogleMap().addMarker(markerOptions);
+            Marker marker = googleMap.addMarker(markerOptions);
             // add to list
             mMarkers.add(marker);
         }
@@ -417,7 +428,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
             // create clusters
             Marker[] markers = mMarkers.toArray(new Marker[mMarkers.size()]);
             markerClusters = new MarkerClusterer(
-                    getGoogleMap(), markers, gridSize, averageCenter)
+                    googleMap, markers, gridSize, averageCenter)
                     .createMarkerClusters();
             // create cluster markers
             for (MarkerCluster cluster : markerClusters) {
@@ -442,7 +453,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                     markerOptions.title(getCities(cluster));
 
                     ///====
-                    Marker clusterMarker = getGoogleMap().addMarker(
+                    Marker clusterMarker = googleMap.addMarker(
                             markerOptions);
 
                     // add to list
@@ -525,9 +536,12 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                     UIUtility.hideSoftKeyboard(mActivity);
 
                     llContainer.setVisibility(View.VISIBLE);
-                    if (getCountryName(marker.getPosition()).equals("United States")) {
+                    String country = getCountry(marker.getTitle());
+                    if (country.equals("")) {
+                        ivFlag.setImageDrawable(getResources().getDrawable(R.drawable.fg_ca_am));
+                    }else if (country.equals("United States")) {
                         ivFlag.setImageDrawable(getResources().getDrawable(R.drawable.america));
-                    } else if (getCountryName(marker.getPosition()).equals("Canada")){
+                    } else if (country.equals("Canada")){
                         ivFlag.setImageDrawable(getResources().getDrawable(R.drawable.canada));
                     }
 
@@ -535,11 +549,11 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                     tvTourTitles.setText(marker.getTitle());
                     tvTourCount.setText(marker.getSnippet());
 
-                    String strCity = marker.getTitle();
-                    if (strCity.length() > 40) {
-                        strCity = strCity.substring(0, 37) + "...";
-                        tvTourTitles.setText(strCity);
-                    }
+//                    String strCity = marker.getTitle();
+//                    if (strCity.length() > 40) {
+//                        strCity = strCity.substring(0, 37) + "...";
+//                        tvTourTitles.setText(strCity);
+//                    }
 
                     getArrayOfSelectedCitiesId(marker.getTitle());
                     return true;
@@ -549,6 +563,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         return googleMap;
     }
     private void getArrayOfSelectedCitiesId(String strCityName) {
+        strCityNames = strCityName;
+
         String[] strings = strCityName.split(", ");
         String strCityID = "";
         List<LocationModel> arrayList = DBHelper.getAllLocation();
@@ -562,7 +578,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         }
         if (strCityID.length() > 0) {
             strCityID = strCityID.substring(1, strCityID.length());
-            ((HomeActivity)mActivity).strCityIDs = strCityID;
+            strCityIDs = strCityID;
         }
 
     }
@@ -626,6 +642,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                 ivFlag.setImageDrawable(getResources().getDrawable(R.drawable.america));
             } else if (getCountryName(marker.getPosition()).equals("Canada")){
                 ivFlag.setImageDrawable(getResources().getDrawable(R.drawable.canada));
+            } else {
+                ivFlag.setImageDrawable(getResources().getDrawable(R.drawable.fg_ca_am));
             }
 
             llContainer.setBackground(getResources().getDrawable(R.drawable.custom_info_bubble));
@@ -663,5 +681,30 @@ public class MapFragment extends Fragment implements View.OnClickListener{
             e.printStackTrace();
         }
         return countryName;
+    }
+    private String getCountry(String cities) {
+        String country = "";
+        int canada = 0;
+        int america = 0;
+        String[] strings = cities.split(", ");
+        List<LocationModel> arrLocation = DBHelper.getAllLocation();
+        for (int i = 0; i < arrLocation.size(); i ++) {
+            for (int k = 0; k < strings.length; k ++) {
+                if (arrLocation.get(i).getCity().equals(strings[k])) {
+                    LatLng latLng = new LatLng(Double.parseDouble(arrLocation.get(i).getLatitude()), Double.parseDouble(arrLocation.get(i).getLongitude()));
+                    country = getCountryName(latLng);
+                    if(country.equals("Canada")) {
+                        canada = 1;
+                    } else if (country.equals("United States")) {
+                        america = 1;
+                    }
+                }
+            }
+        }
+        if (canada == america) {
+            return "";
+        } else {
+            return country;
+        }
     }
 }

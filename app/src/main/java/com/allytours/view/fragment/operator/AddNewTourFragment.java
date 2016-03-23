@@ -15,8 +15,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +104,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
     private ArrayList<String> arrPhotoPathes;
     private ArrayList<ImageView> arrImageViews;
     private  LayoutInflater mLayoutInflater;
-
+    ArrayList<String> arrCity ;
     public AddNewTourFragment() {
         // Required empty public constructor
     }
@@ -115,6 +119,12 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         initUI(view);
         return  view;
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
     private void initVariables() {
 
         mContext = getActivity();
@@ -144,6 +154,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         bFlags[4]  = false;
         bFlags[5]  = false;
         bFlags[6]  = false;
+
+        arrCity = getWholeCities();
 
         takePictureFromCameraManager = new TakePictureFromCameraManager(mContext);
     }
@@ -300,6 +312,50 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             tvAdultCurrnceUnit.setText("USD");
             tvChildCurrencyUnit.setText("USD");
         }
+        tvAdultCurrnceUnit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final String[] strCurrency = getResources().getStringArray(R.array.currency_upper);
+                new AlertDialog.Builder(mContext)
+                        .setSingleChoiceItems(strCurrency, 0, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                     /* User clicked on a radio button do some stuff */
+
+                                ((TextView)v).setText(strCurrency[whichButton]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+        });
+        tvChildCurrencyUnit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final String[] strCurrency = getResources().getStringArray(R.array.currency_upper);
+                new AlertDialog.Builder(mContext)
+                        .setSingleChoiceItems(strCurrency, 0, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                     /* User clicked on a radio button do some stuff */
+
+                                ((TextView)v).setText(strCurrency[whichButton]);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+        });
     }
 
     private void initMultiAutoCompletTextView(View view) {
@@ -314,6 +370,35 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                 if (!hasFocus) {
                     if (mactLocation.getText().toString().trim().length() == 0) {
                         mactLocation.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    } else {
+                        String finalCity = "";
+                        String removedCity = "";
+                        int citycount = 0;
+                        String[] items = mactLocation.getText().toString().split(", ");
+                        for (int k = 0; k < items.length; k ++) {
+                            if (citycount == 5) break;
+                            for (int i = 0; i < arrCiies.length; i ++) {
+                                if (citycount == 5) break;
+                                if (items[k].equals(arrCiies[i])) {
+                                    finalCity = finalCity + ", " + items[k];
+                                    citycount ++;
+                                    break;
+                                }
+                                if (i == arrCiies.length - 1) {
+                                    removedCity = removedCity + ", " + items[k];
+                                }
+                            }
+                        }
+                        if (finalCity.length() > 1) {
+                            mactLocation.setText(finalCity.substring(2, finalCity.length()));
+                        } else {
+                            mactLocation.setText("");
+                        }
+
+                        if (removedCity.length() > 0) {
+                            Utils.showOKDialog(mContext, removedCity.substring(2, removedCity.length()) + " not found" );
+                        }
+
                     }
                 } else {
                     mactLocation.setBackgroundColor(getResources().getColor(R.color.transparent));
@@ -322,11 +407,51 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         });
 
         ///init second MultiAutoCompleteTextView
-        ArrayList<String> arrCity = getWholeCities();
+
         mactRoundTrip = (MultiAutoCompleteTextView)view.findViewById(R.id.mact_nt_specify_city);
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, arrCity);
         mactRoundTrip.setAdapter(adapter1);
         mactRoundTrip.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        mactRoundTrip.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (mactRoundTrip.getText().toString().trim().length() == 0) {
+                        mactRoundTrip.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    } else {
+                        String finalCity = "";
+                        String removedCity = "";
+                        int citycount = 0;
+                        String[] items = mactRoundTrip.getText().toString().split(", ");
+                        for (int k = 0; k < items.length; k++) {
+                            if (citycount == 5) break;
+                            for (int i = 0; i < arrCity.size(); i++) {
+                                if (citycount == 5) break;
+                                if (items[k].equals(arrCity.get(i))) {
+                                    finalCity = finalCity + ", " + items[k];
+                                    citycount++;
+                                    break;
+                                }
+                                if (i == arrCity.size() - 1) {
+                                    removedCity = removedCity + ", " + items[k];
+                                }
+                            }
+                        }
+                        if (finalCity.length() > 1) {
+                            mactRoundTrip.setText(finalCity.substring(2, finalCity.length()));
+                        } else {
+                            mactRoundTrip.setText("");
+                        }
+                        if (removedCity.length() > 0) {
+                            Utils.showOKDialog(mContext, removedCity.substring(2, removedCity.length()) + " not found");
+                        }
+
+                    }
+                } else {
+                    mactRoundTrip.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        });
     }
 
     private void initSpinners(final Spinner spinner, int arrayId) {
@@ -438,10 +563,10 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                 .addStringPart("inclusions", mNewTourModel.getInclusions())
                 .addStringPart("frequency", mNewTourModel.getFrequency())
                 .addStringPart("start_time", mNewTourModel.getStartTime())
-                .addStringPart("tour_duration_hours", mNewTourModel.getDurationTime())
-                .addStringPart("tour_duration_days", mNewTourModel.getDurationDay());
+                .addStringPart("tour_duration", mNewTourModel.getDurationTime())
+                .addStringPart("tour_duration_unit", mNewTourModel.getDurationUnit());
         if (cbRoundTrip.isChecked()) {
-            customMultipartRequest.addStringPart("specified_city", mNewTourModel.getSpecifiedCityIds());
+            customMultipartRequest.addStringPart("specified_city", mNewTourModel.getSpecifiedCityNames());
         } else {
             customMultipartRequest.addStringPart("specified_city", "");
         }
@@ -476,6 +601,34 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             Utils.showOKDialog(mContext, "Please input city");
             return false;
         } else {
+            String finalCity = "";
+            String removedCity = "";
+            int citycount = 0;
+            String[] items = mactLocation.getText().toString().split(", ");
+            for (int k = 0; k < items.length; k ++) {
+                if (citycount == 5) break;
+                for (int i = 0; i < arrCiies.length; i ++) {
+                    if (citycount == 5) break;
+                    if (items[k].equals(arrCiies[i])) {
+                        finalCity = finalCity + ", " + items[k];
+                        citycount ++;
+                        break;
+                    }
+                    if (i == arrCiies.length - 1) {
+                        removedCity = removedCity + ", " + items[k];
+                    }
+                }
+            }
+            if (finalCity.length() > 1) {
+                mactLocation.setText(finalCity.substring(2, finalCity.length()));
+            } else {
+                mactLocation.setText("");
+            }
+
+            if (removedCity.length() > 0) {
+                Utils.showOKDialog(mContext, removedCity.substring(2, removedCity.length()) + " not found" );
+                return false;
+            }
             mNewTourModel.setLocationIds(getLocationIdFromCityName(mactLocation.getText().toString()));
         }
         //check title
@@ -530,7 +683,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         ///set frequency
         mNewTourModel.setFrequency(spFrequency.getSelectedItem().toString());
         ////set duration
-        mNewTourModel.setDurationDay(spDurationUnit.getSelectedItem().toString());
+        mNewTourModel.setDurationUnit(spDurationUnit.getSelectedItem().toString());
         mNewTourModel.setDurationTime(spDuration.getSelectedItem().toString());
         ///check attraction
         if (TextUtils.isEmpty(etAttraction.getText().toString().trim())) {
@@ -549,7 +702,41 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         }
         if (cbRoundTrip.isChecked()) {
             strInclustion = strInclustion + "2,";
-            mNewTourModel.setSpecifiedCityIds(mactRoundTrip.getText().toString().trim());
+            if (mactRoundTrip.getText().toString().trim().length() == 0) {
+                Utils.showOKDialog(mContext, "Please input specified city");
+                return false;
+            } else {
+                String finalCity = "";
+                String removedCity = "";
+                int citycount = 0;
+                String[] items = mactRoundTrip.getText().toString().split(", ");
+                for (int k = 0; k < items.length; k++) {
+                    if (citycount == 5) break;
+                    for (int i = 0; i < arrCity.size(); i++) {
+                        if (citycount == 5) break;
+                        if (items[k].equals(arrCity.get(i))) {
+                            finalCity = finalCity + ", " + items[k];
+                            citycount++;
+                            break;
+                        }
+                        if (i == arrCity.size() - 1) {
+                            removedCity = removedCity + ", " + items[k];
+                        }
+                    }
+                }
+                if (finalCity.length() > 1) {
+                    mactRoundTrip.setText(finalCity.substring(2, finalCity.length()));
+                } else {
+                    mactRoundTrip.setText("");
+                }
+
+                if (removedCity.length() > 0) {
+                    Utils.showOKDialog(mContext, removedCity.substring(2, removedCity.length()) + " not found");
+                    return false;
+                }
+                mNewTourModel.setSpecifiedCityNames(mactRoundTrip.getText().toString().trim());
+            }
+
 
         }
         if (cbBreakfast.isChecked()) {

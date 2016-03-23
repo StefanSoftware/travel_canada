@@ -297,12 +297,29 @@ public class TimeUtility {
         return showDate1;
     }
 
-    public static String getDatewithFormat3(Date date) {
+    public static String formatterToDateMonth(String time) {///////////good works
 
-        SimpleDateFormat df2 = new SimpleDateFormat("dd-MM-yyyy");
-        String showDate1 = df2.format(date);
 
-        return showDate1;
+        String inputPattern = "yyyy-MM-dd";
+        String outputPattern = "MMM-dd";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        Date date = null;
+        String str = null;
+
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+//
+//            date = outputFormat.parse(time);
+//            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+
+
     }
     public static String getHourFromTimeStamp(String timstamp) {
 

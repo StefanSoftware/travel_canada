@@ -52,8 +52,6 @@ public class HomeActivity extends AppCompatActivity {
     private Context mContext;
 
     public static int currentFragmentNumber;
-//    public  static int fromWhere;//0: default, 1: from purchaseActivity to log in for payment
-    public static String strCityIDs;// need to fetch tours in search tour page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +65,6 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void initVariable() {
         mContext = this;
-//        fromWhere = getIntent().getIntExtra("login_for_payment", 0);
-        strCityIDs = "";
     }
     private void initUI() {
 
@@ -119,12 +115,6 @@ public class HomeActivity extends AppCompatActivity {
         return getFragmentManager();
     }
      
-    public void goToTourSearchPage() {
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, new ToursFragment(), "")
-                .commit();
-        currentFragmentNumber = 12;
-    }
     public void showSearchView(boolean flag) {
         if (flag) {
             searchItem.setVisible(true);
@@ -211,6 +201,7 @@ public class HomeActivity extends AppCompatActivity {
         mDrawerLayout.closeDrawers();
     }
     private static int SIGN_IN = 103;
+    private static int BUY_TOUR = 101;
     private void signout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(this.getResources().getString(R.string.app_name));
@@ -253,6 +244,12 @@ public class HomeActivity extends AppCompatActivity {
                 this.finish();
             }
         }
+        if (requestCode == BUY_TOUR) {
+            if (resultCode == 100) {
+                startActivity(new Intent(this, HomeActivity.class));
+                this.finish();
+            }
+        }
     }
 
     @Override
@@ -273,13 +270,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
-                if (currentFragmentNumber == 12) {
-                    ToursFragment.search(query);
-                } else if (currentFragmentNumber == 2) {
-                    mainFragment.search(query);
-                }
-
-
+                mainFragment.search(query);
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();
@@ -290,11 +281,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() == 0) {
-                    if (currentFragmentNumber == 12) {
-                        ToursFragment.search("");
-                    } else if (currentFragmentNumber == 2) {
-                        mainFragment.search("");
-                    }
+                    mainFragment.search("");
+
                 }
                 return false;
             }
@@ -303,11 +291,8 @@ public class HomeActivity extends AppCompatActivity {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                if (currentFragmentNumber == 12) {
-                    ToursFragment.search("");
-                } else if (currentFragmentNumber == 2) {
-                    mainFragment.search("");
-                }
+                mainFragment.search("");
+
                 return true;
             }
         });

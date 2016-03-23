@@ -22,6 +22,7 @@ import com.allytours.model.Constant;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.BitmapUtil;
 import com.allytours.utilities.DiskBitmapCache;
+import com.allytours.utilities.TimeUtility;
 import com.allytours.utilities.image_downloader.UrlImageViewCallback;
 import com.allytours.utilities.image_downloader.UrlRectangleImageViewHelper;
 import com.allytours.view.PurchaseActivity;
@@ -100,12 +101,11 @@ public class TourAdapter extends BaseAdapter {
         TextView tvTitle = (TextView)view.findViewById(R.id.tv_it_title);
         TextView tvAdultPrice = (TextView)view.findViewById(R.id.tv_it_adult_price);
         TextView tvChildPrice = (TextView)view.findViewById(R.id.tv_it_child_price);
-        TextView tvAdultPriceUnit = (TextView)view.findViewById(R.id.tv_it_adult_price_unit);
+        final TextView tvAdultPriceUnit = (TextView)view.findViewById(R.id.tv_it_adult_price_unit);
         TextView tvChildPriceUnit = (TextView)view.findViewById(R.id.tv_it_child__price_unit);
         TextView tvPrivate = (TextView)view.findViewById(R.id.tv_it_private);
-        TextView tvDurationHours = (TextView)view.findViewById(R.id.tv_it_duration_hours);
-        TextView tvDurationDays = (TextView)view.findViewById(R.id.tv_it_duration_days);
-        TextView tvStartTime = (TextView)view.findViewById(R.id.tv_it_start_time);
+        TextView tvDurationHours = (TextView)view.findViewById(R.id.tv_it_duration);
+        TextView tvDurationDays = (TextView)view.findViewById(R.id.tv_it_duration_unit);
         TextView tvStartTimeDate = (TextView)view.findViewById(R.id.tv_it_start_time_date);
         TextView tvReviewCount = (TextView)view.findViewById(R.id.tv_it_review_count);
 
@@ -136,9 +136,8 @@ public class TourAdapter extends BaseAdapter {
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, PurchaseActivity.class);
-                intent.putExtra("tour", arrTours.get(position));
-                mContext.startActivity(intent);
+                PurchaseActivity.tourModel = arrTours.get(position);
+                PurchaseActivity.pushFragment(1);
             }
         });
         tvAdultPrice.setText(tourModel.getAdultPrice());
@@ -164,12 +163,15 @@ public class TourAdapter extends BaseAdapter {
             tvPrivate.setText("Public");
         }
         tvDurationHours.setText(tourModel.getDurationTime());
-        tvDurationDays.setText(tourModel.getDurationDay());
+        tvDurationDays.setText(tourModel.getDurationUnit());
         if (tourModel.getFrequency().equals("Once")) {
-            tvStartTime.setText("Start Time(Once)");
-            tvStartTimeDate.setText(tourModel.getStartDate());
+            String[] strings = tourModel.getStartDate().split(",");
+            String startDate = "";
+            for (int j = 0; j < strings.length; j ++ ) {
+                startDate = startDate + TimeUtility.formatterToDateMonth(strings[j]) + ",";
+            }
+            tvStartTimeDate.setText(startDate.substring(0, startDate.length() - 1));
         } else {
-            tvStartTime.setText("Start Time(Recurring)");
             String[] strDays = mContext.getResources().getStringArray(R.array.start_time_day);
             String[] strings = tourModel.getStartDay().split(",");
             String startDays = "";

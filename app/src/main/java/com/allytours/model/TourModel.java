@@ -21,6 +21,15 @@ public class TourModel  implements Serializable{
     String title;
     String price;
     String tour_id;
+    String cityName;
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
 
     public String getTour_id() {
         return tour_id;
@@ -94,7 +103,7 @@ public class TourModel  implements Serializable{
         this.arrPicturePath = arrPicturePath;
     }
 
-    String specifiedCityIds;
+    String specifiedCityNames;
 
     public String getInclusionOthers() {
         return inclusionOthers;
@@ -134,6 +143,14 @@ public class TourModel  implements Serializable{
 
     public String getRoundTripLocatioIds() {
         return roundTripLocatioIds;
+    }
+
+    public String getSpecifiedCityNames() {
+        return specifiedCityNames;
+    }
+
+    public void setSpecifiedCityNames(String specifiedCityNames) {
+        this.specifiedCityNames = specifiedCityNames;
     }
 
     public void setRoundTripLocatioIds(String roundTripLocatioIds) {
@@ -190,13 +207,6 @@ public class TourModel  implements Serializable{
         this.inclusions = inclusions;
     }
 
-    public String getSpecifiedCityIds() {
-        return specifiedCityIds;
-    }
-
-    public void setSpecifiedCityIds(String specifiedCityIds) {
-        this.specifiedCityIds = specifiedCityIds;
-    }
 
     public String getFrequency() {
         return frequency;
@@ -230,11 +240,11 @@ public class TourModel  implements Serializable{
         this.startTime = startTime;
     }
 
-    public String getDurationDay() {
+    public String getDurationUnit() {
         return durationDay;
     }
 
-    public void setDurationDay(String durationDay) {
+    public void setDurationUnit(String durationDay) {
         this.durationDay = durationDay;
     }
 

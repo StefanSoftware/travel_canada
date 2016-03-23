@@ -35,9 +35,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+        <!--android:configChanges="orientation|screenSize"-->
         <activity
             android:name=".view.HomeActivity"
-            android:configChanges="orientation|screenSize"
+
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -82,6 +83,7 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- <provider -->
@@ -93,34 +95,40 @@
             android:name=".view.ExceptionViewActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_exception_view"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.PurchaseActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_detail_tour"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.ChatActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_chat"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.AddNewTourActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_add_new_tour"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.ReviewActivity"
             android:label="@string/title_activity_review"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".view.SigninActivity"
             android:label="@string/title_activity_signin"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>

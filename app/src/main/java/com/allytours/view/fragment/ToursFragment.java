@@ -19,7 +19,8 @@ import com.allytours.model.Constant;
 import com.allytours.model.LocationModel;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.Utils;
-import com.allytours.view.HomeActivity;
+
+import com.allytours.view.PurchaseActivity;
 import com.allytours.view.adapter.TourAdapter;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -82,6 +83,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         arrBufferTourModel2 = new ArrayList<>();
         searchQuery = "";
         currentState = 0;
+
     }
     private void initUI(View view) {
         btnAdventure = (Button)view.findViewById(R.id.btn_tours_adventure);
@@ -115,7 +117,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         tourAdapter = new TourAdapter(mContext, arrBufferTourModel2);
         lvHome.setAdapter(tourAdapter);
 
-        ((HomeActivity)getActivity()).showSearchView(true);
+//        ((PurchaseActivity)getActivity()).showSearchView(true);
     }
     public static void search(String query) {
         searchQuery = query;
@@ -176,9 +178,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         if (v == btnAdventure) {
             selectTabbar(3);
         }
-//        if (v == ivBack) {
-//            ((HomeActivity)getActivity()).navigationTo(2);
-//        }
+
     }
     private static ArrayList<TourModel> filter1() {
         if (searchQuery.length() == 0) {
@@ -252,7 +252,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
             Utils.showProgress(mContext);
 
             Map<String, String> params = new HashMap<String, String>();
-            params.put("location_id", ((HomeActivity) getActivity()).strCityIDs);
+            params.put("location_id", ((PurchaseActivity) getActivity()).strCityIDs);
 
             CustomRequest signinRequest = new CustomRequest(Request.Method.POST, API.FETCH_TOUR, params,
                     new Response.Listener<JSONObject>() {
@@ -269,6 +269,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                         TourModel tourModel = new TourModel();
 
 //                                        tourModel.setLocationIds(jsonObject.getString("locationId"));
+                                        tourModel.setCityName(jsonObject.getString("city"));
                                         tourModel.setTour_id(jsonObject.getString("tourId"));
                                         tourModel.setTitle(jsonObject.getString("title"));
                                         tourModel.setUserId(jsonObject.getString("operatorId"));
@@ -281,11 +282,11 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                         tourModel.setInclusions(jsonObject.getString("inclusions"));
                                         tourModel.setInclusionOthers(jsonObject.getString("notes"));
                                         tourModel.setFrequency(jsonObject.getString("frequency"));
-                                        tourModel.setSpecifiedCityIds(jsonObject.getString("specifiedCity"));
+                                        tourModel.setSpecifiedCityNames(jsonObject.getString("specifiedCity"));
                                         tourModel.setStart_time(jsonObject.getString("startTime"));
                                         tourModel.setStartDate(jsonObject.getString("startDate"));
                                         tourModel.setStartDay(jsonObject.getString("startDay"));
-                                        tourModel.setDurationDay(jsonObject.getString("tourDurationUnit"));
+                                        tourModel.setDurationUnit(jsonObject.getString("tourDurationUnit"));
                                         tourModel.setDurationTime(jsonObject.getString("tourDuration"));
                                         tourModel.setAdultPrice(jsonObject.getString("priceAdult"));
                                         tourModel.setChildPrice(jsonObject.getString("priceChild"));

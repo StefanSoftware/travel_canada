@@ -18,6 +18,72 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="@dimen/pad_10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Adult Price"
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:id="@+id/tv_dt_adult_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:layout_marginLeft="@dimen/pad_20dp"
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:id="@+id/tv_dt_adult_price_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CAD"
+                            android:layout_marginLeft="@dimen/pad_15dp"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/pad_10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Child Price"
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:id="@+id/tv_dt_child_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:layout_marginLeft="@dimen/pad_20dp"
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:id="@+id/tv_dt_child__price_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CAD"
+                            android:layout_marginLeft="@dimen/pad_15dp"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/dark"
+                    android:layout_marginLeft="@dimen/pad_10dp"
+                    android:layout_marginRight="@dimen/pad_10dp"/>
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="200dp">
@@ -40,6 +106,34 @@
                     android:layout_marginRight="@dimen/pad_10dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/pad_10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/iv_dt_mark"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/smile5"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_dt_review_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 reviews"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="@dimen/pad_10dp"/>
+                </LinearLayout>
+
+                <!--language, type, private-->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal"
                     android:paddingRight="@dimen/pad_10dp"
@@ -59,7 +153,7 @@
                             android:id="@+id/iv_dt_fg_e"
                             android:layout_width="23dp"
                             android:layout_height="15dp"
-                            android:src="@drawable/fg_britsh"
+                            android:src="@drawable/fg_british"
                             android:layout_marginRight="3dp"
                             android:visibility="gone"/>
                         <ImageView
@@ -154,146 +248,37 @@
                             android:textColor="@color/black"/>
                     </LinearLayout>
                 </LinearLayout>
+                <!--duration-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="4"
                     android:padding="@dimen/pad_10dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Adult Price"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:id="@+id/tv_dt_adult_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10"
-                                android:layout_marginLeft="@dimen/pad_20dp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:id="@+id/tv_dt_adult_price_unit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="CAD"
-                                android:layout_marginLeft="@dimen/pad_15dp"
-                                android:textColor="@color/black"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/pad_10dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Child Price"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:id="@+id/tv_dt_child_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10"
-                                android:layout_marginLeft="@dimen/pad_20dp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:id="@+id/tv_dt_child__price_unit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="CAD"
-                                android:layout_marginLeft="@dimen/pad_15dp"
-                                android:textColor="@color/black"/>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/pad_10dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Duration"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:id="@+id/tv_dt_duration_hours"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:layout_marginLeft="@dimen/pad_15dp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Hours"
-                                android:layout_marginLeft="@dimen/pad_10dp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:id="@+id/tv_dt_duration_days"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:layout_marginLeft="@dimen/pad_15dp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Days"
-                                android:layout_marginLeft="@dimen/pad_10dp"
-                                android:textColor="@color/black"/>
 
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/iv_dt_mark"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/smile5"/>
-                        </LinearLayout>
-                        <TextView
-                            android:id="@+id/tv_dt_review_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0 reviews"
-                            android:textColor="@color/black"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-
-                    android:padding="@dimen/pad_10dp">
                     <TextView
-                        android:id="@+id/tv_dt_start_time"
+                        android:id="@+id/tv_dt_duration_hours"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start Time"
+                        android:text="0"
+                        android:layout_marginLeft="@dimen/pad_15dp"
                         android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/tv_dt_duration_days"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="hours"
+                        android:layout_marginLeft="@dimen/pad_15dp"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+                <!--start time-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+
+                    android:padding="@dimen/pad_10dp">
 
                     <LinearLayout
                         android:id="@+id/ll_dt_start_time_container"
@@ -310,6 +295,7 @@
                     android:layout_height="0.5dp"
                     android:background="@color/dark"/>
             </LinearLayout>
+            <!--attraction-->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -341,6 +327,7 @@
 
 
             </LinearLayout>
+            <!--inclustion-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -581,13 +568,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="40dp"
                         android:textSize="@dimen/txt_13sp"
-                        android:hint="Here is notes about trips"
+                        android:hint=""
                         android:visibility="gone"/>
                 </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+    <!--button-->
     <LinearLayout
         android:id="@+id/ll_detail_tour_button_container"
         android:layout_width="fill_parent"

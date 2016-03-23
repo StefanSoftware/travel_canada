@@ -30,6 +30,11 @@
         <item>cad</item>
 
     </string-array>
+    <string-array name="currency_upper">
+        <item>USD</item>
+        <item>CAD</item>
+
+    </string-array>
     <string-array name="account_holder_type">
         <item>individual</item>
         <item>business</item>
@@ -76,13 +81,13 @@
     </string-array>
     <string-array name="start_time_day">
         <item>Alldays</item>
-        <item>Sunday</item>
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thusday</item>
-        <item>Friday</item>
-        <item>Saturday</item>
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
     </string-array>
     <string-array name="start_time">
         <item>Morning(8AM-11AM)</item>

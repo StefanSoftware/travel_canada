@@ -2,6 +2,7 @@ package com.allytours.view.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +19,16 @@ import android.widget.TextView;
 
 import com.allytours.R;
 import com.allytours.controller.API;
+import com.allytours.model.Constant;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.DiskBitmapCache;
+import com.allytours.utilities.TimeUtility;
+import com.allytours.utilities.Utils;
 import com.allytours.utilities.image_downloader.UrlImageViewCallback;
 import com.allytours.utilities.image_downloader.UrlRectangleImageViewHelper;
+import com.allytours.view.ChatActivity;
 import com.allytours.view.PurchaseActivity;
+import com.allytours.view.SigninActivity;
 import com.allytours.widget.FadeInImageListener;
 import com.allytours.widget.HorizontalListView;
 import com.android.volley.RequestQueue;
@@ -51,7 +57,6 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
     TextView tvPrivate ;
     TextView tvDurationHours;
     TextView tvDurationDays;
-    TextView tvStartTime ;
     TextView tvReviewCount , tvAttraction, tvSpecifiedCity, tvNote;
 
     ImageView ivFlagE;
@@ -89,6 +94,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
     private void initVariable() {
         mContext = getActivity();
         mTourModel = (TourModel) getActivity().getIntent().getSerializableExtra("tour");
+        mTourModel = PurchaseActivity.tourModel;
         // Initialise Volley Request Queue.
         mVolleyQueue = Volley.newRequestQueue(mContext);
         int max_cache_size = 1000000;
@@ -117,7 +123,6 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         tvPrivate = (TextView)view.findViewById(R.id.tv_dt_private);
         tvDurationHours = (TextView)view.findViewById(R.id.tv_dt_duration_hours);
         tvDurationDays = (TextView)view.findViewById(R.id.tv_dt_duration_days);
-        tvStartTime = (TextView)view.findViewById(R.id.tv_dt_start_time);
         tvAttraction = (TextView)view.findViewById(R.id.tv_dt_attraction);
         tvReviewCount = (TextView)view.findViewById(R.id.tv_dt_review_count);
         tvSpecifiedCity = (TextView)view.findViewById(R.id.tv_dt_specified_city);
@@ -153,11 +158,12 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         if (mTourModel == null)
             return;
         PurchaseActivity.setTitle(mTourModel.getTitle());
+        PurchaseActivity.tvCityName.setText(mTourModel.getCityName());
         tvAdultPrice.setText(mTourModel.getAdultPrice());
         tvAdultPriceUnit.setText(mTourModel.getCurrency_unit());
         tvChildPrice.setText(mTourModel.getChildPrice());
         tvChildPriceUnit.setText(mTourModel.getCurrency_unit());
-        tvReviewCount.setText(mTourModel.getReview_count() + "Reviews");
+        tvReviewCount.setText(mTourModel.getTotal_reviews() + " Reviews");
         int averageMark = Integer.parseInt(mTourModel.getAverage_rating());
         if (averageMark < 1.5) {
             ivMark.setImageDrawable(mContext.getResources().getDrawable(R.drawable.smile1));
@@ -176,21 +182,33 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
             tvPrivate.setText("Public");
         }
         tvDurationHours.setText(mTourModel.getDurationTime());
-        tvDurationDays.setText(mTourModel.getDurationDay());
+        tvDurationDays.setText(mTourModel.getDurationUnit());
         tvAttraction.setText(mTourModel.getAttractions());
-//        if (mTourModel.getFrequency().equals("Once")) {
-//            tvStartTime.setText("Start Time(Once)");
-//            tvStartTimeDate.setText(mTourModel.getStartDate());
-//        } else {
-//            tvStartTime.setText("Start Time(Recurring)");
-//            String[] strDays = mContext.getResources().getStringArray(R.array.start_time_day);
-//            String[] strings = mTourModel.getStartDay().split(",");
-//            String startDays = "";
-//            for (int j = 0; j < strings.length; j ++ ) {
-//                startDays = startDays + strDays[Integer.parseInt(strings[j])] + ",";
-//            }
-//            tvStartTimeDate.setText(startDays.substring(0, startDays.length() - 1));
-//        }
+        ///set start time
+        if (llStartTimeContainer.getChildCount() > 0) {
+            llStartTimeContainer.removeAllViews();
+        }
+        String[] strDays = mContext.getResources().getStringArray(R.array.start_time_day);
+        String[] strTimes = mContext.getResources().getStringArray(R.array.start_time);
+
+        String[] startTimeNumber = mTourModel.getStart_time().split(",");
+        for (int j = 0; j < startTimeNumber.length; j ++) {
+            View startTimeView = getActivity().getLayoutInflater().inflate(R.layout.item_detail_tour_start_time, null);
+            TextView tvStartDate = (TextView)startTimeView.findViewById(R.id.tv_dt_start_time_date);
+            TextView tvStartTime = (TextView)startTimeView.findViewById(R.id.tv_dt_start_time_time);
+            tvStartTime.setText(strTimes[Integer.parseInt(startTimeNumber[j])]);
+            if (mTourModel.getFrequency().equals("Once")) {
+                String[] strings = mTourModel.getStartDate().split(",");
+                tvStartDate.setText(TimeUtility.formatterToDateMonth(strings[j]));
+            } else {
+
+                String[] strings = mTourModel.getStartDay().split(",");
+                tvStartDate.setText(strDays[Integer.parseInt(strings[j])]);
+            }
+            llStartTimeContainer.addView(startTimeView);
+        }
+
+        ///set type
         if (mTourModel.getTourType().contains("R")) {
             ivRomantic.setVisibility(View.VISIBLE);
         }
@@ -201,6 +219,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         if (mTourModel.getTourType().contains("A")) {
             ivAdventure.setVisibility(View.VISIBLE);
         }
+        ///set language
         if (mTourModel.getLanguages().contains("E")) {
             ivFlagE.setVisibility(View.VISIBLE);
         }
@@ -222,7 +241,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         if (mTourModel.getLanguages().contains("J")) {
             ivFlagJ.setVisibility(View.VISIBLE);
         }
-
+        ////set inclusion
         if (mTourModel.getInclusions().contains("0")) {
             llTaxes.setVisibility(View.VISIBLE);
         }
@@ -232,6 +251,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         if (mTourModel.getInclusions().contains("2")) {
             llRoundTrips.setVisibility(View.VISIBLE);
             tvSpecifiedCity.setVisibility(View.VISIBLE);
+            tvSpecifiedCity.setText(mTourModel.getSpecifiedCityNames());
         }
         if (mTourModel.getInclusions().contains("3")) {
             llBreakfast.setVisibility(View.VISIBLE);
@@ -259,13 +279,59 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v == btnQuery) {
-
+            String usertype =Utils.getFromPreference(mContext, Constant.USER_TYPE);
+            if (usertype.length() == 0) {
+                Intent intent = new Intent(mContext, SigninActivity.class);
+                startActivityForResult(intent, 301);//sign in for query
+            } else if (usertype.equals(Constant.USER_TYPE_CUSTOMER)) {
+                Intent intent = new Intent(mContext, ChatActivity.class);
+                startActivity(intent);
+            }
         }
         if (v == btnBuy) {
-            PurchaseActivity.pushFragment(1);
+            String usertype =Utils.getFromPreference(mContext, Constant.USER_TYPE);
+            if (usertype.length() == 0) {
+                Intent intent = new Intent(mContext, SigninActivity.class);
+                startActivityForResult(intent, 302);//sign in for query
+            } else if (usertype.equals(Constant.USER_TYPE_CUSTOMER)) {
+                PurchaseActivity.pushFragment(2);
+            }
+//
         }
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String usertype = Utils.getFromPreference(mContext, Constant.USER_TYPE);
+        switch (requestCode) {
+
+            case 301://when click query
+                if (resultCode == getActivity().RESULT_OK) {
+                    if (usertype.equals(Constant.USER_TYPE_CUSTOMER)) {
+                        Intent intent = new Intent(getActivity(), ChatActivity.class);
+                        startActivity(intent);
+//                        finish();
+                    } else if (usertype.equals(Constant.USER_TYPE_OPERATOR)){
+                        getActivity().setResult(100);
+                        getActivity().finish();
+                    }
+                }
+                break;
+            case 302://when click buy
+                if (resultCode == getActivity().RESULT_OK) {
+                    if (usertype.equals(Constant.USER_TYPE_CUSTOMER)) {
+                        PurchaseActivity.pushFragment(2);
+                    } else if (usertype.equals(Constant.USER_TYPE_OPERATOR)){
+                        getActivity().setResult(100);
+                        getActivity().finish();
+                    }
+                }
+                break;
+        }
+    }
+
     private class ImageAdapter extends BaseAdapter {
 
         ArrayList<String> arrImages;

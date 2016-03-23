@@ -196,7 +196,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/fg_britsh"
+                            android:src="@drawable/fg_british"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
@@ -220,7 +220,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/fg_france"
+                            android:src="@drawable/fg_french"
                             android:layout_centerInParent="true"
                             />
                     </RelativeLayout>
