@@ -555,8 +555,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                 .addStringPart("title", mNewTourModel.getTitle())
                 .addStringPart("adult_price", mNewTourModel.getAdultPrice())
                 .addStringPart("child_price", mNewTourModel.getChildPrice())
-//                .addStringPart("currency_unit", mNewTourModel.getCurrency_unit())
-                .addStringPart("currency_unit", "CAD")
+                .addStringPart("currency_unit", mNewTourModel.getCurrency_unit())
+//                .addStringPart("currency_unit", "CAD")
                 .addStringPart("picture_count", mNewTourModel.getPictureCount())
                 .addStringPart("active", "1")
                 .addStringPart("tourtype", mNewTourModel.getTourType())
@@ -597,7 +597,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
 
     }
 ////////
-private String getCountryName(LatLng latLng) {
+    private String getCountryName(LatLng latLng) {
     String countryName = "";
     ////
     Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
@@ -653,6 +653,7 @@ private String getCountryName(LatLng latLng) {
             return country;
         }
     }
+
     private boolean checkFields() {
         mNewTourModel.setUserId(Utils.getFromPreference(mContext, Constant.USER_ID));
         ///check city
@@ -895,6 +896,7 @@ private String getCountryName(LatLng latLng) {
             Utils.showOKDialog(mContext, "Please input start time");
             return false;
         } else {
+            String strChecking = "";
             for (int i = 0; i < startTimeCount; i ++) {
                 View view = llStartTimeContainer.getChildAt(i);
                 EditText etDate = (EditText)view.findViewById(R.id.tv_item_nt_start_date);
@@ -903,12 +905,15 @@ private String getCountryName(LatLng latLng) {
                 String date = etDate.getText().toString().trim();
                 String time = etTime.getText().toString().trim();
 
-                if (spFrequency.getSelectedItem().toString().equals("Once")) {
-                    strDate = strDate + etDate.getText().toString() + ",";
-                } else {
-                    strDate = strDate + convertDayToNumber(date) + ",";
+                if (!strChecking.contains(date + time)) {
+                    if (spFrequency.getSelectedItem().toString().equals("Once")) {
+                        strDate = strDate + etDate.getText().toString() + ",";
+                    } else {
+                        strDate = strDate + convertDayToNumber(date) + ",";
+                    }
+                    strTime = strTime + convertTimeToNumber(time) + ",";
                 }
-                strTime = strTime + convertTimeToNumber(time) + ",";
+                strChecking  = strChecking + date + time + ",";
 
 
             }

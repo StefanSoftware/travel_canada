@@ -1,6 +1,8 @@
 package com.allytours.view.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +30,7 @@ import com.allytours.utilities.image_downloader.UrlRectangleImageViewHelper;
 import com.allytours.view.DetailTourActivity;
 import com.allytours.view.PurchaseActivity;
 import com.allytours.view.ReviewActivity;
+import com.allytours.view.SearchTourActivity;
 import com.allytours.widget.FadeInImageListener;
 import com.allytours.widget.HorizontalListView;
 import com.android.volley.Cache;
@@ -93,12 +96,7 @@ public class TourAdapter extends BaseAdapter {
         HorizontalListView horizontalListView = (HorizontalListView)view.findViewById(R.id.horizontalListView);
         ImageAdapter imageAdapter = new ImageAdapter(mContext, arrTours.get(position).getArrImage());
         horizontalListView.setAdapter(imageAdapter);
-        horizontalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int imageNum, long id) {
 
-            }
-        });
         TextView tvTitle = (TextView)view.findViewById(R.id.tv_it_title);
         TextView tvCityName = (TextView)view.findViewById(R.id.tv_it_city);
         TextView tvAdultPrice = (TextView)view.findViewById(R.id.tv_it_adult_price);
@@ -124,6 +122,34 @@ public class TourAdapter extends BaseAdapter {
         LinearLayout llReviewContainer = (LinearLayout)view.findViewById(R.id.ll_it_review_container);
 
         final TourModel tourModel = arrTours.get(position);
+        horizontalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int imageNum, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                View dialogLayout = mlayoutInflater.inflate(R.layout.detail_image_dialog_view, null);
+                ImageView image = (ImageView) dialogLayout.findViewById(R.id.iv_didv);
+                if (!tourModel.getArrImage().get(position).equals("")) {
+                    UrlRectangleImageViewHelper.setUrlDrawable(image, API.TOUR_URL + tourModel.getArrImage().get(position), R.drawable.default_tour, new UrlImageViewCallback() {
+                        @Override
+                        public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
+                            if (!loadedFromCache) {
+                                ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
+                                scale.setDuration(10);
+                                scale.setInterpolator(new OvershootInterpolator());
+                                imageView.startAnimation(scale);
+                            }
+                        }
+                    });
+                }
+                builder.setView(dialogLayout);
+                builder.show();
+            }
+        });
         llReviewContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +164,7 @@ public class TourAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DetailTourActivity.class);
                 intent.putExtra("tour", tourModel);
-                mContext.startActivity(intent);
+                ((SearchTourActivity)mContext).startActivityForResult(intent, 201);
             }
         });
         tvCityName.setText(tourModel.getCityName());
@@ -164,6 +190,7 @@ public class TourAdapter extends BaseAdapter {
         }
         tvDurationHours.setText(tourModel.getDurationTime());
         tvDurationDays.setText(tourModel.getDurationUnit());
+        //set start date or day
         if (tourModel.getFrequency().equals("Once")) {
             String[] strings = tourModel.getStartDate().split(",");
             String startDate = "";
@@ -247,7 +274,7 @@ public class TourAdapter extends BaseAdapter {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view1 = convertView;
             if (view1 == null) {
                 view1 = mlayoutInflater.inflate(R.layout.item_detail_tour_image, null);
@@ -269,6 +296,7 @@ public class TourAdapter extends BaseAdapter {
                     }
                 });
             }
+
             return view1;
         }
     }

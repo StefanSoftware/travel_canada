@@ -1,6 +1,7 @@
 package com.allytours.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -74,6 +75,15 @@ public class SearchTourActivity extends AppCompatActivity {
     }
     public static void setTitle(String title) {
         tvTitle.setText(title);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 201 && resultCode == 100) {
+            setResult(100);
+            finish();
+        }
     }
 
     private static MenuItem searchItem;

@@ -308,6 +308,7 @@
                         android:layout_height="wrap_content"
                         android:text="CAD"
                         android:textStyle="bold"
+                        android:textSize="@dimen/txt_10sp"
                         android:layout_marginLeft="@dimen/pad_10dp"
                         android:textColor="@color/black"/>
                 </LinearLayout>

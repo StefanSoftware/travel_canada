@@ -91,17 +91,12 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                 setTitle("Check Out");
                 break;
             case 2:
-                if (!Utils.getFromPreference(mContext, Constant.USER_TYPE).equals(Constant.USER_TYPE_CUSTOMER)) {
-                    Intent intent = new Intent(mContext, SigninActivity.class);
-                    ((PurchaseActivity)mContext).startActivityForResult(intent, 100);
-                } else {
-                    fragments[pageNum] = new ConfirmationFragment();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, fragments[pageNum])
-                            .commit();
-                    currentPageNumber = pageNum;
-                    setTitle("Confirmation");
-                }
+                fragments[pageNum] = new ConfirmationFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragments[pageNum])
+                        .commit();
+                currentPageNumber = pageNum;
+                setTitle("Confirmation");
 
                 break;
 

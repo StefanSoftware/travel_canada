@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.ScaleAnimation;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -118,7 +119,34 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         horizontalListView = (HorizontalListView)view.findViewById(R.id.hlv_dt);
         ImageAdapter imageAdapter = new ImageAdapter(mContext, mTourModel.getArrImage());
         horizontalListView.setAdapter(imageAdapter);
-
+        horizontalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int imageNum, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                View dialogLayout = getActivity().getLayoutInflater().inflate(R.layout.detail_image_dialog_view, null);
+                ImageView image = (ImageView) dialogLayout.findViewById(R.id.iv_didv);
+                if (!mTourModel.getArrImage().get(imageNum).equals("")) {
+                    UrlRectangleImageViewHelper.setUrlDrawable(image, API.TOUR_URL + mTourModel.getArrImage().get(imageNum), R.drawable.default_tour, new UrlImageViewCallback() {
+                        @Override
+                        public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
+                            if (!loadedFromCache) {
+                                ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
+                                scale.setDuration(10);
+                                scale.setInterpolator(new OvershootInterpolator());
+                                imageView.startAnimation(scale);
+                            }
+                        }
+                    });
+                }
+                builder.setView(dialogLayout);
+                builder.show();
+            }
+        });
 //        tvTitle = (TextView)view.findViewById(R.id.tv_dt_title);
 //        tvAdultPrice = (TextView)view.findViewById(R.id.tv_dt_adult_price);
 //        tvChildPrice = (TextView)view.findViewById(R.id.tv_dt_child_price);
@@ -389,60 +417,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
                     }
                 });
             }
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-//                    final AlertDialog dialog = builder.create();
-//                    LayoutInflater inflater = getActivity().getLayoutInflater();
-                    View dialogLayout = mlayoutInflater.inflate(R.layout.detail_image_dialog_view, null);
-                    ImageView image = (ImageView) dialogLayout.findViewById(R.id.iv_didv);
-                    if (!arrImages.get(position).equals("")) {
-                        UrlRectangleImageViewHelper.setUrlDrawable(image, API.TOUR_URL + arrImages.get(position), R.drawable.default_tour, new UrlImageViewCallback() {
-                            @Override
-                            public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
-                                if (!loadedFromCache) {
-                                    ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
-                                    scale.setDuration(10);
-                                    scale.setInterpolator(new OvershootInterpolator());
-                                    imageView.startAnimation(scale);
-                                }
-                            }
-                        });
-                    }
-                    builder.setView(dialogLayout);
-//                    builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                    builder.show();
-
-
-//                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//                        @Override
-//                        public void onShow(DialogInterface d) {
-//                            ImageView image = (ImageView) dialog.findViewById(R.id.iv_didv);
-//                            if (!arrImages.get(position).equals("")) {
-//                                UrlRectangleImageViewHelper.setUrlDrawable(image, API.TOUR_URL + arrImages.get(position), R.drawable.default_tour, new UrlImageViewCallback() {
-//                                    @Override
-//                                    public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
-//                                        if (!loadedFromCache) {
-//                                            ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
-//                                            scale.setDuration(10);
-//                                            scale.setInterpolator(new OvershootInterpolator());
-//                                            imageView.startAnimation(scale);
-//                                        }
-//                                    }
-//                                });
-//                            }
-//
-//                        }
-//                    });
-                }
-            });
             return view1;
         }
     }

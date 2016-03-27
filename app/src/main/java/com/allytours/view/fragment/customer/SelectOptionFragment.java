@@ -45,7 +45,7 @@ public class SelectOptionFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (v == btnBuy) {
-            PurchaseActivity.pushFragment(2);
+            PurchaseActivity.pushFragment(1);
         }
 
     }
