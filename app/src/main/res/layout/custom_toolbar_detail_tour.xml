@@ -23,7 +23,7 @@
             android:id="@+id/tv_title_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="@string/Title"
             android:textColor="@color/white"
             android:textSize="@dimen/txt_18sp"
             android:textStyle="bold"
@@ -39,6 +39,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/txt_14sp"
             android:layout_toRightOf="@+id/tv_title_detail"
+            android:layout_toLeftOf="@+id/tv_price"
             android:layout_marginLeft="@dimen/pad_10dp"
             android:layout_centerVertical="true"
             android:singleLine="true"
@@ -46,6 +47,20 @@
             android:layout_alignBottom="@+id/tv_title_detail"
             />
 
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_14sp"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:visibility="gone"
+            android:layout_alignBottom="@+id/tv_title_detail"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/pad_10dp"
+            />
     </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

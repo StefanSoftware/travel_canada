@@ -1,14 +1,19 @@
 package com.allytours.view.fragment;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.BaseAdapter;
@@ -27,6 +32,7 @@ import com.allytours.utilities.Utils;
 import com.allytours.utilities.image_downloader.UrlImageViewCallback;
 import com.allytours.utilities.image_downloader.UrlRectangleImageViewHelper;
 import com.allytours.view.ChatActivity;
+import com.allytours.view.DetailTourActivity;
 import com.allytours.view.PurchaseActivity;
 import com.allytours.view.SigninActivity;
 import com.allytours.widget.FadeInImageListener;
@@ -49,12 +55,10 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
     private Context mContext;
     private LinearLayout llButtonContainer;
     private  HorizontalListView horizontalListView;
-    TextView tvTitle;
-    TextView tvAdultPrice ;
-    TextView tvChildPrice ;
-    TextView tvAdultPriceUnit;
-    TextView tvChildPriceUnit;
-    TextView tvPrivate ;
+//    TextView tvAdultPrice ;
+//    TextView tvChildPrice ;
+//    TextView tvAdultPriceUnit;
+//    TextView tvChildPriceUnit;
     TextView tvDurationHours;
     TextView tvDurationDays;
     TextView tvReviewCount , tvAttraction, tvSpecifiedCity, tvNote;
@@ -70,6 +74,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
     ImageView ivSightSeeing;
     ImageView ivAdventure;
     ImageView ivMark;
+    ImageView ivPrivate;
     LinearLayout llStartTimeContainer;
     LinearLayout llTaxes, llTips, llRoundTrips, llBreakfast, llLunch, llDinner, llEquipmentRental, llMandatoryFee, llEnteranceFee, llOther;
     private TourModel mTourModel;
@@ -93,8 +98,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
 
     private void initVariable() {
         mContext = getActivity();
-        mTourModel = (TourModel) getActivity().getIntent().getSerializableExtra("tour");
-        mTourModel = PurchaseActivity.tourModel;
+        mTourModel = DetailTourActivity.tourModel;
         // Initialise Volley Request Queue.
         mVolleyQueue = Volley.newRequestQueue(mContext);
         int max_cache_size = 1000000;
@@ -112,15 +116,14 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
 //            llButtonContainer.setVisibility(View.GONE);
 //        }
         horizontalListView = (HorizontalListView)view.findViewById(R.id.hlv_dt);
-        ImageAdapter imageAdapter = new ImageAdapter(mContext, PurchaseActivity.tourModel.getArrImage());
+        ImageAdapter imageAdapter = new ImageAdapter(mContext, mTourModel.getArrImage());
         horizontalListView.setAdapter(imageAdapter);
 
 //        tvTitle = (TextView)view.findViewById(R.id.tv_dt_title);
-        tvAdultPrice = (TextView)view.findViewById(R.id.tv_dt_adult_price);
-        tvChildPrice = (TextView)view.findViewById(R.id.tv_dt_child_price);
-        tvAdultPriceUnit = (TextView)view.findViewById(R.id.tv_dt_adult_price_unit);
-        tvChildPriceUnit = (TextView)view.findViewById(R.id.tv_dt_child__price_unit);
-        tvPrivate = (TextView)view.findViewById(R.id.tv_dt_private);
+//        tvAdultPrice = (TextView)view.findViewById(R.id.tv_dt_adult_price);
+//        tvChildPrice = (TextView)view.findViewById(R.id.tv_dt_child_price);
+//        tvAdultPriceUnit = (TextView)view.findViewById(R.id.tv_dt_adult_price_unit);
+//        tvChildPriceUnit = (TextView)view.findViewById(R.id.tv_dt_child__price_unit);
         tvDurationHours = (TextView)view.findViewById(R.id.tv_dt_duration_hours);
         tvDurationDays = (TextView)view.findViewById(R.id.tv_dt_duration_days);
         tvAttraction = (TextView)view.findViewById(R.id.tv_dt_attraction);
@@ -139,6 +142,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         ivSightSeeing = (ImageView)view.findViewById(R.id.iv_dt_sightseeing);
         ivAdventure = (ImageView)view.findViewById(R.id.iv_dt_adventure);
         ivMark = (ImageView)view.findViewById(R.id.iv_dt_mark);
+        ivPrivate = (ImageView)view.findViewById(R.id.iv_dt_private);
 
         llStartTimeContainer = (LinearLayout)view.findViewById(R.id.ll_dt_start_time_container);
 
@@ -157,12 +161,14 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
     private void setData() {
         if (mTourModel == null)
             return;
-        PurchaseActivity.setTitle(mTourModel.getTitle());
-        PurchaseActivity.tvCityName.setText(mTourModel.getCityName());
-        tvAdultPrice.setText(mTourModel.getAdultPrice());
-        tvAdultPriceUnit.setText(mTourModel.getCurrency_unit());
-        tvChildPrice.setText(mTourModel.getChildPrice());
-        tvChildPriceUnit.setText(mTourModel.getCurrency_unit());
+        DetailTourActivity.tvTitle.setText(mTourModel.getTitle());
+        DetailTourActivity.tvCityName.setText(mTourModel.getCityName());
+        DetailTourActivity.tvPrice.setText(mTourModel.getAdultPrice() + " " + mTourModel.getCurrency_unit());
+//        tvAdultPrice.setText(mTourModel.getAdultPrice());
+//        tvAdultPriceUnit.setText(mTourModel.getCurrency_unit());
+//        tvChildPrice.setText(mTourModel.getChildPrice());
+//        tvChildPriceUnit.setText(mTourModel.getCurrency_unit());
+
         tvReviewCount.setText(mTourModel.getTotal_reviews() + " Reviews");
         int averageMark = Integer.parseInt(mTourModel.getAverage_rating());
         if (averageMark < 1.5) {
@@ -177,9 +183,9 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
             ivMark.setImageDrawable(mContext.getResources().getDrawable(R.drawable.smile5));
         }
         if (mTourModel.getIs_private().equals("Y")) {
-            tvPrivate.setText("Private");
+            ivPrivate.setImageDrawable(getResources().getDrawable(R.drawable.small_car));
         } else {
-            tvPrivate.setText("Public");
+            ivPrivate.setImageDrawable(getResources().getDrawable(R.drawable.logo_72));
         }
         tvDurationHours.setText(mTourModel.getDurationTime());
         tvDurationDays.setText(mTourModel.getDurationUnit());
@@ -282,7 +288,7 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
             String usertype =Utils.getFromPreference(mContext, Constant.USER_TYPE);
             if (usertype.length() == 0) {
                 Intent intent = new Intent(mContext, SigninActivity.class);
-                startActivityForResult(intent, 301);//sign in for query
+                startActivityForResult(intent, Constant.SIGNIN_FOR_QUERY);//sign in for query
             } else if (usertype.equals(Constant.USER_TYPE_CUSTOMER)) {
                 Intent intent = new Intent(mContext, ChatActivity.class);
                 startActivity(intent);
@@ -292,9 +298,10 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
             String usertype =Utils.getFromPreference(mContext, Constant.USER_TYPE);
             if (usertype.length() == 0) {
                 Intent intent = new Intent(mContext, SigninActivity.class);
-                startActivityForResult(intent, 302);//sign in for query
+                startActivityForResult(intent, Constant.SIGNIN_FOR_BUY);//sign in for buy
             } else if (usertype.equals(Constant.USER_TYPE_CUSTOMER)) {
-                PurchaseActivity.pushFragment(2);
+                Intent intent = new Intent(mContext, PurchaseActivity.class);
+                startActivity(intent);
             }
 //
         }
@@ -322,12 +329,15 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
             case 302://when click buy
                 if (resultCode == getActivity().RESULT_OK) {
                     if (usertype.equals(Constant.USER_TYPE_CUSTOMER)) {
-                        PurchaseActivity.pushFragment(2);
+                        Intent intent = new Intent(mContext, PurchaseActivity.class);
+                        startActivityForResult(intent, 303);
                     } else if (usertype.equals(Constant.USER_TYPE_OPERATOR)){
                         getActivity().setResult(100);
                         getActivity().finish();
                     }
                 }
+                break;
+            case 303:
                 break;
         }
     }
@@ -358,12 +368,12 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view1 = convertView;
             if (view1 == null) {
                 view1 = mlayoutInflater.inflate(R.layout.item_detail_tour_image, null);
             }
-            ImageView imageView = (ImageView)view1.findViewById(R.id.iv_image);
+            final ImageView imageView = (ImageView)view1.findViewById(R.id.iv_image);
 //            mImageLoader.get(API.BASE_URL + arrImages.get(position), new FadeInImageListener(imageView, mContext));
 
             if (!arrImages.get(position).equals("")) {
@@ -379,6 +389,60 @@ public class DetailTourFragment extends Fragment implements View.OnClickListener
                     }
                 });
             }
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+//                    final AlertDialog dialog = builder.create();
+//                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    View dialogLayout = mlayoutInflater.inflate(R.layout.detail_image_dialog_view, null);
+                    ImageView image = (ImageView) dialogLayout.findViewById(R.id.iv_didv);
+                    if (!arrImages.get(position).equals("")) {
+                        UrlRectangleImageViewHelper.setUrlDrawable(image, API.TOUR_URL + arrImages.get(position), R.drawable.default_tour, new UrlImageViewCallback() {
+                            @Override
+                            public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
+                                if (!loadedFromCache) {
+                                    ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
+                                    scale.setDuration(10);
+                                    scale.setInterpolator(new OvershootInterpolator());
+                                    imageView.startAnimation(scale);
+                                }
+                            }
+                        });
+                    }
+                    builder.setView(dialogLayout);
+//                    builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                    builder.show();
+
+
+//                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+//                        @Override
+//                        public void onShow(DialogInterface d) {
+//                            ImageView image = (ImageView) dialog.findViewById(R.id.iv_didv);
+//                            if (!arrImages.get(position).equals("")) {
+//                                UrlRectangleImageViewHelper.setUrlDrawable(image, API.TOUR_URL + arrImages.get(position), R.drawable.default_tour, new UrlImageViewCallback() {
+//                                    @Override
+//                                    public void onLoaded(ImageView imageView, Bitmap loadedBitmap, String url, boolean loadedFromCache) {
+//                                        if (!loadedFromCache) {
+//                                            ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
+//                                            scale.setDuration(10);
+//                                            scale.setInterpolator(new OvershootInterpolator());
+//                                            imageView.startAnimation(scale);
+//                                        }
+//                                    }
+//                                });
+//                            }
+//
+//                        }
+//                    });
+                }
+            });
             return view1;
         }
     }

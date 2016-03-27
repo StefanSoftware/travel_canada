@@ -28,6 +28,7 @@ import com.allytours.controller.Helpers.DBHelper;
 import com.allytours.model.LocationModel;
 import com.allytours.view.HomeActivity;
 import com.allytours.view.PurchaseActivity;
+import com.allytours.view.SearchTourActivity;
 import com.allytours.widget.markerclusterer.MarkerCluster;
 import com.allytours.widget.markerclusterer.MarkerClusterer;
 import com.android.volley.Request;
@@ -153,7 +154,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         }
 
         if (v == llContainer) {
-            Intent intent = new Intent(mActivity, PurchaseActivity.class);
+            Intent intent = new Intent(mActivity, SearchTourActivity.class);
             intent.putExtra("city_ids", strCityIDs);
             intent.putExtra("city_names", strCityNames);
             mActivity.startActivityForResult(intent, 101);
@@ -525,6 +526,7 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         if (googleMap == null) {
             SupportMapFragment mapFragment =  (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             googleMap = mapFragment.getMap();
+            googleMap.getUiSettings().setRotateGesturesEnabled(false);
 //            googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override

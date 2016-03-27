@@ -17343,4 +17343,6 @@
     </string-array>
     <string name="title_activity_review">ReviewActivity</string>
     <string name="title_activity_signin">SigninActivity</string>
+    <string name="title_activity_search_tour">SearchTourActivity</string>
+    <string name="Title">Title</string>
 </resources>

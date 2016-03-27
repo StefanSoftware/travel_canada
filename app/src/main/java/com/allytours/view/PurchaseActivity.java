@@ -31,22 +31,15 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
     public static FragmentManager fragmentManager;
 
-    public static TextView tvTitle, tvCityName;
+    public static TextView tvTitle;
     private ImageButton btnBack;
     private static Context mContext;
 
     public static TourModel tourModel;
 
-    public static int currentPageNumber;//0: detail page, 1: select option, 2: check out, 3: confirmation
-
-    public static DetailTourFragment detailTourFragment;
-    public static SelectOptionFragment selectOptionFragment;
-    public static CheckOutFragment checkOutFragment;
-    public static ConfirmationFragment confirmationFragment;
+    public static int currentPageNumber;// 0: select option, 1: check out, 2: confirmation
 
     public static Fragment[] fragments;
-    public static String strCityIDs;
-    String cityNames;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,13 +52,10 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
     private void initVariable() {
         mContext = this;
-        tourModel = new TourModel();
+        tourModel = (TourModel)getIntent().getSerializableExtra("tour");
         currentPageNumber = 0;
         fragmentManager = getSupportFragmentManager();
-        fragments = new Fragment[6];
-        strCityIDs = getIntent().getStringExtra("city_ids");
-        cityNames = getIntent().getStringExtra("city_names");
-
+        fragments = new Fragment[3];
     }
     private void initUI() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,13 +65,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         btnBack.setOnClickListener(this);
 
         tvTitle = (TextView)toolbar.findViewById(R.id.tv_title_detail);
-        tvCityName = (TextView)toolbar.findViewById(R.id.tv_citynames);
-        setTitle(cityNames);
-
-        fragments[0] = new ToursFragment();
-        fragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragments[0])
-                .commit();
+        pushFragment(0);
 
     }
     public static void setTitle(String title) {
@@ -89,61 +73,57 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
     public static void pushFragment(int pageNum) {
         switch (pageNum) {
-            case 1:
-                fragments[1] = new DetailTourFragment();
+
+            case 0:
+                fragments[pageNum] = new SelectOptionFragment();
                 fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragments[1], "")
-                .commit();
-                currentPageNumber = 1;
-                setTitle(tourModel.getTitle());
-                tvCityName.setVisibility(View.VISIBLE);
-                showSearchView(false);
-//                tvCityName.setText(tourModel.getCityName());
+                        .replace(R.id.fragment_container, fragments[pageNum])
+                        .commit();
+                currentPageNumber = pageNum;
+                setTitle("Select Options");
+                break;
+            case 1:
+                fragments[pageNum] = new CheckOutFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragments[pageNum])
+                        .commit();
+                currentPageNumber = pageNum;
+                setTitle("Check Out");
                 break;
             case 2:
-                fragments[2] = new SelectOptionFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, fragments[2])
-                        .commit();
-                currentPageNumber = 2;
-                setTitle("Select Options");
-                tvCityName.setVisibility(View.GONE);
-                showSearchView(false);
-                break;
-            case 3:
-                fragments[3] = new CheckOutFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, fragments[3])
-                        .commit();
-                currentPageNumber = 3;
-                setTitle("Check Out");
-                tvCityName.setVisibility(View.GONE);
-                showSearchView(false);
-                break;
-            case 4:
                 if (!Utils.getFromPreference(mContext, Constant.USER_TYPE).equals(Constant.USER_TYPE_CUSTOMER)) {
                     Intent intent = new Intent(mContext, SigninActivity.class);
                     ((PurchaseActivity)mContext).startActivityForResult(intent, 100);
                 } else {
-                    fragments[4] = new ConfirmationFragment();
+                    fragments[pageNum] = new ConfirmationFragment();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, fragments[4])
+                            .replace(R.id.fragment_container, fragments[pageNum])
                             .commit();
-                    currentPageNumber = 4;
+                    currentPageNumber = pageNum;
                     setTitle("Confirmation");
-                    tvCityName.setVisibility(View.GONE);
-                    showSearchView(false);
                 }
-
-                break;
-            case 5:
 
                 break;
 
 
         }
     }
+    private void popFragment() {
+        currentPageNumber --;
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragments[currentPageNumber])
+                .commit();
 
+        switch (currentPageNumber) {
+            case 0:
+                tvTitle.setText("Select Options");
+                break;
+            case 1:
+                tvTitle.setText("Check Out");
+                break;
+
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -175,37 +155,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
         }
     }
-    private void popFragment() {
-        currentPageNumber --;
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragments[currentPageNumber])
-                .commit();
 
-        switch (currentPageNumber) {
-            case 0:
-                showSearchView(true);
-                setTitle(cityNames);
-                break;
-            case 1:
-                setTitle(tourModel.getTitle());
-                break;
-            case 2:
-                tvTitle.setText("Select Options");
-                break;
-            case 3:
-                tvTitle.setText("Check Out");
-                break;
-            case 4:
-                break;
-        }
-    }
-    public static void showSearchView(boolean flag) {
-        if (flag) {
-            searchItem.setVisible(true);
-        } else {
-            searchItem.setVisible(false);
-        }
-    }
     private static MenuItem searchItem;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -213,39 +163,9 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
         searchItem = menu.findItem(R.id.action_search);
+        searchItem.setVisible(false);
         MenuItem newTourItem = menu.findItem(R.id.add_new_tour);
         newTourItem.setVisible(false);
-
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // perform query here
-                ToursFragment.search(query);
-                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
-                searchView.clearFocus();
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.length() == 0) {
-                    ToursFragment.search("");
-                }
-                return false;
-            }
-
-        });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                ToursFragment.search("");
-
-                return true;
-            }
-        });
 
         return super.onCreateOptionsMenu(menu);
 

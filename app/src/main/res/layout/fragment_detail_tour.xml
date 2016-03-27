@@ -17,73 +17,10 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="@dimen/pad_10dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Adult Price"
-                            android:textColor="@color/black"/>
-                        <TextView
-                            android:id="@+id/tv_dt_adult_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="10"
-                            android:layout_marginLeft="@dimen/pad_20dp"
-                            android:textColor="@color/black"/>
-                        <TextView
-                            android:id="@+id/tv_dt_adult_price_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="CAD"
-                            android:layout_marginLeft="@dimen/pad_15dp"
-                            android:textColor="@color/black"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/pad_10dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Child Price"
-                            android:textColor="@color/black"/>
-                        <TextView
-                            android:id="@+id/tv_dt_child_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="10"
-                            android:layout_marginLeft="@dimen/pad_20dp"
-                            android:textColor="@color/black"/>
-                        <TextView
-                            android:id="@+id/tv_dt_child__price_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="CAD"
-                            android:layout_marginLeft="@dimen/pad_15dp"
-                            android:textColor="@color/black"/>
-                    </LinearLayout>
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/pad_5dp">
 
 
-
-                </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/dark"
-                    android:layout_marginLeft="@dimen/pad_10dp"
-                    android:layout_marginRight="@dimen/pad_10dp"/>
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="200dp">
@@ -103,33 +40,9 @@
                     android:layout_height="0.5dp"
                     android:background="@color/dark"
                     android:layout_marginLeft="@dimen/pad_10dp"
-                    android:layout_marginRight="@dimen/pad_10dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="@dimen/pad_10dp">
+                    android:layout_marginRight="@dimen/pad_10dp"
+                    android:layout_marginTop="@dimen/pad_5dp"/>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/iv_dt_mark"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/smile5"/>
-                    </LinearLayout>
-                    <TextView
-                        android:id="@+id/tv_dt_review_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 reviews"
-                        android:textColor="@color/black"
-                        android:layout_marginLeft="@dimen/pad_10dp"/>
-                </LinearLayout>
 
                 <!--language, type, private-->
                 <LinearLayout
@@ -240,38 +153,76 @@
                         android:layout_marginLeft="@dimen/pad_20dp"
                         android:gravity="center_vertical"
                         android:layout_weight="2">
-                        <TextView
-                            android:id="@+id/tv_dt_private"
+                        <ImageView
+                            android:id="@+id/iv_dt_private"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="private"
-                            android:textColor="@color/black"/>
+                            android:src="@drawable/logo_72"
+                            />
                     </LinearLayout>
                 </LinearLayout>
-                <!--duration-->
-                <LinearLayout
+                <!--duration and review-->
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:padding="@dimen/pad_10dp">
-
-                    <TextView
-                        android:id="@+id/tv_dt_duration_hours"
+                    <!--duration-->
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0"
-                        android:layout_marginLeft="@dimen/pad_15dp"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:layout_alignParentLeft="true"
 
-                    <TextView
-                        android:id="@+id/tv_dt_duration_days"
+                        >
+
+                        <TextView
+                            android:id="@+id/tv_dt_duration_hours"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:layout_marginLeft="@dimen/pad_15dp"
+                            android:textColor="@color/black"/>
+
+                        <TextView
+                            android:id="@+id/tv_dt_duration_days"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="hours"
+                            android:layout_marginLeft="@dimen/pad_15dp"
+                            android:textColor="@color/black"/>
+
+
+                    </LinearLayout>
+                    <!--review-->
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="hours"
-                        android:layout_marginLeft="@dimen/pad_15dp"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentRight="true">
 
-                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/iv_dt_mark"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/smile5"/>
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_dt_review_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 reviews"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="@dimen/pad_10dp"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
                 <!--start time-->
                 <LinearLayout
                     android:layout_width="match_parent"

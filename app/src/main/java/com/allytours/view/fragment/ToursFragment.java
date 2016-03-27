@@ -20,7 +20,7 @@ import com.allytours.model.LocationModel;
 import com.allytours.model.TourModel;
 import com.allytours.utilities.Utils;
 
-import com.allytours.view.PurchaseActivity;
+import com.allytours.view.SearchTourActivity;
 import com.allytours.view.adapter.TourAdapter;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -117,10 +117,9 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         tourAdapter = new TourAdapter(mContext, arrBufferTourModel2);
         lvHome.setAdapter(tourAdapter);
 
-//        ((PurchaseActivity)getActivity()).showSearchView(true);
     }
-    public static void search(String query) {
-        searchQuery = query;
+    public static void search() {
+        searchQuery = SearchTourActivity.searchQuery;
         filter2(filter1(), currentState);
 
 
@@ -252,7 +251,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
             Utils.showProgress(mContext);
 
             Map<String, String> params = new HashMap<String, String>();
-            params.put("location_id", ((PurchaseActivity) getActivity()).strCityIDs);
+            params.put("location_id", ((SearchTourActivity) getActivity()).strCityIDs);
 
             CustomRequest signinRequest = new CustomRequest(Request.Method.POST, API.FETCH_TOUR, params,
                     new Response.Listener<JSONObject>() {
@@ -304,6 +303,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                         arrTourModel.add(tourModel);
 
                                     }
+//                                    search();
                                     filter2(filter1(), 0);
 
                                 } else {
@@ -333,4 +333,12 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 100) {
+            getActivity().setResult(100);
+            getActivity().finish();
+        }
+    }
 }

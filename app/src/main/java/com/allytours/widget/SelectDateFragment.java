@@ -38,11 +38,12 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
             // Show selected date
             String date = String.valueOf(day) + "/"  + String.valueOf(month + 1) + "/" + String.valueOf(year);
             String timeStamp = String.valueOf(TimeUtility.getTimeStampFromString(date));
-            if ((Long.parseLong(timeStamp) + 24 * 3600) < Long.parseLong(TimeUtility.getCurrentTimeStamp())) {
-
-            } else {
-                editText.setText(year + "-" + month + "-" + day);
-            }
+            editText.setText(year + "-" + month + "-" + day);
+//            if ((Long.parseLong(timeStamp) + 24 * 3600) < Long.parseLong(TimeUtility.getCurrentTimeStamp())) {
+//
+//            } else {
+//
+//            }
 
         }
 

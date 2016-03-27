@@ -35,10 +35,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <!--android:configChanges="orientation|screenSize"-->
+
+        <!-- android:configChanges="orientation|screenSize" -->
         <activity
             android:name=".view.HomeActivity"
-
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -129,6 +129,16 @@
             android:name=".view.SigninActivity"
             android:label="@string/title_activity_signin"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".view.SearchTourActivity"
+            android:label="@string/title_activity_search_tour"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".view.DetailTourActivity"
+            android:label="@string/title_activity_detail_tour"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>

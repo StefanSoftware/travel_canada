@@ -64,4 +64,7 @@ public class Constant {
     public static String TITLE_CONFIRMATION = "Confirmation";
     public static String TITLE_DETAIL_TOUR = "Detail Tour";
 
+    public static int SIGNIN_FOR_QUERY = 301;
+    public static int SIGNIN_FOR_BUY = 302;
+
 }

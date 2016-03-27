@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -70,6 +72,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -594,6 +597,62 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
 
     }
 ////////
+private String getCountryName(LatLng latLng) {
+    String countryName = "";
+    ////
+    Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+    try {
+        List<Address> addressList = geocoder.getFromLocation(
+                latLng.latitude, latLng.longitude, 1);
+        if (addressList != null && addressList.size() > 0) {
+            Address address = addressList.get(0);
+            StringBuilder sb = new StringBuilder();
+//                        for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+//                            sb.append(address.getAddressLine(i)).append("\n");
+//                        }
+//                        sb.append(address.getLocality());
+//                        sb.append(address.getPostalCode()).append("\n");
+//                        sb.append(address.getCountryName());
+//                        searchKey = sb.toString();
+//                        searchKey = address.getAddressLine(address.getMaxAddressLineIndex() - 1);
+            if (address.getAdminArea() != null) {
+                countryName = address.getCountryName();/////Address[addressLines=[0:"Allen, OK 74825",1:"USA"],feature=74825,admin=Oklahoma,sub-admin=null,locality=Allen,thoroughfare=null,postalCode=74825,countryCode=US,countryName=United States,hasLatitude=true,latitude=34.8031254,hasLongitude=true,longitude=-96.429036,phone=null,url=null,extras=null]
+//                            searchKey = searchKey.replace(" ", "_");
+
+            }
+
+        }
+    } catch (IOException e) {
+//                    Log.e(TAG, "Unable connect to Geocoder", e);
+        e.printStackTrace();
+    }
+    return countryName;
+}
+    private String getCountry(String cities) {
+        String country = "";
+        int canada = 0;
+        int america = 0;
+        String[] strings = cities.split(", ");
+        List<LocationModel> arrLocation = DBHelper.getAllLocation();
+        for (int i = 0; i < arrLocation.size(); i ++) {
+            for (int k = 0; k < strings.length; k ++) {
+                if (arrLocation.get(i).getCity().equals(strings[k])) {
+                    LatLng latLng = new LatLng(Double.parseDouble(arrLocation.get(i).getLatitude()), Double.parseDouble(arrLocation.get(i).getLongitude()));
+                    country = getCountryName(latLng);
+                    if(country.equals("Canada")) {
+                        canada = 1;
+                    } else if (country.equals("United States")) {
+                        america = 1;
+                    }
+                }
+            }
+        }
+        if (canada == america) {
+            return "";
+        } else {
+            return country;
+        }
+    }
     private boolean checkFields() {
         mNewTourModel.setUserId(Utils.getFromPreference(mContext, Constant.USER_ID));
         ///check city
@@ -662,6 +721,29 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             mNewTourModel.setChildPrice(strChildPrice);
         }
         ///set currency unit
+        String country = getCountry(mactLocation.getText().toString());
+        if (country.length() > 0) {
+            if (country.equals("Canada")) {
+                if (tvAdultCurrnceUnit.getText().toString().equals("USD") || tvChildCurrencyUnit.getText().toString().equals("USD")) {
+
+                    tvAdultCurrnceUnit.setText("CAD");
+                    tvChildCurrencyUnit.setText("CAD");
+                    Utils.showOKDialog(mContext, "Currency unit should be CAD");
+                    return false;
+                }
+
+
+            } else if (country.equals("United States")) {
+                if (tvAdultCurrnceUnit.getText().toString().equals("CAD") || tvChildCurrencyUnit.getText().toString().equals("CAD")) {
+
+                    tvAdultCurrnceUnit.setText("USD");
+                    tvChildCurrencyUnit.setText("USD");
+                    Utils.showOKDialog(mContext, "Currency unit should be USD");
+                    return false;
+                }
+
+            }
+        }
         mNewTourModel.setCurrency_unit(tvChildCurrencyUnit.getText().toString());
         //check private
         if (rbPrivate.isChecked()) {

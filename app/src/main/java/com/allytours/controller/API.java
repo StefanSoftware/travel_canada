@@ -6,7 +6,7 @@ package com.allytours.controller;
 public class API {
     public static String BASE_URL = "http://192.168.2.16/AllyTour5.1/public/mobile/";
     public static String TOUR_URL = "http://192.168.2.16/AllyTour5.1/public/images/tour/";
-
+//
 //    public static String BASE_URL = "http://54.213.114.248/Allytour/public/mobile/";
 //    public static String TOUR_URL = "http://54.213.114.248/Allytour/public/images/tour/";
 
