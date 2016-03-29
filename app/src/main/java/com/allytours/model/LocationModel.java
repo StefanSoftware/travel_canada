@@ -28,6 +28,16 @@ public class LocationModel  extends SugarRecord {
     String longitude;
     String latitude;
 
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    String timezone;
+
     public LocationModel() {
 
     }

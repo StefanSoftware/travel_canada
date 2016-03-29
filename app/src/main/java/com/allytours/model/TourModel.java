@@ -22,6 +22,15 @@ public class TourModel  implements Serializable{
     String price;
     String tour_id;
     String cityName;
+    String operatorName;
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
 
     public String getCityName() {
         return cityName;
@@ -43,8 +52,6 @@ public class TourModel  implements Serializable{
     String review_count;
     String rate;
     String duration;
-    String start_time;
-    String end_time;
     String days;
     String adultCount ;
     String childCount;
@@ -367,21 +374,6 @@ public class TourModel  implements Serializable{
         this.duration = duration;
     }
 
-    public String getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(String start_time) {
-        this.start_time = start_time;
-    }
-
-    public String getEnd_time() {
-        return end_time;
-    }
-
-    public void setEnd_time(String end_time) {
-        this.end_time = end_time;
-    }
 
     public String getDays() {
         return days;

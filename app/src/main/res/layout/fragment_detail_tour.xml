@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.allytours.view.fragment.DetailTourFragment">
+    tools:context="com.allytours.controller.fragment.DetailTourFragment">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -43,7 +43,26 @@
                     android:layout_marginRight="@dimen/pad_10dp"
                     android:layout_marginTop="@dimen/pad_5dp"/>
 
-
+                <!--operator name-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/pad_10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="Operated by : "/>
+                    <TextView
+                        android:id="@+id/tv_dt_operator_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text=""
+                        android:textStyle="bold"
+                        android:singleLine="true"/>
+                </LinearLayout>
                 <!--language, type, private-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -128,21 +147,21 @@
                             android:id="@+id/iv_dt_romentic"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/like_filled"
+                            android:src="@drawable/romantic24"
                             android:layout_marginRight="3dp"
                             android:visibility="gone"/>
                         <ImageView
                             android:id="@+id/iv_dt_sightseeing"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/add_favorit_fill"
+                            android:src="@drawable/sightseeing24"
                             android:layout_marginRight="3dp"
                             android:visibility="gone"/>
                         <ImageView
                             android:id="@+id/iv_dt_adventure"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/add_favorit_fill"
+                            android:src="@drawable/adventure24"
                             android:layout_marginRight="3dp"
                             android:visibility="gone"/>
                     </LinearLayout>
@@ -157,7 +176,7 @@
                             android:id="@+id/iv_dt_private"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/logo_72"
+                            android:src="@drawable/bus24"
                             />
                     </LinearLayout>
                 </LinearLayout>

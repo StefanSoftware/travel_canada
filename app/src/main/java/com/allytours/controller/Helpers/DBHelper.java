@@ -1,7 +1,6 @@
 package com.allytours.controller.Helpers;
 
 import com.allytours.model.LocationModel;
-import com.android.volley.request.StringRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +41,6 @@ public class DBHelper {
         }
         return arrayList;
     }
+
 
 }

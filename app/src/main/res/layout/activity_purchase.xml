@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="com.allytours.view.PurchaseActivity">
+    tools:context="com.allytours.controller.PurchaseActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -16,7 +16,7 @@
 
             <include
                 android:id="@+id/toolbar"
-                layout="@layout/custom_toolbar_detail_tour">
+                layout="@layout/custom_toolbar_">
             </include>
         </android.support.design.widget.AppBarLayout>
         <FrameLayout
