@@ -1097,6 +1097,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             String timeStamp = String.valueOf(TimeUtility.getTimeStampFromString(date));
 
             DateTime dateTime = DateTime.now();
+            int birthYear = dateTime.getYear();
             if (dateTime.getYear() - year >= 18) {
                 editText.setText(year + "-" + month + "-" + day);
             } else {

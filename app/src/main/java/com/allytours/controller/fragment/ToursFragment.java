@@ -191,7 +191,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         } else {
             ArrayList<TourModel> arrayList = new ArrayList<>();
             for (int i = 0; i < arrTourModel.size(); i ++ ) {
-                if (arrTourModel.get(i).getTitle().contains(searchQuery) || arrTourModel.get(i).getAttractions().contains(searchQuery)) {
+                if (arrTourModel.get(i).getTitle().toLowerCase().contains(searchQuery) || arrTourModel.get(i).getAttractions().toLowerCase().contains(searchQuery)) {
                     arrayList.add(arrTourModel.get(i));
                 }
             }
@@ -313,6 +313,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                             String[] strTimes = tourModel.getStartTime().split(",");
                                             String[] strTimeArray = getResources().getStringArray(R.array.start_time);
                                             String recoverStartDate = "";
+                                            String recoverStartTime = "";
                                             int maxOffset = getMaxTimeZone(tourModel.getCityName());
 
                                             for (int j = 0; j < strDates.length; j ++ ) {
@@ -320,7 +321,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
 ////////////////////
                                                 //get time after 12 hours(by utc)
                                                 DateTime now = DateTime.now();
-                                                DateTime after12hours = now.plusHours(12 - myOffset);
+                                                DateTime after12hours = now.plusHours(12 - myOffset + maxOffset);
 
                                                 ///count city time(by utc)
                                                 DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
@@ -329,14 +330,14 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                                 DateTime selectedTime = null;
                                                 String startTime = strTimeArray[Integer.parseInt(strTimes[j])];
                                                 if (startTime.contains("Morning")) {
-                                                    selectedTime = dt.plusHours(6 - maxOffset);
+                                                    selectedTime = dt.plusHours(8 );
                                                 } else if (startTime.contains("Afternoon")) {
-                                                    selectedTime = dt.plusHours(12- maxOffset);
+                                                    selectedTime = dt.plusHours(12);
                                                 }else if (startTime.contains("Evening")) {
-                                                    selectedTime = dt.plusHours(16- maxOffset);
+                                                    selectedTime = dt.plusHours(16);
                                                 }
                                                 else if (startTime.contains("Night")) {
-                                                    selectedTime = dt.plusHours(20- maxOffset);
+                                                    selectedTime = dt.plusHours(20);
                                                 }
 
                                                 //compare time
@@ -344,12 +345,14 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
                                                 if (result == 1) {
                                                 } else {
                                                     recoverStartDate = recoverStartDate + strDates[j] + ",";
+                                                    recoverStartTime = recoverStartTime + strTimes[j] + ",";
 
                                                 }
 
                                             }
                                             if (recoverStartDate.length() > 0) {
                                                 tourModel.setStartDate(recoverStartDate.substring(0, recoverStartDate.length() - 1));
+                                                tourModel.setStartTime(recoverStartTime.substring(0, recoverStartTime.length() - 1));
                                                 arrTourModel.add(tourModel);
                                             }
                                         } else {
@@ -390,7 +393,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
 
     }
     private int getMaxTimeZone(String strCities) {
-        int maxOffset = 0;
+        int maxOffset = -100;
         if (strCities.length() > 0) {
             String[] arrCities = strCities.split(",");
             List<LocationModel> arrayLocatons = DBHelper.getAllLocation();

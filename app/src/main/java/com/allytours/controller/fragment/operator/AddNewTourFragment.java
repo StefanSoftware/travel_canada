@@ -1161,7 +1161,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                                         DateTime selectedTime = null;
                                         switch (whichButton) {
                                             case 0:
-                                                selectedTime = dt.plusHours(6);
+                                                selectedTime = dt.plusHours(8);
                                                 break;
                                             case 1:
                                                 selectedTime = dt.plusHours(12);
