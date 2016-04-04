@@ -375,7 +375,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                         String finalCity = "";
                         String removedCity = "";
                         int citycount = 0;
-                        String[] items = mactLocation.getText().toString().split(", ");
+                        String strLocation = mactLocation.getText().toString().replace(", ", ",");
+                        String[] items = strLocation.split(",");
                         for (int k = 0; k < items.length; k ++) {
                             if (citycount == 5) break;
                             for (int i = 0; i < arrCiies.length; i ++) {
@@ -423,7 +424,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                         String finalCity = "";
                         String removedCity = "";
                         int citycount = 0;
-                        String[] items = mactRoundTrip.getText().toString().split(", ");
+                        String strRoundTripLocation =mactRoundTrip.getText().toString().replace(", ", ",");
+                        String[] items = strRoundTripLocation.split(",");
                         for (int k = 0; k < items.length; k++) {
                             if (citycount == 5) break;
                             for (int i = 0; i < arrCity.size(); i++) {
@@ -630,7 +632,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         String country = "";
         int canada = 0;
         int america = 0;
-        String[] strings = cities.split(", ");
+        String strCities = cities.replace(", ", ",");
+        String[] strings = strCities.split(",");
         List<LocationModel> arrLocation = DBHelper.getAllLocation();
         for (int i = 0; i < arrLocation.size(); i ++) {
             for (int k = 0; k < strings.length; k ++) {
@@ -662,7 +665,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             String finalCity = "";
             String removedCity = "";
             int citycount = 0;
-            String[] items = mactLocation.getText().toString().split(", ");
+            String strLocation =mactLocation.getText().toString().replace(", ", ",");
+            String[] items = strLocation.split(",");
             for (int k = 0; k < items.length; k ++) {
                 if (citycount == 5) break;
                 for (int i = 0; i < arrCiies.length; i ++) {
@@ -798,7 +802,8 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                 String finalCity = "";
                 String removedCity = "";
                 int citycount = 0;
-                String[] items = mactRoundTrip.getText().toString().split(", ");
+                String strRoundTrip =mactRoundTrip.getText().toString().replace(", ", ",");
+                String[] items = strRoundTrip.split(",");
                 for (int k = 0; k < items.length; k++) {
                     if (citycount == 5) break;
                     for (int i = 0; i < arrCity.size(); i++) {
@@ -903,6 +908,7 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
             return false;
         } else {
             String strChecking = "";
+            int maxOffset = getMaxTimeZone(mactLocation.getText().toString());
             for (int i = 0; i < startTimeCount; i ++) {
                 View view = llStartTimeContainer.getChildAt(i);
                 EditText etDate = (EditText)view.findViewById(R.id.tv_item_nt_start_date);
@@ -911,17 +917,54 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
                 String date = etDate.getText().toString().trim();
                 String time = etTime.getText().toString().trim();
 
+                if (date.length() == 0 || time.length() == 0) {
+                    Utils.showOKDialog(mContext, "Please fill out start time");
+                    return false;
+                }
                 if (!strChecking.contains(date + time)) {
                     if (spFrequency.getSelectedItem().toString().equals("Once")) {
-                        strDate = strDate + etDate.getText().toString() + ",";
+
+                        //get time after 12 hours
+                        DateTime now = DateTime.now();
+                        DateTime after12hours = now.plusHours(12 - myOffset + maxOffset);
+                        ///count selected time
+                        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+                        DateTime dt = formatter.parseDateTime(date);
+                        DateTime selectedTime = null;
+                        if (time.contains("Morning")) {
+                            selectedTime = dt.plusHours(8);
+                        } else if (time.contains("Afternoon")) {
+                            selectedTime = dt.plusHours(12);
+                        }else if (time.contains("Evening")) {
+                            selectedTime = dt.plusHours(16);
+                        }else if (time.contains("Night")) {
+                            selectedTime = dt.plusHours(20);
+                        }
+
+                        //compare time
+                        int result = DateTimeComparator.getInstance().compare(after12hours, selectedTime);
+
+                        if (result == 1) {
+                            llStartTimeContainer.removeViewAt(i);
+                            continue;
+                        } else {
+                            strDate = strDate + etDate.getText().toString() + ",";
+                            strTime = strTime + convertTimeToNumber(time) + ",";
+                        }
+
                     } else {
                         strDate = strDate + convertDayToNumber(date) + ",";
+                        strTime = strTime + convertTimeToNumber(time) + ",";
                     }
-                    strTime = strTime + convertTimeToNumber(time) + ",";
+
                 }
                 strChecking  = strChecking + date + time + ",";
 
 
+            }
+            if (strTime.length() == 0) {
+                Utils.showOKDialog(mContext, "Please input start time");
+                return false;
             }
             mNewTourModel.setStartTime(strTime);
             mNewTourModel.setStartDate(strDate);
@@ -971,11 +1014,10 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
 
     }
     private String[] spliteStringByComma(String str) {
-        String[] strings = str.split(", ");
+        String string = str.replace(", ", "");
+        String[] strings = string.split(",");
         return strings;
     }
-
-
     @Override
     public void onClick(View v) {
         if (!(v instanceof EditText)) {
@@ -1209,9 +1251,10 @@ public class AddNewTourFragment extends Fragment implements View.OnClickListener
         llStartTimeContainer.removeViewAt(llStartTimeContainer.getChildCount() - 1);
     }
     private int getMaxTimeZone(String strCities) {
+        strCities.replace(", ", ",");
         int maxOffset = -100;
         if (strCities.length() > 0) {
-            String[] arrCities = strCities.split(", ");
+            String[] arrCities = strCities.split(",");
             List<LocationModel> arrayLocatons = DBHelper.getAllLocation();
             for (int i = 0; i < arrCities.length; i ++) {
                 for (int k = 0; k < arrayLocatons.size(); k ++) {

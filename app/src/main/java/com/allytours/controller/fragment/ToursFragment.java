@@ -191,7 +191,7 @@ public class ToursFragment extends Fragment implements View.OnClickListener{
         } else {
             ArrayList<TourModel> arrayList = new ArrayList<>();
             for (int i = 0; i < arrTourModel.size(); i ++ ) {
-                if (arrTourModel.get(i).getTitle().toLowerCase().contains(searchQuery) || arrTourModel.get(i).getAttractions().toLowerCase().contains(searchQuery)) {
+                if (arrTourModel.get(i).getTitle().toLowerCase().contains(searchQuery.toLowerCase()) || arrTourModel.get(i).getAttractions().toLowerCase().contains(searchQuery.toLowerCase())) {
                     arrayList.add(arrTourModel.get(i));
                 }
             }

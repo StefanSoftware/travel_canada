@@ -54,7 +54,6 @@ import com.allytours.model.Constant;
 import com.allytours.model.UserModel;
 import com.allytours.controller.SigninActivity;
 import com.allytours.widget.MyCircularImageView;
-import com.allytours.widget.SelectDateFragment;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
@@ -62,6 +61,9 @@ import com.android.volley.request.CustomMultipartRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -382,7 +384,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         }
         if (v == etBirthday) {
             UIUtility.hideSoftKeyboard(mActivity);
-            DialogFragment newFragment = new SelectDateFragment(etBirthday);
+            DialogFragment newFragment = new SelectBirthdayFragment(etBirthday);
             newFragment.show(getFragmentManager(), "Birthday");
         }
     }
@@ -1097,8 +1099,15 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             String timeStamp = String.valueOf(TimeUtility.getTimeStampFromString(date));
 
             DateTime dateTime = DateTime.now();
-            int birthYear = dateTime.getYear();
-            if (dateTime.getYear() - year >= 18) {
+//            DateTime selectedDate = new DateTime(timeStamp);
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+            DateTime selectedDate = formatter.parseDateTime(String.valueOf(year) + "-" + String.valueOf(month + 1) + "-" + String.valueOf(day));
+
+            DateTime after18Years = selectedDate.plusYears(18);
+            int result = DateTimeComparator.getInstance().compare(dateTime, after18Years);
+//            int birthYear = dateTime.getYear();
+
+            if (result == 1) {
                 editText.setText(year + "-" + month + "-" + day);
             } else {
                 Utils.showOKDialog(mContext, "Below 18 years old is not allowed to register");
