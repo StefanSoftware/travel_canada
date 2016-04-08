@@ -1,123 +1,341 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:widget="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/pad_5dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/ll_item_my_tours_right"
-                android:gravity="center_vertical">
-                <TextView
-                    android:id="@+id/tv_item_tour_listing_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tour name"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_14sp"
-                    android:drawablePadding="@dimen/pad_5dp"/>
-
-                <TextView
-                    android:id="@+id/tv_item_tour_listing_last_message_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:background="@drawable/badge_red"
-                    android:layout_marginLeft="@dimen/pad_10dp"
-                    android:text="65654"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"
-                    android:gravity="center"
-                    android:textSize="@dimen/txt_10sp"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/ll_item_my_tours_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:padding="@dimen/pad_10dp"
-                android:layout_alignParentRight="true">
-
-                <TextView
-                    android:id="@+id/tv_item_tour_listing_total_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="$ 25000"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_13sp"
-                    />
-                <TextView
-                    android:id="@+id/tv_item_tour_listing_currency_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CAD"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_13sp"
-                    android:layout_marginLeft="@dimen/pad_5dp"/>
-
-            </LinearLayout>
-        </RelativeLayout>
+        android:layout_marginBottom="@dimen/pad_15dp">
+        <!--image, title-->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/pad_5dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chat"
-                android:textColor="@color/strong_blue"/>
+            android:layout_marginTop="@dimen/pad_5dp">
+            <com.allytours.widget.HorizontalListView
+                android:id="@+id/horizontalListView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:divider="#ed3a24"
+                android:fadingEdgeLength="5dp"
+                android:requiresFadingEdge="horizontal"
+                />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/tv_item_tour_listing_last_message"
+                    android:id="@+id/tv_it_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="tour title"
+                    android:textColor="@color/blue"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/txt_20sp"
+                    android:layout_toLeftOf="@+id/ll_it_review_container"
+                    android:layout_margin="@dimen/pad_10dp"
+                    />
+                <!--price-->
+                <LinearLayout
+                    android:id="@+id/ll_it_review_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/tv_item_tour_listing_last_message_time"
-                    android:text="What is included?"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginRight="@dimen/pad_10dp"/>
-                <TextView
-                    android:id="@+id/tv_item_tour_listing_last_message_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Aug 14, 2015"
-                    android:layout_toLeftOf="@+id/iv_item_my_tours_chat_navigation"
-                    android:layout_marginRight="@dimen/pad_10dp"/>
-                <ImageView
-                    android:id="@+id/iv_item_my_tours_chat_navigation"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_chevron_right_black_24dp"/>
+                    android:layout_margin="@dimen/pad_10dp"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        >
+
+
+                        <TextView
+                            android:id="@+id/tv_it_adult_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/txt_20sp"
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:id="@+id/tv_it_adult_price_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CAD"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/txt_10sp"
+                            android:layout_marginLeft="@dimen/pad_10dp"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+
+                </LinearLayout>
             </RelativeLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:background="@drawable/round_corner_gray"
-            android:gravity="center">
-            <Button
-                android:id="@+id/btn_item_tour_listing_active"
+
+            <TextView
+                android:id="@+id/tv_it_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Active"
-                android:background="@color/transparent"
-                android:textColor="@color/blue"/>
+                android:text="tour title"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/txt_14sp"
+                android:layout_marginLeft="@dimen/pad_10dp"
+                />
         </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/dark"
+            android:layout_marginLeft="@dimen/pad_20dp"
+            android:layout_marginRight="@dimen/pad_20dp"/>
+
+        <!--language, type, private, review-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/pad_10dp"
+            android:paddingLeft="@dimen/pad_10dp"
+            android:paddingTop="@dimen/pad_5dp"
+            android:weightSum="5">
+            <!--flag-->
+            <LinearLayout
+                android:id="@+id/ll_it_flagcontainer"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_weight="1.1"
+                android:weightSum="7">
+
+                <ImageView
+                    android:id="@+id/iv_it_fg_e"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_british"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/iv_it_fg_s"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_spanish"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/iv_it_fg_f"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_french"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/iv_it_fg_p"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_portuguese"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_it_fg_c"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_china"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_it_fg_g"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_german"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_it_fg_j"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/fg_japan"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+
+
+            </LinearLayout>
+            <!--type-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/pad_5dp"
+                android:gravity="center_vertical"
+                android:layout_weight="1.9"
+                >
+                <ImageView
+                    android:id="@+id/iv_it_romentic"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/romantic24"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/iv_it_sightseeing"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/sightseeing24"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/iv_it_adventure"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/adventure24"
+                    android:layout_marginRight="1.5dp"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+            <!--private-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/pad_5dp"
+                android:gravity="center"
+                android:layout_weight="2"
+                >
+                <ImageView
+                    android:id="@+id/iv_it_private"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/bus24"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            android:padding="@dimen/pad_10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/pad_10dp">
+                    <!--duration-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:id="@+id/tv_it_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:layout_marginLeft="@dimen/pad_15dp"
+                            android:textColor="@color/black"/>
+
+                        <TextView
+                            android:id="@+id/tv_it_duration_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="hours"
+                            android:layout_marginLeft="@dimen/pad_15dp"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+                    <!--review-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_alignParentRight="true"
+                        >
+                        <!--review-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/iv_it_mark"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/smile5"/>
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_it_review_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 reviews"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/txt_13sp"
+                            android:layout_marginLeft="@dimen/pad_10dp"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!--start time-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/pad_10dp">
+
+
+                    <TextView
+                        android:id="@+id/tv_it_start_time_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:layout_marginLeft="@dimen/pad_20dp"
+                        android:textColor="@color/grey"
+                        android:layout_toLeftOf="@+id/sw_active"
+                        />
+                   <Switch
+                       android:id="@+id/sw_active"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Active"
+                       android:layout_alignParentRight="true"
+                       android:checked="false"/>
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
     </LinearLayout>
+
 </LinearLayout>
